@@ -1,0 +1,198 @@
+---
+title: "Initial Seizure type Analysis"
+author: "Kyung Mi Chung"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+knitr::opts_knit$set(root.dir = "Y:/Jane/Citizen")
+```
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(data.table)
+library(readxl)
+library(mltools)
+```
+
+```{r}
+path_data="./data/"
+path_save="./initial/"
+path_classifier="./data/inital_seizure_types_classifier.xlsx"
+```
+
+
+#1. Assigning Groups - Focal, Bilateral_TC, Absence, Infantile_spasms
+```{r}
+# Import classifier
+classifier <- read_excel(path_classifier)
+
+
+# Import Seizure data
+Ciitizen_seizure = read_excel(paste(path_data, "Ciitizen_SCN8A_UArizona_2024.02.09.xlsx", sep = ""), sheet = "seizure_history")
+Ciitizen_seizure <- Ciitizen_seizure[, c("patient_uuid",	"seizure_history_type", "seizure_history_age_days")]
+
+
+# Filter for range 0-3 years old
+Ciitizen_seizure <- Ciitizen_seizure %>% filter(seizure_history_age_days < 1095)
+Ciitizen_seizure$age_onset_m <- Ciitizen_seizure$seizure_history_age_days/30
+
+# One-hot encode Focal, Bilateral_TC, Absence, Infantile_spasms seizure
+Ciitizen_seizure$focal <- ifelse(Ciitizen_seizure$seizure_history_type %in% classifier$focal, 1, 0)
+Ciitizen_seizure$bilateral_tc <- ifelse(Ciitizen_seizure$seizure_history_type %in% classifier$bilateral_tonic_clonic, 1, 0)
+Ciitizen_seizure$absence <- ifelse(Ciitizen_seizure$seizure_history_type %in% classifier$absence, 1, 0)
+Ciitizen_seizure$infantile <- ifelse(Ciitizen_seizure$seizure_history_type %in% classifier$infantile_spasms, 1, 0)
+
+Ciitizen_seizure <- Ciitizen_seizure %>% rename("UUID" = "patient_uuid")
+study <- Ciitizen_seizure[, c("UUID", "seizure_history_age_days", "age_onset_m", "focal", "bilateral_tc", "absence", "infantile")]
+
+
+```
+
+
+#2. Load more data for building out dataset
+```{r}
+Ciitizen_diagnosis= read_excel(paste(path_data, "Ciitizen_SCN8A_UArizona_2024.02.09.xlsx", sep = ""), sheet = "clinical_diagnosis")
+Ciitizen_variant = read_excel(paste(path_data, "Ciitizen_SCN8A_UArizona_2024.02.09.xlsx", sep = ""), sheet = "genetic_findings")
+Ciitizen_medication = read_excel(paste(path_data, "Ciitizen_SCN8A_UArizona_2024.02.09.xlsx", sep = ""), sheet = "medication_aggregate")
+Ciitizen_hospitalization = read_excel(paste(path_data, "Ciitizen_SCN8A_UArizona_2024.02.09.xlsx", sep = ""), sheet = "hospital_admission")
+Ciitizen_demographics = read_excel(paste(path_data, "Ciitizen_SCN8A_UArizona_2024.02.09.xlsx", sep = ""), sheet = "demographics")
+
+#only interested in <3 years old here 
+Ciitizen_diagnosis <- Ciitizen_diagnosis %>% filter(clinical_diagnosis_age_days_firstDate<1095)
+Ciitizen_hospitalization <- Ciitizen_hospitalization %>% filter(admission_age_days_firstDate<1095)
+Ciitizen_medication_weaned <- Ciitizen_medication %>% filter(medication_age_days_lastDate < 1095) 
+```
+
+
+#3. Expanding Dataset to include features of interest
+##3.1 Getting Medications when stable
+```{r}
+Ciitizen_medication_stable <- Ciitizen_medication
+
+# Clean aggregated medication data
+indications <- paste(c("Epilepsy", "Seizure", "spasms", "seizure", "epilepsy"), collapse = "|")
+Ciitizen_medication_stable <- subset(Ciitizen_medication_stable, grepl(indications, medication_indication))
+meds_to_use <- paste(c("Oxcarbazepine", "Phenytoin", "Lacosamide", "Lamotrigine", "Rufinamide", "Clobazam", "Carbamazepine", "Phenobarbital", "Clonazepam", "Vigabatrin", "Zonisamide", "Ethosuximide", "Levetiracetam", "ACTH", "Prednisolone", "Topiramate", "Epidiolex", "Valproate", "Felbamate", "Nitrazepam", "Primidone", "Stiripentol", "Tiagabine", "Vigabatrin", "Gabapentin", "Brivaracetam", "Acetazolamide", "Clonidine", "Perampanel"), collapse = "|")
+Ciitizen_medication_stable <- Ciitizen_medication_stable %>%
+  mutate(medication = ifelse(grepl("ACTH", medication), "ACTH", medication))
+Ciitizen_medication_stable <- subset(Ciitizen_medication_stable, grepl(meds_to_use, medication))
+Ciitizen_medication_stable <- subset(Ciitizen_medication_stable, select = -c(3:6, 9:11))
+```
+
+```{r}
+# Function to find stable periods and count medications
+find_stable_periods <- function(data) {
+  # Sort by first date and last date
+  data <- data[order(data$medication_age_days_firstDate,
+                     data$medication_age_days_lastDate),]
+  
+  max_meds <- 0 
+  stable_periods <- NULL
+  for (i in seq_len(nrow(data))) {
+    start_date <- data$medication_age_days_firstDate[i]
+    end_date <- data$medication_age_days_lastDate[i]
+    
+    overlaps <- subset(data,
+                       medication_age_days_firstDate <= start_date &
+                         medication_age_days_lastDate >= end_date)
+    
+    # Check if the period is stable
+    if ((end_date - start_date >=365) & (nrow(overlaps) > max_meds)) {
+      max_meds <- nrow(overlaps)
+      stable_periods <- overlaps
+    }
+  }
+  
+  if (is.null(stable_periods)) {
+    stable_periods <- data[FALSE,]
+  }
+  
+  result <- data.frame(
+    patient_uuid = unique(data$patient_uuid),
+    age_days_start = ifelse(is.null(stable_periods), NA, min(stable_periods$medication_age_days_firstDate)),
+    age_days_end = ifelse(is.null(stable_periods), NA, max(stable_periods$medication_age_days_lastDate)),
+    num_stable_meds = ifelse(is.null(stable_periods), NA, nrow(stable_periods))
+  )
+  return(result)
+}
+
+stable_periods <- Ciitizen_medication_stable %>%
+ group_by(patient_uuid) %>%
+ do(find_stable_periods(.))
+
+stable_periods <- stable_periods %>% rename("UUID" = "patient_uuid")
+study <- merge(study, subset(stable_periods, select = c(1, 4)), by = "UUID", all=T)
+```
+
+
+##3.2 Getting Variant
+```{r}
+scn8a_variant <- Ciitizen_variant %>% filter(gene == "SCN8A")
+
+scn8a_variant <- scn8a_variant %>% group_by(patient_uuid) %>% rename("UUID" = "patient_uuid")
+
+scn8a_variant <- scn8a_variant %>% distinct(UUID, .keep_all = T)
+
+scn8a_variant <- scn8a_variant %>% select(c(UUID, variant_DNA, variant_protein))
+study <- merge(study, scn8a_variant, by = "UUID", all = T)
+```
+
+##3.3 Getting Hospitalization Events
+```{r}
+hospitalization <- Ciitizen_hospitalization %>% select(patient_uuid, admission_diagnosis, admission_age_days_firstDate,
+                                                       admission_age_days_lastDate)
+
+hospitalization$admission_age_days_firstDate <- as.numeric(hospitalization$admission_age_days_firstDate)
+hospitalization$admission_age_days_lastDate <- as.numeric(hospitalization$admission_age_days_lastDate)
+
+length_stay <- apply(hospitalization[3:4],1, diff)
+hospitalization <- cbind(hospitalization, length_stay)
+hosp_onehot <- as.data.table(hospitalization)
+hosp_onehot$admission_diagnosis <- as.factor(hosp_onehot$admission_diagnosis)
+hosp_onehot <- one_hot(hosp_onehot)
+hosp_final <- hosp_onehot %>% group_by(patient_uuid) %>% 
+  summarise(across(`admission_diagnosis_Abnormal movement`:admission_diagnosis_Vomiting, sum, na.rm = T))
+hosp_final <- hosp_final %>% rename("UUID"="patient_uuid")
+study <- merge(study, hosp_final, by = "UUID", all = T)
+
+hosp_stays <- hosp_onehot %>% group_by(patient_uuid) %>% 
+  summarise(across(length_stay, mean, na.rm = T)) %>% rename("UUID"= "patient_uuid")
+
+study <- merge(study, hosp_stays, by = "UUID", all = T)
+```
+
+##3.4 Demographics: Sex and Age at diagnosis
+```{r}
+dems <- Ciitizen_demographics %>% select(patient_uuid, sex, age_at_diagnosis) %>% 
+  rename("UUID" = "patient_uuid")
+
+#recode male to 1, female to 0
+dems <- dems %>% mutate(sex = ifelse( sex == "male", 1,0))
+dems$age_at_diagnosis[ dems$age_at_diagnosis== "undefined"] <- 100
+dems$age_at_diagnosis <- as.numeric(dems$age_at_diagnosis)
+dems <- dems %>% mutate(age_at_diagnosis_m = age_at_diagnosis*12)
+
+study <- merge(study, dems, by = "UUID", all = T)
+
+study <- study %>% mutate(onset_diagnosis_gap = ifelse(age_at_diagnosis_m<1200, (age_at_diagnosis_m - age_onset_m), "undefined")) %>% select(-age_at_diagnosis)
+```
+
+##3.5 Getting Clinical Diagnoses
+```{r}
+diagnosis <- Ciitizen_diagnosis %>% select(patient_uuid, clinical_diagnosis) %>% 
+  rename("UUID" = "patient_uuid")
+
+diagnosis <- as.data.table(diagnosis) 
+diagnosis$clinical_diagnosis <- as.factor(diagnosis$clinical_diagnosis)
+diagnosis <- one_hot(diagnosis)
+diagnosis <- diagnosis %>% group_by(UUID) %>% 
+  summarise(across(`clinical_diagnosis_Abdominal pain`:`clinical_diagnosis_West syndrome`, sum, na.rm=T))
+
+study <- merge(study, diagnosis, by = "UUID", all =T)
+write.csv(study, paste(path_save, "Supplementary_Table - Study Data with seizure types.csv", sep = ""))
+```
+
