@@ -211,7 +211,7 @@ study <- merge(study, subset(stable_periods, select = c(1, 4)), by = "UUID", all
 
 ##3.2 Getting Seizure types 
 ```{r}
-seizures <- Ciitizen_seizures 
+seizures <- Ciitizen_seizure 
 
 seizures <- seizures %>% select(c(patient_uuid, seizure_history_type))
 seizures_onehot <- as.data.table(seizures)
@@ -220,7 +220,6 @@ seizures_onehot <- one_hot(seizures_onehot)
 
 seizures_onehot <- seizures_onehot %>%  group_by(patient_uuid) %>% 
   summarise(across(c(`seizure_history_type_Absence seizure`:`seizure_history_type_Unprovoked seizure`), ~max(.x, na.rm = TRUE)))
-seizures_onehot <- seizures_onehot %>% rename("UUID" = "patient_uuid")
 study <- merge(study, seizures_onehot, by = "UUID", all=T)
 ```
 
