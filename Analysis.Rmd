@@ -90,3 +90,216 @@ plot
 dev.off()
 ```
 
+
+#2 Correlations Between Groups and Hospitalization Events
+##2.1 Initial Seizure Type
+```{r}
+hospital_data <- data
+new_col_names <- gsub("admission_diagnosis_", "", colnames(hospital_data))
+colnames(hospital_data) <- new_col_names
+
+data_long <- hospital_data %>%
+  gather(key = "initial_seizure_type", value = "value1", focal:infantile) %>%
+  gather(key = "hospital_event", value = "value2", `Abnormal movement`:Vomiting) %>%
+  filter(value1 == 1, value2 == 1) %>%
+  group_by(hospital_event) %>%
+  mutate(n = n()) %>%
+  filter(n >= 5)
+
+# Plot
+p_init <- ggbarstats(data_long, initial_seizure_type, hospital_event) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+##2.2 Number of Seizure Types
+```{r}
+data_long <- hospital_data %>%
+  gather(key = "hospital_event", value = "value2", `Abnormal movement`:Vomiting) %>%
+  filter(value2 == 1) %>%
+  group_by(hospital_event) %>%
+  mutate(n = n()) %>%
+  filter(n >= 5)
+
+# Plot
+p_unique <- ggbarstats(data_long, unique_types, hospital_event) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+##2.3 Abnormal EEG
+```{r}
+data_long <- data_long %>%
+  filter(n >= 7)
+
+# Plot
+p_abnormal <- ggbarstats(data_long, abnormal_eeg, hospital_event) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+##2.4 Age of Onset
+```{r}
+# Plot
+p_onset <- ggbarstats(data_long, Onset_group, hospital_event) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+##2.5 Save Plots
+```{r}
+plot <- list(p_init, p_unique, p_abnormal, p_onset)
+pdf("./figures/hospital_plots.pdf", width = 12, height = 8)
+plot
+dev.off()
+```
+
+
+#3 Correlations Between Groups and Clinical Diagnoses
+##3.1 Initial Seizure Type
+```{r}
+clinical_data <- data
+new_col_names <- gsub("clinical_diagnosis_", "", colnames(clinical_data))
+colnames(clinical_data) <- new_col_names
+
+data_long <- clinical_data %>%
+  gather(key = "initial_seizure_type", value = "value1", focal:infantile) %>%
+  gather(key = "clinical_diagnosis", value = "value2", `Abdominal pain`:`West syndrome`) %>%
+  filter(value1 == 1, value2 == 1) %>%
+  group_by(clinical_diagnosis) %>%
+  mutate(n = n()) %>%
+  filter(n > 30)
+
+# Plot
+p_init <- ggbarstats(data_long, initial_seizure_type, clinical_diagnosis) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+##3.2 Number of Seizure Types
+```{r}
+data_long <- clinical_data %>%
+  gather(key = "clinical_diagnosis", value = "value2", `Abdominal pain`:`West syndrome`) %>%
+  filter(value2 == 1) %>%
+  group_by(clinical_diagnosis) %>%
+  mutate(n = n()) %>%
+  filter(n >= 15)
+
+# Plot
+p_unique <- ggbarstats(data_long, unique_types, clinical_diagnosis) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+##3.3 Abnormal EEG
+```{r}
+# Plot
+p_abnormal <- ggbarstats(data_long, abnormal_eeg, clinical_diagnosis) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+##3.4 Age of Onset
+```{r}
+# Plot
+p_onset <- ggbarstats(data_long, Onset_group, clinical_diagnosis) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+##3.5 Save Plots
+```{r}
+plot <- list(p_init, p_unique, p_abnormal, p_onset)
+pdf("./figures/clinical_plots.pdf", width = 12, height = 8)
+plot
+dev.off()
+```
+
+
+#4 Correlations Between Groups and Diagnostic Procedure Results
+##4.1 Initial Seizure Type
+```{r}
+procedure_data <- data
+new_col_names <- gsub("procedure_findings_", "", colnames(procedure_data))
+colnames(procedure_data) <- new_col_names
+
+data_long <- procedure_data %>%
+  gather(key = "initial_seizure_type", value = "value1", focal:infantile) %>%
+  gather(key = "procedure_result", value = "value2", `Abnormal restricted diffusion`:`Videofluoroscopy swallow normal`) %>%
+  filter(value1 == 1, value2 == 1) %>%
+  group_by(procedure_result) %>%
+  mutate(n = n()) %>%
+  filter(n >= 20)
+
+# Plot
+p_init <- ggbarstats(data_long, initial_seizure_type, procedure_result) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+##4.2 Number of Seizure Types
+```{r}
+data_long <- procedure_data %>%
+  gather(key = "procedure_result", value = "value2", `Abnormal restricted diffusion`:`Videofluoroscopy swallow normal`) %>%
+  filter(value2 == 1) %>%
+  group_by(procedure_result) %>%
+  mutate(n = n()) %>%
+  filter(n >= 10)
+
+# Plot
+p_unique <- ggbarstats(data_long, unique_types, procedure_result) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+##4.3 Abnormal EEG
+```{r}
+# Plot
+p_abnormal <- ggbarstats(data_long, abnormal_eeg, procedure_result) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+##4.4 Age of Onset
+```{r}
+# Plot
+p_onset <- ggbarstats(data_long, Onset_group, procedure_result) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+##4.5 Save Plots
+```{r}
+plot <- list(p_init, p_unique, p_abnormal, p_onset)
+pdf("./figures/procedure_plots.pdf", width = 12, height = 8)
+plot
+dev.off()
+```
+
+
+#5 Correlations Between Groups and Number of Stable Medications
+##5.1 Initial Seizure Type
+```{r}
+stable_data <- data
+
+data_long <- stable_data %>%
+  gather(key = "initial_seizure_type", value = "value1", focal:infantile) %>%
+  filter(value1 == 1)
+
+# Plot
+p_init <- ggbarstats(data_long, initial_seizure_type, num_stable_meds)
+```
+
+##5.2 Number of Seizure Types
+```{r}
+# Plot
+p_unique <- ggbarstats(stable_data, unique_types, num_stable_meds)
+```
+
+##5.3 Abnormal EEG
+```{r}
+# Plot
+p_abnormal <- ggbarstats(stable_data, abnormal_eeg, num_stable_meds) 
+```
+
+##5.4 Age of Onset
+```{r}
+# Plot
+p_onset <- ggbarstats(stable_data, Onset_group, num_stable_meds) 
+```
+
+##5.5 Save Plots
+```{r}
+plot <- list(p_init, p_unique, p_abnormal, p_onset)
+pdf("./figures/stable_plots.pdf", width = 12, height = 8)
+plot
+dev.off()
+```
