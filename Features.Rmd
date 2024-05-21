@@ -1,0 +1,95 @@
+---
+title: "Features"
+author: "Kiran Smelser"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(data.table)
+library(readxl)
+library(mltools)
+library(ggstatsplot)
+```
+
+```{r}
+path_data="./data/Ciitizen_SCN8A_UArizona_2024.02.09.xlsx"
+path_classifier="./data/ciitizen_health_classifier.xlsx"
+```
+
+```{r}
+data <- read_csv(path_data)
+```
+
+```{r}
+# Import Seizure data
+Ciitizen_seizure = read_excel(path_data, sheet = "seizure_history")
+Ciitizen_seizure <- Ciitizen_seizure[, c("patient_uuid",	"seizure_history_type", "seizure_history_age_days")]
+
+
+# Filter for range 0-3 years old
+Ciitizen_seizure <- Ciitizen_seizure %>% filter(seizure_history_age_days < 1095)
+```
+
+```{r}
+Ciitizen_diagnosis= read_excel(path_data, sheet = "clinical_diagnosis")
+Ciitizen_medication = read_excel(path_data, sheet = "medication_aggregate")
+Ciitizen_hospitalization = read_excel(path_data, sheet = "hospital_admission")
+Ciitizen_demographics = read_excel(path_data, sheet = "demographics")
+Ciitizen_diagnostic = read_excel(path_data, sheet = "diagnostic_procedures")
+
+#only interested in <3 years old here 
+Ciitizen_diagnosis <- Ciitizen_diagnosis %>% filter(clinical_diagnosis_age_days_firstDate<1095)
+Ciitizen_hospitalization <- Ciitizen_hospitalization %>% filter(admission_age_days_firstDate<1095)
+Ciitizen_medication_weaned <- Ciitizen_medication %>% filter(medication_age_days_lastDate < 1095) 
+Ciitizen_diagnostic <- Ciitizen_diagnostic %>% filter(procedure_age_days < 1095)
+```
+
+#1. Unique values for all one-hot encoded features
+##1.1 Seizure Types
+```{r}
+types <- unique(Ciitizen_seizure$seizure_history_type)
+```
+
+##1.2 Hospitalization Events
+```{r}
+hospitalizations <- unique(Ciitizen_hospitalization$admission_diagnosis)
+```
+
+##1.3 Clinical Diagnoses
+```{r}
+diagnoses <- unique(Ciitizen_diagnosis$clinical_diagnosis)
+```
+
+##1.4 Diagnostic Procedures
+```{r}
+procedures <- unique(Ciitizen_diagnostic$procedure)
+```
+
+#2. Export
+```{r}
+# Find max length
+max_length <- max(length(types), length(hospitalizations), length(diagnoses), length(procedures))
+
+# Pad vectors with NA values
+types <- c(types, rep(NA, max_length - length(types)))
+hospitalizations <- c(hospitalizations, rep(NA, max_length - length(hospitalizations)))
+diagnoses <- c(diagnoses, rep(NA, max_length - length(diagnoses)))
+procedures <- c(procedures, rep(NA, max_length - length(procedures)))
+
+# Combine dataframes
+combined_df <- data.frame("Seizure Types" = types, 
+                          "Hospitalization Events" = hospitalizations, 
+                          "Clinical Diagnoses" = diagnoses, 
+                          "Diagnostic Procedures" = procedures, 
+                          stringsAsFactors = FALSE)
+
+write.csv(combined_df, file = "./data/features.csv", row.names = FALSE)
+```
+

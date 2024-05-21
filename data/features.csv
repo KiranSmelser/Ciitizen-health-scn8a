@@ -1,0 +1,417 @@
+Seizure Types,Hospitalization Events,Clinical Diagnoses,Diagnostic Procedures
+Seizure,Hypoxia,Sinus bradycardia,CT of head without contrast
+Prolonged seizure (>5 minutes),Apnea,Abnormal involuntary movement,Electroencephalogram (EEG)
+Generalized tonic-clonic seizure,Epilepsy monitoring unit admission,Seizure,Video EEG
+Infantile spasms,Pneumonia,Hyperexplexia,Echocardiography
+Focal seizure,Seizure disorder,Apnea,Electrocardiogram
+Complex partial seizure with impairment of consciousness,Planned admission,Breathholding spell,US scan of hip
+Provoked seizure,Birth,Increased muscle tone,CT of head with contrast
+Status epilepticus,Abnormal movement,Hyperkinesis,MRI of brain without contrast
+Focal seizure with secondary generalization,Increased seizure frequency,Epilepsy,MRI of orbits without contrast
+Focal seizure with impaired awareness,Term birth of newborn,Movement Disorder,Ambulatory EEG
+Focal motor seizure,Status epilepticus,Constipation,Polysomnography
+Febrile seizure,Vomiting,Sinus tachycardia,Videofluoroscopy swallow
+Focal clonic seizure,Respiratory distress,Patent foramen ovale,Ultrasonography of head and neck
+Myoclonic seizure,Dehydration,Decreased muscle tone,PET CT of brain
+Clonic seizure,Urinary tract infectious disease,Delayed speech and language development,Upper gastrointestinal tract series
+Tonic seizure,Acute viral disease,Developmental dysplasia of left hip,MRI of brain
+Subclinical seizure,Respiratory failure,Hemangioma,Retrograde cystourethrogram
+Generalized onset seizure,Acute respiratory failure,Cyanosis,Ultrasonography of bilateral kidneys
+Unprovoked seizure,Electrolyte imbalance,Obstructive sleep apnea,MRI of brain with contrast
+Multifocal seizures,Apparent life-threatening event in infant,Gastroesophageal reflux disease (GERD),CT of head and neck
+Absence seizure,Admitted for observation,Laryngomalacia,CT of head
+"Tonic seizures, refractory",Fever,Altered mental status,Ultrasonography of head by open fontanel acoustic window
+Generalized tonic seizure,Hydrops,Global developmental delay,Continuous EEG
+Unclassified seizure,Planned procedure,Feeding problem,Ultrasonography of lower limb
+Atonic seizures,Epilepsy,Gross motor developmental delay,Magnetic resonance spectroscopy
+Myoclonic-atonic seizure,Infection associated with implant,Cardiac arrhythmia,MRI of abdomen and pelvis
+Myoclonic absence seizure,Cellulitis,Refractory epilepsy,MRI of chest without contrast
+Epilepsy of infancy with migrating focal seizures,Infantile spasms,Torticollis,Single photon emission computed tomography of brain
+Epileptic spasms,Altered mental status,Plagiocephaly,Sleep EEG
+Atypical absence seizure,Gastrointestinal hemorrhage,Hypotonia,Endoscopy of nose
+Myoclonic-tonic seizure,Acute upper respiratory infection,Infantile spasms,Magnetic resonance spectroscopy of brain without contrast
+Generalized clonic seizure,Aspiration pneumonia,Poor visual tracking,Electromyography
+,Sepsis,Stereotypy,Nerve conduction study
+,Prematurity of infant,Cerebral palsy,Laryngoscopy
+,Hypoglycemia,Feeding difficulty,Radionuclide gastric emptying study
+,Choking,Epileptic spasms,US scan of bladder
+,Hyponatremia,Myopia,PH reflux test
+,Brief resolved unexplained event,Alternating esotropia,Electroretinography
+,Accidental overdose,Astigmatism,MRI of brain and brain stem without contrast
+,Intolerance to food,Cortical visual impairment,MRS of head
+,Overdose,Slow weight gain,CT of brain without contrast
+,Hypertension,Vomiting,Ultrasonography of abdomen
+,Irritability,Chronic otitis media,Ultrasonography of liver
+,Preterm birth,Irritability,Holter extended electrocardiographic recording
+,Cardiopulmonary arrest,Abnormal gait,Diffusion weighted magnetic resonance imaging of brain
+,Acute viral bronchiolitis,Hydronephrosis,Radiography for bone age studies
+,Viral infection,Nystagmus,CT of chest
+,,Postural plagiocephaly,Voiding urethrocystography
+,,Dysmorphic features,Auditory brainstem electric response audiometry
+,,Muscle weakness,Oto-acoustic emission test
+,,Dysphagia,Audiogram
+,,Dysfunction of eustachian tube,Tympanometry testing
+,,Pulmonary aspiration,US scan of spine
+,,Hypertrophy of tonsils AND adenoids,MRI of lumbar spine with contrast
+,,Injury of head,MRI of pelvis with contrast
+,,Unprovoked seizure,MRI of pelvis without contrast
+,,Self-injurious behavior,Esophagogastroduodenoscopy (EGD)
+,,Localization-related epilepsy,Endoscopy and biopsy of upper gastrointestinal tract
+,,Seizure free,Fiberoptic bronchoscopy and biopsy
+,,Abnormal behavior,MR angiography of head and brain without contrast
+,,Acute respiratory failure,Biopsy of muscle
+,,Meningoencephalitis,Fluoroscopy using contrast
+,,Dependence on supplemental oxygen,MRI of head and spine
+,,Cardiomegaly,Barium swallow
+,,Dependence on continuous positive airway pressure ventilation,Fiberoptic bronchoscopy
+,,Dependency on feeding tube,Nasal sinus endoscopy
+,,Subarachnoid hemorrhage,"CT of chest, abdomen and pelvis"
+,,Cerebral hemorrhage,Biopsy of duodenum
+,,Myoclonus,Ultrasonography of intestine
+,,Tremor,Visual evoked potential study
+,,Dependency on total parenteral nutrition,CT of abdomen
+,,Dextrocardia,Ultrasonography of left breast
+,,Prolonged QT interval,Ultrasonography of pelvis and lower extremity
+,,Hypoplasia of the optic nerve,MRI of lumbar and sacral spine
+,,Chorea,MRI venography
+,,Atelectasis,Ultrasonography of upper limb
+,,Upper gastrointestinal bleeding,Ultrasonography of groin and scrotum
+,,Phimosis,MRI of orbit with contrast
+,,Mixed muscle tone,Biopsy of colon
+,,Macrocephaly,Colonoscopy
+,,Amblyopia,MRI of brain with functional imaging
+,,Lethargy,Fluoroscopic cystourethrography
+,,Sialorrhea,US scan of gallbladder
+,,Hypermetropia,CT of abdomen and pelvis
+,,Hematemesis,MRI of lumbar spine without contrast
+,,Chronic constipation,Biopsy of skin
+,,Spastic quadriplegia,Biopsy of skeletal muscle
+,,Dependence on ventilator,Contrast enema
+,,Hypertrophy of adenoids,Gastroesophageal reflux study
+,,Snoring,Nasal laryngoscopy
+,,Pulmonary edema,
+,,Anemia,
+,,Thrombocytopenia,
+,,Respiratory insufficiency,
+,,Respiratory distress,
+,,Exotropia,
+,,Abnormal weight gain,
+,,Oral aversion,
+,,Recurrent aspiration pneumonia,
+,,Insomnia,
+,,Bruxism,
+,,Problem behavior,
+,,Overweight,
+,,Intellectual disability,
+,,Chronic pulmonary aspiration,
+,,Cushingoid facies,
+,,Ineffective airway clearance,
+,,Unintentional weight loss,
+,,Clostridioides difficile infection,
+,,Serum bicarbonate below reference range,
+,,Disturbance in sleep behavior,
+,,Reactive airway disease,
+,,Pleural effusion,
+,,Respiratory failure,
+,,Dependence on biphasic positive airway pressure ventilation,
+,,Ptosis,
+,,Staring spell,
+,,Low blood pressure (hypotension),
+,,Retention of urine,
+,,Septic shock,
+,,Neurogenic bladder,
+,,Neurogenic bowel,
+,,Chronic lung disease,
+,,Speech delay,
+,,Feeling agitated,
+,,Developmental regression associated with seizure,
+,,Seizure free for 1 year,
+,,Chronic cough,
+,,Sensory integration disorder,
+,,Expressive language delay,
+,,Generalized epilepsy,
+,,Decreased level of consciousness,
+,,Heart murmur,
+,,Ohtahara syndrome,
+,,Appendicular hypertonia,
+,,Central sleep apnea,
+,,Chronic respiratory failure,
+,,Dysconjugate gaze,
+,,Tongue tie,
+,,Hematochezia,
+,,Intolerance to food,
+,,Intermittent esotropia,
+,,Intermittent tremor,
+,,Coordination problem,
+,,Fine motor impairment,
+,,Sleep disorder,
+,,Nonspecific paroxysmal spell,
+,,Hypoxic ischemic encephalopathy,
+,,Cardiac arrest,
+,,Disorder of autonomic nervous system,
+,,Spasticity,
+,,Hepatic steatosis,
+,,Developmental regression associated with hospitalization,
+,,Inspiratory stridor,
+,,Neuromuscular scoliosis,
+,,Prematurity of infant,
+,,Provoked seizure,
+,,Dislocation of bilateral hip joints,
+,,Scoliosis deformity of spine,
+,,Left ventricular hypertrophy,
+,,Hypertrophic cardiomyopathy,
+,,Aplastic anemia,
+,,Osteopenia,
+,,Talipes equinovarus,
+,,Edema of lower extremity,
+,,Inguinal hernia,
+,,Contracture of joint of finger,
+,,Hypertension,
+,,Disorder of visual pathways,
+,,Pyelonephritis,
+,,Immunodeficiency disorder,
+,,Short stature,
+,,Urinary incontinence,
+,,Chronic hyponatremia,
+,,Contracture of joint of left ankle,
+,,Reduced visual acuity,
+,,Failure to thrive,
+,,Umbilical hernia,
+,,Esotropia,
+,,Decreased hearing,
+,,Poor visual attention,
+,,Weak cry,
+,,Abnormal weight loss,
+,,Diarrhea,
+,,Failure to gain weight,
+,,Auditory processing disorder,
+,,Global aphasia,
+,,Eczema,
+,,Hirsutism,
+,,Gastroparesis,
+,,Microcephaly,
+,,Fatigue,
+,,Malnutrition,
+,,Aspiration pneumonia,
+,,Autistic features,
+,,Autism spectrum disorder,
+,,Neutropenia,
+,,Ataxia,
+,,Underweight,
+,,Fracture of femur,
+,,Asthma,
+,,Severe cognitive impairment,
+,,Allergic condition,
+,,Congenital hip dysplasia,
+,,Hypoparathyroidism,
+,,Visual disturbance,
+,,Impaired cognition (brain fog),
+,,Cortical blindness,
+,,Intermittent strabismus,
+,,Hydrops fetalis,
+,,Bilateral contracture of joints of elbows,
+,,Tachypnea,
+,,Bilateral contracture of joints of knees,
+,,Swelling (Edema),
+,,Pericardial effusion,
+,,Arthrogryposis,
+,,Fracture of bone,
+,,Bilateral contracture of joints of wrists,
+,,Pneumothorax,
+,,Swollen abdomen,
+,,Ascites,
+,,Neonatal jaundice,
+,,Delayed visual maturation,
+,,Abdominal pain,
+,,Congenital hydronephrosis,
+,,Hyperopic astigmatism,
+,,Gastrointestinal dysmotility,
+,,Hyperactive behavior,
+,,Aggressive behavior,
+,,Anxiety,
+,,Nephrolithiasis,
+,,Recurrent urinary tract infections,
+,,Recurrent viral infection,
+,,Vesicoureteral reflux,
+,,Choreoathetosis,
+,,Acquired coxa valga,
+,,Hearing loss,
+,,Recurrent acute otitis media,
+,,Gross motor developmental regression,
+,,Respiratory compromise,
+,,Lennox-Gastaut syndrome,
+,,Subluxation of left hip joint,
+,,Bilateral dysplastic hip,
+,,Double Incontinence,
+,,Ventricular septal defect,
+,,Pulmonic valve stenosis,
+,,Clostridium difficile diarrhea,
+,,Hydrocephalus,
+,,Premature atrial contraction,
+,,Cholelithiasis without obstruction,
+,,Normocytic anemia,
+,,Hydrocele of testis,
+,,Syndactyly of toes,
+,,Convulsions in the newborn,
+,,Fracture of clavicle,
+,,Nocturnal myoclonus,
+,,Hypospadias,
+,,Sandifer syndrome,
+,,Alternating hypertropia,
+,,Intermittent exotropia,
+,,Restlessness,
+,,Breathing-related sleep disorder,
+,,Oropharyngeal dysphagia,
+,,Dystonia,
+,,Right bundle branch block,
+,,Variable muscle tone,
+,,Hypoplasia of corpus callosum,
+,,Clostridium difficile colitis,
+,,Hyperirritability,
+,,Inappropriate laughter,
+,,West syndrome,
+,,Kyphosis deformity of spine,
+,,Temperature dysregulation,
+,,Esophagitis,
+,,Restrictive lung disease,
+,,Progressive myoclonic epilepsy,
+,,Undescended testicle,
+,,Axial hypotonia,
+,,Generalized hypotonia,
+,,Developmental regression,
+,,Localized edema,
+,,Fracture of ulna,
+,,Fracture of radius,
+,,Fracture of scaphoid bone of wrist,
+,,Incoordination,
+,,Mixed receptive-expressive language disorder,
+,,Chronic vomiting,
+,,Hypoglycemia,
+,,Acute hyperglycemia,
+,,Microcytic anemia,
+,,Hypercholesterolemia,
+,,Recurrent pneumonia,
+,,Nausea,
+,,Hypokalemia,
+,,Dyslipidemia,
+,,Vitamin D deficiency,
+,,Gastrointestinal hemorrhage,
+,,Drug-induced hyponatremia,
+,,Brachycephaly,
+,,Dyskinesia,
+,,Contracture of right elbow joint,
+,,Severe sensorineural hearing loss of the right ear,
+,,Projectile vomiting,
+,,Delayed milestone,
+,,Mild hyperopia,
+,,Hyponatremia,
+,,Bilateral hearing loss,
+,,Strabismus,
+,,Precocious thelarche,
+,,Seizure free for 6 months,
+,,Seizure free > 12 months,
+,,Difficulty swallowing,
+,,Respiratory arrest,
+,,Elevated liver enzymes (Transaminitis),
+,,Jaundice,
+,,Mild gross motor delay,
+,,Cephalhematoma due to birth trauma,
+,,Anisocoria,
+,,Intertrigo,
+,,Alternating exotropia,
+,,Spastic quadriparesis,
+,,Profound global developmental delay,
+,,Myopic astigmatism,
+,,Adrenal insufficiency,
+,,Ventricular tachycardia,
+,,Recurrent Clostridium difficile infection,
+,,Hypotonic cerebral palsy,
+,,Cold hands,
+,,Immunoglobulin G deficiency,
+,,Severe intellectual disability,
+,,Left conductive hearing loss,
+,,Dilatation of renal pelvis,
+,,Neonatal hypoglycemia,
+,,Excessive weight gain,
+,,Oculomotor apraxia,
+,,Disorders of initiating and maintaining sleep,
+,,Environmental allergy,
+,,Intracranial hemorrhage,
+,,Laryngeal spasm,
+,,Dermoid cyst,
+,,Left hemiplegia,
+,,Decreased urine output,
+,,Dysmorphic facies,
+,,Suck-swallow incoordination,
+,,Hypoxemia,
+,,Abnormal breathing,
+,,Bilateral contracture of joints of hips,
+,,Congenital coxa valga,
+,,Hyperventilation,
+,,Spastic paraplegia,
+,,Hyperplasia of gingiva,
+,,Bilateral contractures of upper and lower extremities,
+,,Congenital hydronephrosis due to ureteropelvic junction obstruction,
+,,Muscle weakness of lower limb,
+,,Chronic kidney disease,
+,,Obstructive nephropathy,
+,,Hypertrophy of tonsils,
+,,Hypoalbuminemia,
+,,Hypothyroidism,
+,,Hypercapnic respiratory failure,
+,,Conjunctivitis,
+,,Mood disorder,
+,,Cognitive developmental delay,
+,,Motor tic disorder,
+,,Dependence on non-invasive ventilation,
+,,Precocious puberty,
+,,Hyperlipidemia,
+,,Cortical dysplasia,
+,,Hyperopia of right eye,
+,,Hyperopia of left eye,
+,,Simple craniosynostosis,
+,,Enlarged Liver (Hepatomegaly),
+,,Neuropathic pain,
+,,Gastritis,
+,,Ulcer of mouth,
+,,Infection caused by Helicobacter pylori,
+,,Retractile testis,
+,,Neuromuscular kyphosis,
+,,Dysmetria,
+,,Developmental delay in fine motor function,
+,,Talipes planovalgus,
+,,Mitochondrial cytopathy,
+,,Fracture of ankle,
+,,Single seizure,
+,,"Blind or low vision, both eyes",
+,,Speech and language disorder,
+,,Talipes planus,
+,,Contracture of ankle joint,
+,,Pancreatitis,
+,,Bilious vomiting,
+,,Hypercalcemia,
+,,Mild expressive language delay,
+,,Oral apraxia,
+,,Mild pulmonary valve stenosis,
+,,Congenital atrial septal defect,
+,,Hypoventilation,
+,,Neuralgia,
+,,Severe global developmental delay,
+,,Restless sleep,
+,,Craniosynostosis syndrome,
+,,Profound intellectual disability,
+,,Edema of glottis,
+,,Vocal cord paralysis,
+,,Seasonal allergy,
+,,Talipes equinus,
+,,Conductive hearing loss of right ear,
+,,Developmental plateau,
+,,Headache,
+,,Hypochloremia,
+,,Hyperkalemia,
+,,Syndrome of inappropriate antidiuretic hormone secretion (SIADH),
+,,Pectus excavatum,
+,,Upper respiratory tract obstruction,
+,,Dependence on nocturnal oxygen therapy,
+,,Dyspnea on exertion,
+,,Hepatitis,
