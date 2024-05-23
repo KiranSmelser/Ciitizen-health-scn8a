@@ -21,12 +21,66 @@ library(ggstatsplot)
 ```{r}
 path_data="./data/Supplementary_Table - Study Data by Groups.csv"
 path_classifier="./data/ciitizen_health_classifier.xlsx"
+directory <- getwd()
 ```
 
 ```{r}
-data <- read_csv(path_data)
+data <- read_csv(path_data, show_col_types = FALSE)
 ```
 
+```{r seizure_types_by_grouping_strats, warning=FALSE}
+seizure_types <- data %>% select(6, 8:46)
+colnames(seizure_types) <- gsub("seizure_history_type_", "", colnames(seizure_types))
+colnames(seizure_types) <- gsub(" ", "_", colnames(seizure_types))
+seizure_types$Onset_group[is.na(seizure_types$Onset_group)] <- "None"
+seizure_types[is.na(seizure_types)] <- 0
+
+seizure_types <- seizure_types %>% mutate(Onset_group = recode(Onset_group, "Neonatal" = "1. Neonatal", "1-4 Months"= "2. 1-4 Months", "4-7 Months"= "3. 4-7 Months", "7-12 Months" = "4. 7-10 Months", "12+ Months" = "5. 12+ Months"))
+seizure_types <- seizure_types %>% filter(Onset_group != "None")
+
+
+strat_list <- colnames(seizure_types)[1:8]
+sz_types <- colnames(seizure_types)[9:length(colnames(seizure_types))]
+
+for (strat in strat_list) {
+  significant_col <- c()
+  
+  strat_df <- seizure_types %>% select(!!sym(strat), all_of(sz_types))
+  group_type <- seizure_types[[strat]]
+  
+  for (var_name in sz_types) {
+    cont_table <- table(group_type, seizure_types[[var_name]])
+    
+    test_result <- chisq.test(cont_table)
+    
+    if (test_result$p.value < 0.05) {
+      significant_col <- c(significant_col, var_name)
+    }
+  }
+  
+  pdf(file = file.path(directory, "figures", paste("Seizure_types_by", strat, "SigOnly.pdf", sep = "_")), width = 10, height = 10)
+  
+  for (colname in significant_col) {
+    plot <- ggbarstats(data = seizure_types, x = !!sym(colname), y = !!sym(strat)) +
+      labs(x = strat,
+           y = paste("Counts of", colname, sep = " "),
+           title = paste("Distribution of", colname, "by", strat, sep = " ")) +
+      theme_minimal() +
+      theme(
+        text = element_text(size = 12, color = "black"),
+        plot.title = element_text(size = 14, face = "bold", color = "#2a475e"),
+        plot.subtitle = element_text(size = 12, face = "bold", color = "#1b2838"),
+        plot.title.position = "plot",
+        axis.text = element_text(size = 12, color = "black"),
+        axis.title = element_text(size = 12)
+      )
+    
+    print(plot) 
+  }
+  
+  dev.off()
+}
+```
 
 #1 Correlations Between Groups and Seizure Types
 ##1.1 Initial Seizure Type
