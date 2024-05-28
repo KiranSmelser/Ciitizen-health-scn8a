@@ -1,0 +1,158 @@
+---
+title: "Analysis"
+author: "Kiran Smelser"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(data.table)
+library(readxl)
+library(pROC)
+library(caret)
+```
+
+```{r}
+path_data="./data/Supplementary_Table - Study Data by Groups.csv"
+path_classifier="./data/ciitizen_health_classifier.xlsx"
+directory <- getwd()
+```
+
+```{r}
+data <- read_csv(path_data, show_col_types = FALSE)[, -1]
+attach(data)
+```
+
+#1 Likelihood of Focal Seizures
+##1.1 Logistic Regression Model
+```{r}
+logismod<-glm(`seizure_history_type_Focal seizure`~bilateral_tc,family=binomial(link="logit"))
+summary(logismod)
+```
+
+##1.2 Confidence Interval
+```{r}
+summary(logismod)
+beta_hat<-logismod$coefficients[2]
+beta_hat
+se_beta_hat<-summary(logismod)$coef[,"Std. Error"] 
+se_beta_hat<-se_beta_hat[2]
+se_beta_hat
+zstar<-qnorm(0.975,0,1)
+```
+
+```{r}
+#Lower bound
+(lb<-beta_hat-zstar*se_beta_hat)
+#Upper bound
+(ub<-beta_hat+zstar*se_beta_hat)
+
+#Odds
+exp(lb)
+exp(ub)
+```
+
+##1.3 Diagnostics
+```{r}
+# AUC
+roc_obj <- roc(logismod$model[, 1], fitted(logismod))
+auc(roc_obj)
+```
+
+```{r}
+# Confusion Matrix
+predicted <- ifelse(fitted(logismod) > 0.5, 1, 0)
+confusionMatrix(as.factor(predicted), as.factor(logismod$model[, 1]))
+```
+
+
+#2 Likelihood of Status Events
+##2.1 Logistic Regression Model
+```{r}
+logismod<-glm(`seizure_history_type_Status epilepticus`~bilateral_tc,family=binomial(link="logit"))
+summary(logismod)
+```
+
+##2.2 Confidence Interval
+```{r}
+summary(logismod)
+beta_hat<-logismod$coefficients[2]
+beta_hat
+se_beta_hat<-summary(logismod)$coef[,"Std. Error"] 
+se_beta_hat<-se_beta_hat[2]
+se_beta_hat
+zstar<-qnorm(0.975,0,1)
+```
+
+```{r}
+#Lower bound
+(lb<-beta_hat-zstar*se_beta_hat)
+#Upper bound
+(ub<-beta_hat+zstar*se_beta_hat)
+
+#Odds
+exp(lb)
+exp(ub)
+```
+
+##2.3 Diagnostics
+```{r}
+# AUC
+roc_obj <- roc(logismod$model[, 1], fitted(logismod))
+auc(roc_obj)
+```
+
+```{r}
+# Confusion Matrix
+predicted <- ifelse(fitted(logismod) > 0.5, 1, 0)
+confusionMatrix(as.factor(predicted), as.factor(logismod$model[, 1]))
+```
+
+
+#3 Likelihood of Prolonged Seizures
+##3.1 Logistic Regression Model
+```{r}
+logismod<-glm(`seizure_history_type_Prolonged seizure (>5 minutes)`~bilateral_tc,family=binomial(link="logit"))
+summary(logismod)
+```
+
+##3.2 Confidence Interval
+```{r}
+summary(logismod)
+beta_hat<-logismod$coefficients[2]
+beta_hat
+se_beta_hat<-summary(logismod)$coef[,"Std. Error"] 
+se_beta_hat<-se_beta_hat[2]
+se_beta_hat
+zstar<-qnorm(0.975,0,1)
+```
+
+```{r}
+#Lower bound
+(lb<-beta_hat-zstar*se_beta_hat)
+#Upper bound
+(ub<-beta_hat+zstar*se_beta_hat)
+
+#Odds
+exp(lb)
+exp(ub)
+```
+
+##3.3 Diagnostics
+```{r}
+# AUC
+roc_obj <- roc(logismod$model[, 1], fitted(logismod))
+auc(roc_obj)
+```
+
+```{r}
+# Confusion Matrix
+predicted <- ifelse(fitted(logismod) > 0.5, 1, 0)
+confusionMatrix(as.factor(predicted), as.factor(logismod$model[, 1]))
+```
