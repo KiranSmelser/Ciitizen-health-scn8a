@@ -59,7 +59,7 @@ for (seizure_type in seizure_types) {
         lb <- beta_hat - zstar * se_beta_hat
         ub <- beta_hat + zstar * se_beta_hat
         odds <- exp(c(lb, ub))
-        
+
         # Diagnostics
         roc_obj <- roc(logismod$model[, 1], fitted(logismod))
         auc_val <- auc(roc_obj)
@@ -68,8 +68,8 @@ for (seizure_type in seizure_types) {
         
         # Extract and save key metrics
         coef <- beta_hat
-        ci_lower <- lb
-        ci_upper <- ub
+        ci_lower <- exp(lb)
+        ci_upper <- exp(ub)
         auc <- auc_val
         
         model_results <- data.frame(
@@ -100,8 +100,8 @@ for (seizure_type in seizure_types) {
       
       # Extract and save key metrics
       coef <- beta_hat
-      ci_lower <- lb
-      ci_upper <- ub
+      ci_lower <- exp(lb)
+      ci_upper <- exp(ub)
       auc <- auc_val
       
       model_results <- data.frame(

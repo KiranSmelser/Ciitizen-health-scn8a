@@ -1,137 +1,137 @@
-seizure_type,predictor,coefficient,ci_lower,ci_upper,auc
-seizure_focal,bilateral_tc,1.663505134,0.57543952,2.751570747,0.673423423
-seizure_focal,Onset_group_(Intercept),1.504077397,0.42066654,2.587488253,0.806949807
-seizure_focal,Onset_group_Onset_group12+ Months,-19.07014588,-2760.513083,2722.372791,0.806949807
-seizure_focal,Onset_group_Onset_group4-7 Months,-1.098612289,-2.595559508,0.398334931,0.806949807
-seizure_focal,Onset_group_Onset_group7-12 Months,-2.277267285,-3.729685632,-0.824848939,0.806949807
-seizure_focal,Onset_group_Onset_groupNeonatal,-2.602689685,-4.535240236,-0.670139135,0.806949807
-seizure_focal,focal,23.05097517,-5936.677001,5982.778952,0.959459459
-seizure_focal,absence,0.285663907,-1.117530782,1.688858596,0.51539039
-seizure_focal,infantile,1.011600912,-0.27131625,2.294518073,0.570945946
-seizure_focal,abnormal_eeg,0.530628196,-1.324573247,2.385829639,0.517676768
-seizure_focal,unique_types_(Intercept),-19.56606853,-7045.392105,7006.259968,0.897875817
-seizure_focal,unique_types_unique_types1,17.62015838,-7008.206034,7043.446351,0.897875817
-seizure_focal,unique_types_unique_types2,19.8537506,-7005.972339,7045.67984,0.897875817
-seizure_focal,unique_types_unique_types3,21.27081662,-7004.555381,7047.097014,0.897875817
-seizure_focal,unique_types_unique_types4,39.13213705,-11069.67423,11147.9385,0.897875817
-seizure_focal,unique_types_unique_types5,39.13213704,-11717.32346,11795.58773,0.897875817
-seizure_focal,age_onset_m,-0.177624447,-0.300643159,-0.054605736,0.688030888
-seizure_spasms,bilateral_tc,-0.223143551,-1.462733424,1.016446322,0.525641026
-seizure_spasms,Onset_group_(Intercept),-0.762140052,-1.659289475,0.13500937,0.727083333
-seizure_spasms,Onset_group_Onset_group12+ Months,-17.80392846,-4537.678909,4502.071053,0.727083333
-seizure_spasms,Onset_group_Onset_group4-7 Months,-1.109662125,-2.847794263,0.628470013,0.727083333
-seizure_spasms,Onset_group_Onset_group7-12 Months,-0.911836382,-2.436780491,0.613107728,0.727083333
-seizure_spasms,Onset_group_Onset_groupNeonatal,-17.80392846,-4537.67891,4502.071053,0.727083333
-seizure_spasms,focal,0.810930216,-0.470969326,2.092829758,0.596153846
-seizure_spasms,absence,0.319633672,-1.380722185,2.01998953,0.518589744
-seizure_spasms,infantile,53.13213755,-213479.1545,213585.4187,1
-seizure_spasms,abnormal_eeg,16.19919222,-3451.482097,3483.880482,0.544642857
-seizure_spasms,unique_types_(Intercept),-18.56606852,-4279.944978,4242.812841,0.741565452
-seizure_spasms,unique_types_unique_types1,16.62015837,-4244.759009,4277.999325,0.741565452
-seizure_spasms,unique_types_unique_types2,16.77430905,-4244.604776,4278.153394,0.741565452
-seizure_spasms,unique_types_unique_types3,16.86132042,-4244.517855,4278.240496,0.741565452
-seizure_spasms,unique_types_unique_types4,18.56606852,-4242.813141,4279.945278,0.741565452
-seizure_spasms,unique_types_unique_types5,18.97153363,-4242.407751,4280.350819,0.741565452
-seizure_spasms,age_onset_m,-0.06997516,-0.199639395,0.059689074,0.549305556
-seizure_tonic-clonic,bilateral_tc,21.33373044,-4194.161966,4236.829427,0.890625
-seizure_tonic-clonic,Onset_group_(Intercept),0.980829253,0.042568647,1.919089859,0.737608183
-seizure_tonic-clonic,Onset_group_Onset_group12+ Months,-2.926739402,-5.222504472,-0.630974332,0.737608183
-seizure_tonic-clonic,Onset_group_Onset_group4-7 Months,0.405465108,-1.169634894,1.98056511,0.737608183
-seizure_tonic-clonic,Onset_group_Onset_group7-12 Months,-1.299282984,-2.606852808,0.00828684,0.737608183
-seizure_tonic-clonic,Onset_group_Onset_groupNeonatal,-0.980829253,-2.654466721,0.692808215,0.737608183
-seizure_tonic-clonic,focal,1.413882318,0.431618986,2.396145649,0.669588415
-seizure_tonic-clonic,absence,0.505094949,-0.965601746,1.975791644,0.526295732
-seizure_tonic-clonic,infantile,-0.875468737,-2.106420421,0.355482947,0.56402439
-seizure_tonic-clonic,abnormal_eeg,1.897119985,-0.351861649,4.146101619,0.559233449
-seizure_tonic-clonic,unique_types_(Intercept),-18.56606851,-4279.944983,4242.812846,0.814550042
-seizure_tonic-clonic,unique_types_unique_types1,18.05524289,-4243.323791,4279.434277,0.814550042
-seizure_tonic-clonic,unique_types_unique_types2,19.72921932,-4241.649813,4281.108252,0.814550042
-seizure_tonic-clonic,unique_types_unique_types3,19.37699873,-4242.002078,4280.756076,0.814550042
-seizure_tonic-clonic,unique_types_unique_types4,20.17550642,-4241.203949,4281.554961,0.814550042
-seizure_tonic-clonic,unique_types_unique_types5,37.13213702,-7093.518659,7167.782933,0.814550042
-seizure_tonic-clonic,age_onset_m,-0.158792653,-0.269893817,-0.047691489,0.692761605
-seizure_clonic,bilateral_tc,2.187654975,0.088926806,4.286383143,0.667675545
-seizure_clonic,Onset_group_(Intercept),-0.36772478,-1.21762218,0.48217262,0.775246305
-seizure_clonic,Onset_group_Onset_group12+ Months,-18.19834373,-4538.073316,4501.676628,0.775246305
-seizure_clonic,Onset_group_Onset_group4-7 Months,-1.504077397,-3.218297871,0.210143077,0.775246305
-seizure_clonic,Onset_group_Onset_group7-12 Months,-2.522646978,-4.708327373,-0.336966583,0.775246305
-seizure_clonic,Onset_group_Onset_groupNeonatal,-0.730887509,-2.542874853,1.081099836,0.775246305
-seizure_clonic,focal,1.401065678,0.025993829,2.776137528,0.655569007
-seizure_clonic,absence,0.2135741,-1.478614386,1.905762586,0.512106538
-seizure_clonic,infantile,0.798507696,-0.560965512,2.157980905,0.566585956
-seizure_clonic,abnormal_eeg,16.29310286,-3451.388187,3483.974393,0.545454545
-seizure_clonic,unique_types_(Intercept),-19.56606851,-7045.392068,7006.259931,0.860331633
-seizure_clonic,unique_types_unique_types1,-1.29E-08,-8782.282517,8782.282517,0.860331633
-seizure_clonic,unique_types_unique_types2,17.77430904,-7008.051797,7043.600415,0.860331633
-seizure_clonic,unique_types_unique_types3,18.75513829,-7007.07096,7044.581237,0.860331633
-seizure_clonic,unique_types_unique_types4,19.56606851,-7006.260114,7045.392251,0.860331633
-seizure_clonic,unique_types_unique_types5,20.95236287,-7004.873979,7046.778704,0.860331633
-seizure_clonic,age_onset_m,-0.29038515,-0.520930416,-0.059839884,0.751847291
-seizure_motor,bilateral_tc,2.503255788,1.162905825,3.843605752,0.729545455
-seizure_motor,Onset_group_(Intercept),0.559615788,-0.309045361,1.428276937,0.723387723
-seizure_motor,Onset_group_Onset_group12+ Months,-1.658228077,-3.4790906,0.162634446,0.723387723
-seizure_motor,Onset_group_Onset_group4-7 Months,-0.693147181,-2.028637494,0.642343132,0.723387723
-seizure_motor,Onset_group_Onset_group7-12 Months,-1.881371628,-3.285306495,-0.47743676,0.723387723
-seizure_motor,Onset_group_Onset_groupNeonatal,0.538996501,-1.281866022,2.359859024,0.723387723
-seizure_motor,focal,0.760286483,-0.183680804,1.704253771,0.593181818
-seizure_motor,absence,0.474457976,-0.930008331,1.878924283,0.525757576
-seizure_motor,infantile,0.806475866,-0.423112844,2.036064576,0.558712121
-seizure_motor,abnormal_eeg,17.62858883,-3450.052673,3485.30985,0.569444444
-seizure_motor,unique_types_(Intercept),-18.56606851,-4279.944983,4242.812846,0.88042588
-seizure_motor,unique_types_unique_types1,17.09973144,-4244.279368,4278.478831,0.88042588
-seizure_motor,unique_types_unique_types2,18.08056069,-4243.298445,4279.459566,0.88042588
-seizure_motor,unique_types_unique_types3,21.05097516,-4240.328427,4282.430378,0.88042588
-seizure_motor,unique_types_unique_types4,20.17550642,-4241.203949,4281.554962,0.88042588
-seizure_motor,unique_types_unique_types5,37.13213702,-7093.518659,7167.782933,0.88042588
-seizure_motor,age_onset_m,-0.121970435,-0.2264249,-0.01751597,0.693861694
-seizure_absence,bilateral_tc,0.046520016,-1.43225507,1.525295101,0.505208333
-seizure_absence,Onset_group_(Intercept),-1.84582669,-3.063475374,-0.628178007,0.585537919
-seizure_absence,Onset_group_Onset_group12+ Months,-0.100083459,-2.523491589,2.323324672,0.585537919
-seizure_absence,Onset_group_Onset_group4-7 Months,-0.025975486,-1.949226526,1.897275553,0.585537919
-seizure_absence,Onset_group_Onset_group7-12 Months,0.171850257,-1.561137269,1.904837783,0.585537919
-seizure_absence,Onset_group_Onset_groupNeonatal,-16.72024182,-4536.595298,4503.154814,0.585537919
-seizure_absence,focal,0.097980408,-1.305465881,1.501426697,0.512152778
-seizure_absence,absence,53.13213755,-248431.5472,248537.8114,1
-seizure_absence,infantile,0.319633672,-1.380718623,2.019985967,0.525173611
-seizure_absence,abnormal_eeg,-0.710846755,-3.038497628,1.616804117,0.529713115
-seizure_absence,unique_types_(Intercept),-19.56606853,-7045.392067,7006.25993,0.866120219
-seizure_absence,unique_types_unique_types1,18.09973146,-7007.72638,7043.925842,0.866120219
-seizure_absence,unique_types_unique_types2,1.22E-08,-8397.468252,8397.468252,0.866120219
-seizure_absence,unique_types_unique_types3,17.08116188,-7008.745133,7042.907457,0.866120219
-seizure_absence,unique_types_unique_types4,18.87292135,-7006.953283,7044.699125,0.866120219
-seizure_absence,unique_types_unique_types5,19.97153364,-7005.854693,7045.79776,0.866120219
-seizure_absence,age_onset_m,0.039714152,-0.042590252,0.122018556,0.561728395
-seizure_history_type_Status epilepticus,bilateral_tc,1.722766598,0.587146887,2.858386309,0.674242424
-seizure_history_type_Status epilepticus,Onset_group_(Intercept),0.762140052,-0.13500937,1.659289475,0.71950272
-seizure_history_type_Status epilepticus,Onset_group_Onset_group12+ Months,-18.32820854,-2759.771079,2723.114661,0.71950272
-seizure_history_type_Status epilepticus,Onset_group_Onset_group4-7 Months,-0.628608659,-1.982801877,0.725584558,0.71950272
-seizure_history_type_Status epilepticus,Onset_group_Onset_group7-12 Months,-1.301136553,-2.594882465,-0.00739064,0.71950272
-seizure_history_type_Status epilepticus,Onset_group_Onset_groupNeonatal,-1.272965676,-2.962242185,0.416310833,0.71950272
-seizure_history_type_Status epilepticus,focal,2.043073898,0.978038362,3.108109433,0.731439394
-seizure_history_type_Status epilepticus,absence,0.474457976,-0.930008331,1.878924283,0.525757576
-seizure_history_type_Status epilepticus,infantile,0.046520015,-1.156684056,1.249724087,0.503409091
-seizure_history_type_Status epilepticus,abnormal_eeg,-1.574346593,-3.820240894,0.671547709,0.546717172
-seizure_history_type_Status epilepticus,unique_types_(Intercept),-1.252762968,-2.824230194,0.318704257,0.766994267
-seizure_history_type_Status epilepticus,unique_types_unique_types1,0.15415068,-1.782339835,2.090641195,0.766994267
-seizure_history_type_Status epilepticus,unique_types_unique_types2,0.767255153,-1.0341855,2.568695806,0.766994267
-seizure_history_type_Status epilepticus,unique_types_unique_types3,2.063693185,0.099844233,4.027542136,0.766994267
-seizure_history_type_Status epilepticus,unique_types_unique_types4,2.862200881,0.201513033,5.522888729,0.766994267
-seizure_history_type_Status epilepticus,unique_types_unique_types5,18.81883145,-3448.862757,3486.50042,0.766994267
-seizure_history_type_Status epilepticus,age_onset_m,-0.138163486,-0.249053772,-0.0272732,0.66006216
-seizure_history_type_Prolonged seizure (>5 minutes),bilateral_tc,2.545531272,1.308330856,3.782731687,0.747368421
-seizure_history_type_Prolonged seizure (>5 minutes),Onset_group_(Intercept),1.223775432,0.226649597,2.220901266,0.756965944
-seizure_history_type_Prolonged seizure (>5 minutes),Onset_group_Onset_group12+ Months,-18.78984392,-2760.232748,2722.653061,0.756965944
-seizure_history_type_Prolonged seizure (>5 minutes),Onset_group_Onset_group4-7 Months,-0.818310324,-2.254044221,0.617423574,0.756965944
-seizure_history_type_Prolonged seizure (>5 minutes),Onset_group_Onset_group7-12 Months,-1.762771932,-3.12774861,-0.397795255,0.756965944
-seizure_history_type_Prolonged seizure (>5 minutes),Onset_group_Onset_groupNeonatal,-0.712949808,-2.457380365,1.031480749,0.756965944
-seizure_history_type_Prolonged seizure (>5 minutes),focal,1.299282984,0.330790168,2.267775801,0.656390977
-seizure_history_type_Prolonged seizure (>5 minutes),absence,0.160623193,-1.242571496,1.563817882,0.508646617
-seizure_history_type_Prolonged seizure (>5 minutes),infantile,-0.287682072,-1.490287005,0.91492286,0.521052632
-seizure_history_type_Prolonged seizure (>5 minutes),abnormal_eeg,1.701375408,-0.545382393,3.948133208,0.551358234
-seizure_history_type_Prolonged seizure (>5 minutes),unique_types_(Intercept),-0.693147181,-2.079051005,0.692756644,0.734375
-seizure_history_type_Prolonged seizure (>5 minutes),unique_types_unique_types1,-0.405465108,-2.194659252,1.383729036,0.734375
-seizure_history_type_Prolonged seizure (>5 minutes),unique_types_unique_types2,1.178654996,-0.463419483,2.820729476,0.734375
-seizure_history_type_Prolonged seizure (>5 minutes),unique_types_unique_types3,1.504077397,-0.314692207,3.322847001,0.734375
-seizure_history_type_Prolonged seizure (>5 minutes),unique_types_unique_types4,1.386294361,-0.80501199,3.577600713,0.734375
-seizure_history_type_Prolonged seizure (>5 minutes),unique_types_unique_types5,18.25921567,-3449.422294,3485.940725,0.734375
-seizure_history_type_Prolonged seizure (>5 minutes),age_onset_m,-0.250866529,-0.394582832,-0.107150226,0.773606811
+"seizure_type","predictor","coefficient","ci_lower","ci_upper","auc"
+"seizure_focal","bilateral_tc",1.66350513370176,1.77791178328866,15.6672218122854,0.673423423423423
+"seizure_focal","Onset_group_(Intercept)",1.50407739677627,1.52297634237139,13.2963326064994,0.806949806949807
+"seizure_focal","Onset_group_Onset_group12+ Months",-19.0701458831377,0,Inf,0.806949806949807
+"seizure_focal","Onset_group_Onset_group4-7 Months",-1.09861228866811,0.0746041227596266,1.48934277357714,0.806949806949807
+"seizure_focal","Onset_group_Onset_group7-12 Months",-2.27726728500975,0.0240003796140331,0.438301197895598,0.806949806949807
+"seizure_focal","Onset_group_Onset_groupNeonatal",-2.60268968544438,0.0107243305445893,0.511637386326152,0.806949806949807
+"seizure_focal","focal",23.050975171918,0,Inf,0.959459459459459
+"seizure_focal","absence",0.285663907198995,0.327086446169926,5.41329841733141,0.51539039039039
+"seizure_focal","infantile",1.01160091167764,0.762375357400076,9.91965431015192,0.570945945945946
+"seizure_focal","abnormal_eeg",0.530628195818815,0.265916415421852,10.8680755045104,0.517676767676768
+"seizure_focal","unique_types_(Intercept)",-19.5660685261525,0,Inf,0.897875816993464
+"seizure_focal","unique_types_unique_types1",17.6201583770972,0,Inf,0.897875816993464
+"seizure_focal","unique_types_unique_types2",19.8537505986043,0,Inf,0.897875816993464
+"seizure_focal","unique_types_unique_types3",21.270816618391,0,Inf,0.897875816993464
+"seizure_focal","unique_types_unique_types4",39.1321370450811,0,Inf,0.897875816993464
+"seizure_focal","unique_types_unique_types5",39.1321370446458,0,Inf,0.897875816993464
+"seizure_focal","age_onset_m",-0.177624447431731,0.740341909769044,0.94685838692479,0.688030888030888
+"seizure_spasms","bilateral_tc",-0.223143551314413,0.231602341269855,2.76335721172193,0.525641025641026
+"seizure_spasms","Onset_group_(Intercept)",-0.762140052046895,0.190274126698823,1.14454750919703,0.727083333333333
+"seizure_spasms","Onset_group_Onset_group12+ Months",-17.8039284578162,0,Inf,0.727083333333333
+"seizure_spasms","Onset_group_Onset_group4-7 Months",-1.1096621248547,0.0579720510631861,1.87474005614337,0.727083333333333
+"seizure_spasms","Onset_group_Onset_group7-12 Months",-0.911836381524774,0.0874419188408726,1.84615985495305,0.727083333333333
+"seizure_spasms","Onset_group_Onset_groupNeonatal",-17.8039284578181,0,Inf,0.727083333333333
+"seizure_spasms","focal",0.810930215914561,0.624396730764899,8.10782591821539,0.596153846153846
+"seizure_spasms","absence",0.31963367225978,0.251396932336036,7.53824600587456,0.518589743589744
+"seizure_spasms","infantile",53.1321375463861,0,Inf,1
+"seizure_spasms","abnormal_eeg",16.1991922216266,0,Inf,0.544642857142857
+"seizure_spasms","unique_types_(Intercept)",-18.5660685169671,0,Inf,0.741565452091768
+"seizure_spasms","unique_types_unique_types1",16.6201583679118,0,Inf,0.741565452091768
+"seizure_spasms","unique_types_unique_types2",16.7743090477391,0,Inf,0.741565452091768
+"seizure_spasms","unique_types_unique_types3",16.8613204247287,0,Inf,0.741565452091768
+"seizure_spasms","unique_types_unique_types4",18.5660685169671,0,Inf,0.741565452091768
+"seizure_spasms","unique_types_unique_types5",18.9715336250753,0,Inf,0.741565452091768
+"seizure_spasms","age_onset_m",-0.0699751603892203,0.819026045124129,1.06150644498766,0.549305555555556
+"seizure_tonic-clonic","bilateral_tc",21.3337304354702,0,Inf,0.890625
+"seizure_tonic-clonic","Onset_group_(Intercept)",0.980829253009144,1.04348768615832,6.81475326005474,0.737608182533438
+"seizure_tonic-clonic","Onset_group_Onset_group12+ Months",-2.92673940202362,0.00539380356634846,0.532073132462215,0.737608182533438
+"seizure_tonic-clonic","Onset_group_Onset_group4-7 Months",0.40546510811054,0.310480278927034,7.24683708667841,0.737608182533438
+"seizure_tonic-clonic","Onset_group_Onset_group7-12 Months",-1.29928298412768,0.0737663356241376,1.00832127094709,0.737608182533438
+"seizure_tonic-clonic","Onset_group_Onset_groupNeonatal",-0.980829253009146,0.0703363375369548,1.99932218430966,0.737608182533438
+"seizure_tonic-clonic","focal",1.41388231763661,1.53974833754003,10.9807709691232,0.669588414634146
+"seizure_tonic-clonic","absence",0.505094949056804,0.380754013621598,7.21232698995955,0.526295731707317
+"seizure_tonic-clonic","infantile",-0.875468737353898,0.12167272493779,1.42686958971189,0.564024390243902
+"seizure_tonic-clonic","abnormal_eeg",1.89711998488567,0.703377427910179,63.1871917989681,0.559233449477352
+"seizure_tonic-clonic","unique_types_(Intercept)",-18.5660685115792,0,Inf,0.814550042052145
+"seizure_tonic-clonic","unique_types_unique_types1",18.0552428878132,0,Inf,0.814550042052145
+"seizure_tonic-clonic","unique_types_unique_types2",19.7292193213849,0,Inf,0.814550042052145
+"seizure_tonic-clonic","unique_types_unique_types3",19.3769987277955,0,Inf,0.814550042052145
+"seizure_tonic-clonic","unique_types_unique_types4",20.1755064240133,0,Inf,0.814550042052145
+"seizure_tonic-clonic","unique_types_unique_types5",37.1321370235155,0,Inf,0.814550042052145
+"seizure_tonic-clonic","age_onset_m",-0.158792652776305,0.763460556788868,0.95342788484654,0.692761605035405
+"seizure_clonic","bilateral_tc",2.18765497479763,1.09300065283753,72.7030359115693,0.667675544794189
+"seizure_clonic","Onset_group_(Intercept)",-0.367724780125317,0.295933006418276,1.61958933418521,0.775246305418719
+"seizure_clonic","Onset_group_Onset_group12+ Months",-18.1983437297418,0,Inf,0.775246305418719
+"seizure_clonic","Onset_group_Onset_group4-7 Months",-1.50407739677627,0.0400231248520812,1.23385458361617,0.775246305418719
+"seizure_clonic","Onset_group_Onset_group7-12 Months",-2.52264697777085,0.00901985182034269,0.713932697279162,0.775246305418719
+"seizure_clonic","Onset_group_Onset_groupNeonatal",-0.730887508542791,0.0786399960603342,2.94791999775461,0.775246305418719
+"seizure_clonic","focal",1.40106567844019,1.02633461504635,16.0568817600935,0.655569007263923
+"seizure_clonic","absence",0.213574100299437,0.227953325080576,6.7245337090674,0.512106537530266
+"seizure_clonic","infantile",0.798507696218612,0.570657820518036,8.65364747032412,0.566585956416465
+"seizure_clonic","abnormal_eeg",16.2931028553197,0,Inf,0.545454545454545
+"seizure_clonic","unique_types_(Intercept)",-19.5660685055848,0,Inf,0.860331632653061
+"seizure_clonic","unique_types_unique_types1",-1.29089379918765e-08,0,Inf,0.860331632653061
+"seizure_clonic","unique_types_unique_types2",17.7743090363567,0,Inf,0.860331632653061
+"seizure_clonic","unique_types_unique_types3",18.7551382893684,0,Inf,0.860331632653061
+"seizure_clonic","unique_types_unique_types4",19.5660685055848,0,Inf,0.860331632653061
+"seizure_clonic","unique_types_unique_types5",20.9523628667047,0,Inf,0.860331632653061
+"seizure_clonic","age_onset_m",-0.290385150456205,0.593967653501811,0.941915336825755,0.751847290640394
+"seizure_motor","bilateral_tc",2.50325578829181,3.19921614328146,46.6935365758212,0.729545454545454
+"seizure_motor","Onset_group_(Intercept)",0.559615787935404,0.734147467491806,4.17150522968203,0.723387723387723
+"seizure_motor","Onset_group_Onset_group12+ Months",-1.65822807660055,0.0308354400498451,1.17660649823354,0.723387723387723
+"seizure_motor","Onset_group_Onset_group4-7 Months",-0.693147180559928,0.13151458860743,1.90092979529637,0.723387723387723
+"seizure_motor","Onset_group_Onset_group7-12 Months",-1.88137162791709,0.0374291114841839,0.62037151638954,0.723387723387723
+"seizure_motor","Onset_group_Onset_groupNeonatal",0.53899650072974,0.27751896044696,10.5894584840391,0.723387723387723
+"seizure_motor","focal",0.760286483397525,0.832201396864656,5.49728190345242,0.593181818181818
+"seizure_motor","absence",0.474457976053514,0.394550423384425,6.54645893625977,0.525757575757576
+"seizure_motor","infantile",0.806475865866947,0.655004715468143,7.66040286658673,0.558712121212121
+"seizure_motor","abnormal_eeg",17.6285888337808,0,Inf,0.569444444444444
+"seizure_motor","unique_types_(Intercept)",-18.5660685062612,0,Inf,0.88042588042588
+"seizure_motor","unique_types_unique_types1",17.0997314374678,0,Inf,0.88042588042588
+"seizure_motor","unique_types_unique_types2",18.0805606904795,0,Inf,0.88042588042588
+"seizure_motor","unique_types_unique_types3",21.0509751560493,0,Inf,0.88042588042588
+"seizure_motor","unique_types_unique_types4",20.1755064186954,0,Inf,0.88042588042588
+"seizure_motor","unique_types_unique_types5",37.1321370178451,0,Inf,0.88042588042588
+"seizure_motor","age_onset_m",-0.121970434712091,0.797379223585023,0.98263654297986,0.693861693861694
+"seizure_absence","bilateral_tc",0.0465200155113499,0.238769871927849,4.59649980042165,0.505208333333333
+"seizure_absence","Onset_group_(Intercept)",-1.84582669049833,0.0467250257691592,0.533563064161929,0.585537918871252
+"seizure_absence","Onset_group_Onset_group12+ Months",-0.100083458556983,0.0801791647128928,10.2095613896656,0.585537918871252
+"seizure_absence","Onset_group_Onset_group4-7 Months",-0.0259754864032609,0.142384159519531,6.66770386619902,0.585537918871252
+"seizure_absence","Onset_group_Onset_group7-12 Months",0.171850256926659,0.209897225705799,6.71831771600706,0.585537918871252
+"seizure_absence","Onset_group_Onset_groupNeonatal",-16.720241819366,0,Inf,0.585537918871252
+"seizure_absence","focal",0.0979804080719196,0.271046230400166,4.4880876456277,0.512152777777778
+"seizure_absence","absence",53.1321375490957,0,Inf,1
+"seizure_absence","infantile",0.319633671868624,0.251397827915919,7.53821914572193,0.525173611111111
+"seizure_absence","abnormal_eeg",-0.710846755424608,0.0479068092932071,5.03696701088812,0.529713114754098
+"seizure_absence","unique_types_(Intercept)",-19.5660685307084,0,Inf,0.866120218579235
+"seizure_absence","unique_types_unique_types1",18.099731461915,0,Inf,0.866120218579235
+"seizure_absence","unique_types_unique_types2",1.21977669152462e-08,0,Inf,0.866120218579235
+"seizure_absence","unique_types_unique_types3",17.0811618809204,0,Inf,0.866120218579235
+"seizure_absence","unique_types_unique_types4",18.8729213501484,0,Inf,0.866120218579235
+"seizure_absence","unique_types_unique_types5",19.9715336388165,0,Inf,0.866120218579235
+"seizure_absence","age_onset_m",0.0397141516863676,0.958303972593165,1.12977506518913,0.561728395061728
+"seizure_history_type_Status epilepticus","bilateral_tc",1.7227665977409,1.79884876747073,17.4333721472767,0.674242424242424
+"seizure_history_type_Status epilepticus","Onset_group_(Intercept)",0.762140052046897,0.87370772463745,5.25557529733331,0.71950271950272
+"seizure_history_type_Status epilepticus","Onset_group_Onset_group12+ Months",-18.328208538404,0,Inf,0.71950271950272
+"seizure_history_type_Status epilepticus","Onset_group_Onset_group4-7 Months",-0.628608659422375,0.137682925750995,2.0659384080701,0.71950271950272
+"seizure_history_type_Status epilepticus","Onset_group_Onset_group7-12 Months",-1.30113655277958,0.0746546500708075,0.992636603363875,0.71950271950272
+"seizure_history_type_Status epilepticus","Onset_group_Onset_groupNeonatal",-1.27296567581289,0.0517028597420454,1.51635712978259,0.71950271950272
+"seizure_history_type_Status epilepticus","focal",2.04307389750835,2.65923466631697,22.3786959591578,0.731439393939394
+"seizure_history_type_Status epilepticus","absence",0.474457976053515,0.394550423384425,6.54645893625978,0.525757575757576
+"seizure_history_type_Status epilepticus","infantile",0.0465200151893702,0.314527408810269,3.48938005787075,0.503409090909091
+"seizure_history_type_Status epilepticus","abnormal_eeg",-1.57434659262261,0.0219225192469041,1.95726425334917,0.546717171717172
+"seizure_history_type_Status epilepticus","unique_types_(Intercept)",-1.25276296849537,0.0593543305473889,1.37534451670798,0.766994266994267
+"seizure_history_type_Status epilepticus","unique_types_unique_types1",0.154150679827259,0.168244023040015,8.09010083399748,0.766994266994267
+"seizure_history_type_Status epilepticus","unique_types_unique_types2",0.767255152713666,0.355515830519387,13.0487951764637,0.766994266994267
+"seizure_history_type_Status epilepticus","unique_types_unique_types3",2.0636931847117,1.1049987823905,56.1227993987813,0.766994266994267
+"seizure_history_type_Status epilepticus","unique_types_unique_types4",2.86220088092947,1.22325217900962,250.357207822797,0.766994266994267
+"seizure_history_type_Status epilepticus","unique_types_unique_types5",18.818831454857,0,Inf,0.766994266994267
+"seizure_history_type_Status epilepticus","age_onset_m",-0.138163486218525,0.779538054690981,0.973095355437145,0.66006216006216
+"seizure_history_type_Prolonged seizure (>5 minutes)","bilateral_tc",2.54553127160285,3.69999273400794,43.935897091179,0.747368421052632
+"seizure_history_type_Prolonged seizure (>5 minutes)","Onset_group_(Intercept)",1.22377543162211,1.25439024882205,9.21563286294316,0.756965944272446
+"seizure_history_type_Prolonged seizure (>5 minutes)","Onset_group_Onset_group12+ Months",-18.7898439179794,0,Inf,0.756965944272446
+"seizure_history_type_Prolonged seizure (>5 minutes)","Onset_group_Onset_group4-7 Months",-0.81831032351395,0.104973827572721,1.85414481591478,0.756965944272446
+"seizure_history_type_Prolonged seizure (>5 minutes)","Onset_group_Onset_group7-12 Months",-1.7627719323548,0.0438163339535254,0.671799561246612,0.756965944272446
+"seizure_history_type_Prolonged seizure (>5 minutes)","Onset_group_Onset_groupNeonatal",-0.712949807856125,0.0856590527822661,2.80521658254017,0.756965944272446
+"seizure_history_type_Prolonged seizure (>5 minutes)","focal",1.29928298413001,1.39206766063074,9.65789582263995,0.656390977443609
+"seizure_history_type_Prolonged seizure (>5 minutes)","absence",0.160623193236657,0.288641023663363,4.77702459050248,0.508646616541353
+"seizure_history_type_Prolonged seizure (>5 minutes)","infantile",-0.28768207233215,0.2253079817946,2.49658265834267,0.521052631578947
+"seizure_history_type_Prolonged seizure (>5 minutes)","abnormal_eeg",1.70137540775958,0.579620098378958,51.8385047651803,0.551358234295416
+"seizure_history_type_Prolonged seizure (>5 minutes)","unique_types_(Intercept)",-0.693147180559947,0.125048826629953,1.99921907895869,0.734375
+"seizure_history_type_Prolonged seizure (>5 minutes)","unique_types_unique_types1",-0.405465108108161,0.111396513197098,3.98975184849883,0.734375
+"seizure_history_type_Prolonged seizure (>5 minutes)","unique_types_unique_types2",1.17865499634165,0.629128668445191,16.7890934395087,0.734375
+"seizure_history_type_Prolonged seizure (>5 minutes)","unique_types_unique_types3",1.50407739677627,0.730013532396208,27.7392118109525,0.734375
+"seizure_history_type_Prolonged seizure (>5 minutes)","unique_types_unique_types4",1.38629436111989,0.447082565863489,35.7875730830565,0.734375
+"seizure_history_type_Prolonged seizure (>5 minutes)","unique_types_unique_types5",18.2592156673522,0,Inf,0.734375
+"seizure_history_type_Prolonged seizure (>5 minutes)","age_onset_m",-0.25086652931512,0.673961135360854,0.898390701005664,0.773606811145511
