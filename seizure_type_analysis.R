@@ -34,7 +34,7 @@ data$unique_types <- as.factor(data$unique_types)
 predictors <- c("bilateral_tc", "Onset_group", "focal", "absence", "infantile", "abnormal_eeg", "unique_types", "age_onset_m")
 
 # Targets
-seizure_types <- c("seizure_focal", "seizure_spasms", "seizure_tonic-clonic", "seizure_clonic", "seizure_motor", "seizure_absence", "seizure_history_type_Status epilepticus", "seizure_history_type_Prolonged seizure (>5 minutes)")
+seizure_types <- c("seizure_focal", "seizure_spasms", "seizure_tonic-clonic", "seizure_clonic", "seizure_tonic", "seizure_myoclonic", "seizure_absence", "seizure_history_type_Status epilepticus", "seizure_history_type_Prolonged seizure (>5 minutes)")
 
 results_df <- data.frame()
 for (seizure_type in seizure_types) {
