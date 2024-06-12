@@ -1,0 +1,162 @@
+---
+title: "Descriptive Figures"
+author: "Kiran Smelser"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(data.table)
+library(readxl)
+library(ggplot2)
+library(ggsci)
+library(gridExtra)
+```
+
+```{r}
+path_data="./data/Ciitizen_SCN8A_UArizona_2024.02.09.xlsx"
+path_classifier="./data/ciitizen_health_classifier.xlsx"
+path_onset_ages="./data/onset_ages.csv"
+```
+
+```{r}
+# Create directory to save plots
+dir.create("./figures/descriptive")
+```
+
+
+#1. Age of Onset
+```{r}
+# Import age of onset data
+onset_age <- read.csv(path_onset_ages)
+onset_age <- data.table(onset_age)
+onset_age <- onset_age[, min(Age_onset), by = "UUID"]
+
+# Convert onset age from days to years
+onset_age$onset_age_years <- onset_age$V1 / 365.25
+onset_age <- onset_age %>% arrange(onset_age_years)
+
+# Add a column for cumulative count of patients
+onset_age$cumulative_count <- cumsum(rep(1, nrow(onset_age)))
+
+# Calculate cumulative proportion
+onset_age$cumulative_proportion <- onset_age$cumulative_count / nrow(onset_age)
+
+# Plot
+p <- ggplot(onset_age, aes(x = onset_age_years, y = cumulative_proportion)) +
+  geom_step(color = pal_simpsons()(2)[2], size = 1.25) +
+  labs(x = "Age (years)", 
+       y = "Cumulative onset", 
+       title = paste0("Seizure onset (n = ", nrow(onset_age), ")")) +
+  coord_cartesian(xlim = c(0, 10), ylim = c(0, 1)) +
+  scale_x_continuous(breaks=0:10) +
+  theme_classic()
+ggsave("./figures/descriptive/seizure_onset.pdf", plot = p, width = 10, height = 7)
+```
+
+#2. Seizure Types
+```{r}
+# Clean and import seizure data
+seizure_types <- read_excel(path_data, sheet = "seizure_history")
+seizure_types <- subset(seizure_types, select = -c(3:7))
+
+# Import and format seizure type classifier
+classifier <- read_excel(path_classifier)
+types_classifier <- classifier[grepl("seizure_", names(classifier))]
+names(types_classifier) <- sub('^seizure_', '', names(types_classifier))
+
+# Function to add seizure types
+find_column_name <- function(value, df) {
+  for (col_name in names(df)) {
+    if (value %in% df[[col_name]]) {
+      return(col_name)
+    }
+  }
+  return(NA)
+}
+
+# Classify seizure types
+seizure_types$type <- sapply(seizure_types$seizure_history_type, find_column_name, df=types_classifier)
+seizure_types <- na.omit(seizure_types)
+seizure_types <- subset(seizure_types, select = -c(seizure_history_type))
+
+# Convert age in days to years
+seizure_types$age_years <- seizure_types$seizure_history_age_days / 365
+
+# Convert from wide to long format for ggplot2
+long <- seizure_types %>%
+  gather(key = "age_type", value = "age_years", age_years)
+
+# Calculate frequency for each seizure type at ages 1,2,...
+long <- long %>%
+  group_by(type, age_years = floor(age_years)) %>%
+  summarise(n = n()) %>%
+  ungroup()
+
+# Create a plot
+p1 <- ggplot(long, aes(x = age_years, y = n)) +
+  geom_smooth(method = loess, formula = y~x, se = FALSE, lty = 1,
+              method.args = list(span = 1), aes(color = type)) +
+  labs(x = "Age (years)", y = "Frequency", color = "Seizure Type") +
+  coord_cartesian(xlim = c(0, 10)) +
+  scale_x_continuous(breaks=0:10) +
+  theme_classic() + 
+  scale_color_simpsons()
+ggsave("./figures/descriptive/types_freq.pdf", plot = p1, width = 10, height = 7)
+```
+
+#3. Hospitalizations
+```{r}
+# Clean and import hospitalization data
+hospitalizations <- read_excel(path_data, sheet = "hospital_admission")
+hospitalizations <- subset(hospitalizations, select = c(1:2))
+
+# Import hospitalization classifier
+hospitalization_classifier <- read_excel("./data/Grouping Hospitalizations.xlsx")
+
+# Classify hospitalizations
+hospitalizations <- left_join(hospitalizations, hospitalization_classifier, by = c("admission_diagnosis"="Hospitalization Events"))
+
+# Calculate frequency for admission types
+admission_types <- hospitalizations %>%
+  group_by(`Admission Type`) %>%
+  summarise(n = n()) %>%
+  ungroup()
+admission_types <- na.omit(admission_types)
+
+# Calculate frequency for types
+types <- hospitalizations %>%
+  group_by(Type) %>%
+  summarise(n = n()) %>%
+  ungroup()
+types <- na.omit(types)
+
+p2 <- ggplot(admission_types, aes(x="", y=n, fill=`Admission Type`)) +
+  geom_col(color = "white") +
+  geom_label(aes(label = n),
+             color = "white",
+             position = position_stack(vjust = 0.5),
+             show.legend = FALSE) +
+  coord_polar(theta = "y") +
+  theme_void() +
+  scale_fill_simpsons()
+
+p3 <- ggplot(types, aes(x="", y=n, fill=Type)) +
+  geom_col(color = "white") +
+  geom_label(aes(label = n),
+             color = "white",
+             position = position_stack(vjust = 0.5),
+             show.legend = FALSE) +
+  coord_polar(theta = "y") +
+  theme_void() +
+  scale_fill_simpsons()
+
+ggsave("./figures/descriptive/hospitalization_freq.pdf", plot = grid.arrange(p2, p3, ncol=2), width = 17, height = 7)
+```
+
