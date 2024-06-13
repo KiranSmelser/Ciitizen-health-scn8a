@@ -137,9 +137,14 @@ types <- hospitalizations %>%
   ungroup()
 types <- na.omit(types)
 
-p2 <- ggplot(admission_types, aes(x="", y=n, fill=`Admission Type`)) +
+# Calculate percentages
+admission_types$percentage <- admission_types$n / sum(admission_types$n)
+types$percentage <- types$n / sum(types$n)
+
+# Plot the pie charts with percentages
+p2 <- ggplot(admission_types, aes(x="", y=percentage, fill=`Admission Type`)) +
   geom_col(color = "white") +
-  geom_label(aes(label = n),
+  geom_label(aes(label = scales::percent(percentage)),
              color = "white",
              position = position_stack(vjust = 0.5),
              show.legend = FALSE) +
@@ -147,9 +152,9 @@ p2 <- ggplot(admission_types, aes(x="", y=n, fill=`Admission Type`)) +
   theme_void() +
   scale_fill_simpsons()
 
-p3 <- ggplot(types, aes(x="", y=n, fill=Type)) +
+p3 <- ggplot(types, aes(x="", y=percentage, fill=Type)) +
   geom_col(color = "white") +
-  geom_label(aes(label = n),
+  geom_label(aes(label = scales::percent(percentage)),
              color = "white",
              position = position_stack(vjust = 0.5),
              show.legend = FALSE) +
@@ -157,6 +162,29 @@ p3 <- ggplot(types, aes(x="", y=n, fill=Type)) +
   theme_void() +
   scale_fill_simpsons()
 
-ggsave("./figures/descriptive/hospitalization_freq.pdf", plot = grid.arrange(p2, p3, ncol=2), width = 17, height = 7)
+ggsave("./figures/descriptive/hospitalization_pct.pdf", plot = grid.arrange(p2, p3, ncol=2), width = 17, height = 7)
+
+# Plot pie charts with frequencies
+# p2 <- ggplot(admission_types, aes(x="", y=n, fill=`Admission Type`)) +
+#   geom_col(color = "white") +
+#   geom_label(aes(label = n),
+#              color = "white",
+#              position = position_stack(vjust = 0.5),
+#              show.legend = FALSE) +
+#   coord_polar(theta = "y") +
+#   theme_void() +
+#   scale_fill_simpsons()
+# 
+# p3 <- ggplot(types, aes(x="", y=n, fill=Type)) +
+#   geom_col(color = "white") +
+#   geom_label(aes(label = n),
+#              color = "white",
+#              position = position_stack(vjust = 0.5),
+#              show.legend = FALSE) +
+#   coord_polar(theta = "y") +
+#   theme_void() +
+#   scale_fill_simpsons()
+# 
+# ggsave("./figures/descriptive/hospitalization_freq.pdf", plot = grid.arrange(p2, p3, ncol=2), width = 17, height = 7)
 ```
 
