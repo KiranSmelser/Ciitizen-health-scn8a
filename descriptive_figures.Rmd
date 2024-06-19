@@ -31,36 +31,7 @@ dir.create("./figures/descriptive")
 ```
 
 
-#1. Age of Onset
-```{r}
-# Import age of onset data
-onset_age <- read.csv(path_onset_ages)
-onset_age <- data.table(onset_age)
-onset_age <- onset_age[, min(Age_onset), by = "UUID"]
-
-# Convert onset age from days to years
-onset_age$onset_age_years <- onset_age$V1 / 365.25
-onset_age <- onset_age %>% arrange(onset_age_years)
-
-# Add a column for cumulative count of patients
-onset_age$cumulative_count <- cumsum(rep(1, nrow(onset_age)))
-
-# Calculate cumulative proportion
-onset_age$cumulative_proportion <- onset_age$cumulative_count / nrow(onset_age)
-
-# Plot
-p <- ggplot(onset_age, aes(x = onset_age_years, y = cumulative_proportion)) +
-  geom_step(color = pal_simpsons()(2)[2], size = 1.25) +
-  labs(x = "Age (years)", 
-       y = "Cumulative onset", 
-       title = paste0("Seizure onset (n = ", nrow(onset_age), ")")) +
-  coord_cartesian(xlim = c(0, 10), ylim = c(0, 1)) +
-  scale_x_continuous(breaks=0:10) +
-  theme_classic()
-ggsave("./figures/descriptive/seizure_onset.pdf", plot = p, width = 10, height = 7)
-```
-
-#2. Seizure Types
+#1. Seizure Types
 ```{r}
 # Clean and import seizure data
 seizure_types <- read_excel(path_data, sheet = "seizure_history")
@@ -111,7 +82,7 @@ p1 <- ggplot(long, aes(x = age_years, y = n)) +
 ggsave("./figures/descriptive/types_freq.pdf", plot = p1, width = 10, height = 7)
 ```
 
-#3. Hospitalizations
+#2. Hospitalizations
 ```{r}
 # Clean and import hospitalization data
 hospitalizations <- read_excel(path_data, sheet = "hospital_admission")
