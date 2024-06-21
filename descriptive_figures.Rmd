@@ -22,7 +22,6 @@ library(gridExtra)
 ```{r}
 path_data="./data/Ciitizen_SCN8A_UArizona_2024.02.09.xlsx"
 path_classifier="./data/ciitizen_health_classifier.xlsx"
-path_onset_ages="./data/onset_ages.csv"
 ```
 
 ```{r}
@@ -57,6 +56,9 @@ seizure_types$type <- sapply(seizure_types$seizure_history_type, find_column_nam
 seizure_types <- na.omit(seizure_types)
 seizure_types <- subset(seizure_types, select = -c(seizure_history_type))
 
+# Group into other
+seizure_types$type <- replace(seizure_types$type, seizure_types$type %in% c("absence", "clonic", "myoclonic"), "other")
+
 # Convert age in days to years
 seizure_types$age_years <- seizure_types$seizure_history_age_days / 365
 
@@ -64,22 +66,36 @@ seizure_types$age_years <- seizure_types$seizure_history_age_days / 365
 long <- seizure_types %>%
   gather(key = "age_type", value = "age_years", age_years)
 
-# Calculate frequency for each seizure type at ages 1,2,...
+# Calculate the number of unique patients at ages 1,2,...
 long <- long %>%
   group_by(type, age_years = floor(age_years)) %>%
-  summarise(n = n()) %>%
+  summarise(n = n_distinct(patient_uuid)) %>%
   ungroup()
 
-# Create a plot
-p1 <- ggplot(long, aes(x = age_years, y = n)) +
+# Create a smooth line plot
+p1_alt <- ggplot(long, aes(x = age_years, y = n)) +
   geom_smooth(method = loess, formula = y~x, se = FALSE, lty = 1,
               method.args = list(span = 1), aes(color = type)) +
-  labs(x = "Age (years)", y = "Frequency", color = "Seizure Type") +
+  labs(x = "Age (years)", y = "Individuals", color = "Seizure Type") +
   coord_cartesian(xlim = c(0, 10)) +
   scale_x_continuous(breaks=0:10) +
   theme_classic() + 
   scale_color_simpsons()
-ggsave("./figures/descriptive/types_freq.pdf", plot = p1, width = 10, height = 7)
+
+# Define the order
+type_levels <- c("tonic-clonic", "focal", "other", "tonic", "spasms")
+
+# Convert 'type' to a factor and specify the order of levels
+long$type <- factor(long$type, levels = type_levels)
+
+# Plot
+p1 <- ggplot(long, aes(x=age_years, y=n, fill=type)) +
+  geom_area(stat="smooth", position="identity", method="loess") +
+  labs(x="Age in Years", y="Individuals", fill = "Seizure Type") +
+  theme_classic() + 
+  scale_fill_simpsons()
+
+ggsave("./figures/descriptive/types_indivs.pdf", plot = p1, width = 10, height = 7)
 ```
 
 #2. Hospitalizations
@@ -93,69 +109,22 @@ hospitalization_classifier <- read_excel("./data/Grouping Hospitalizations.xlsx"
 
 # Classify hospitalizations
 hospitalizations <- left_join(hospitalizations, hospitalization_classifier, by = c("admission_diagnosis"="Hospitalization Events"))
+hospitalizations <- hospitalizations[hospitalizations$`Admission Type` %in% c("Emergency", "Unplanned"), ]
 
-# Calculate frequency for admission types
-admission_types <- hospitalizations %>%
-  group_by(`Admission Type`) %>%
+# Calculate frequency for admission types and subgroups
+hospitalizations_freq <- hospitalizations %>%
+  group_by(`Admission Type`, Subgroup) %>%
   summarise(n = n()) %>%
   ungroup()
-admission_types <- na.omit(admission_types)
+hospitalizations_freq <- na.omit(hospitalizations_freq)
 
-# Calculate frequency for types
-types <- hospitalizations %>%
-  group_by(Type) %>%
-  summarise(n = n()) %>%
-  ungroup()
-types <- na.omit(types)
-
-# Calculate percentages
-admission_types$percentage <- admission_types$n / sum(admission_types$n)
-types$percentage <- types$n / sum(types$n)
-
-# Plot the pie charts with percentages
-p2 <- ggplot(admission_types, aes(x="", y=percentage, fill=`Admission Type`)) +
-  geom_col(color = "white") +
-  geom_label(aes(label = scales::percent(percentage)),
-             color = "white",
-             position = position_stack(vjust = 0.5),
-             show.legend = FALSE) +
-  coord_polar(theta = "y") +
-  theme_void() +
+# Plot stacked bar chart with frequencies
+p2 <- ggplot(hospitalizations_freq, aes(x=`Admission Type`, y=n, fill=Subgroup)) +
+  geom_bar(stat="identity", color="white") +
+  labs(x="Admission Type", y="Frequency", fill = "Subgroup") +
+  theme_classic() +
   scale_fill_simpsons()
 
-p3 <- ggplot(types, aes(x="", y=percentage, fill=Type)) +
-  geom_col(color = "white") +
-  geom_label(aes(label = scales::percent(percentage)),
-             color = "white",
-             position = position_stack(vjust = 0.5),
-             show.legend = FALSE) +
-  coord_polar(theta = "y") +
-  theme_void() +
-  scale_fill_simpsons()
-
-ggsave("./figures/descriptive/hospitalization_pct.pdf", plot = grid.arrange(p2, p3, ncol=2), width = 17, height = 7)
-
-# Plot pie charts with frequencies
-# p2 <- ggplot(admission_types, aes(x="", y=n, fill=`Admission Type`)) +
-#   geom_col(color = "white") +
-#   geom_label(aes(label = n),
-#              color = "white",
-#              position = position_stack(vjust = 0.5),
-#              show.legend = FALSE) +
-#   coord_polar(theta = "y") +
-#   theme_void() +
-#   scale_fill_simpsons()
-# 
-# p3 <- ggplot(types, aes(x="", y=n, fill=Type)) +
-#   geom_col(color = "white") +
-#   geom_label(aes(label = n),
-#              color = "white",
-#              position = position_stack(vjust = 0.5),
-#              show.legend = FALSE) +
-#   coord_polar(theta = "y") +
-#   theme_void() +
-#   scale_fill_simpsons()
-# 
-# ggsave("./figures/descriptive/hospitalization_freq.pdf", plot = grid.arrange(p2, p3, ncol=2), width = 17, height = 7)
+ggsave("./figures/descriptive/hospitalization_freq.pdf", plot = p2, width = 10, height = 7)
 ```
 
