@@ -151,7 +151,7 @@ hospitalizations_freq$`Admission Type` <- factor(hospitalizations_freq$`Admissio
 p2 <- ggplot(hospitalizations_freq, aes(x=`Admission Type`, y=n)) +
   geom_bar(stat="identity", aes(fill=Subgroup)) +
   geom_bar(data = seizure_freq, aes(x="Seizure", y=n/2), stat="identity", show.legend = FALSE, fill = pal_simpsons("springfield")(11)[11]) +
-  labs(x="Admission Type", y="Frequency", fill = "Subgroup") +
+  labs(x="Admission Type", y="Subgroup Frequency", fill = "Subgroup") +
   scale_y_continuous(sec.axis = sec_axis(~.*2, name = "Seizure Frequency")) +
   theme_classic() +
   scale_fill_simpsons()
