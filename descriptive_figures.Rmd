@@ -67,18 +67,34 @@ long <- seizure_types %>%
   gather(key = "age_type", value = "age_years", age_years)
 
 # Calculate the number of unique patients at ages 1,2,...
-long <- long %>%
+patients_by_type <- long %>%
   group_by(type, age_years = floor(age_years)) %>%
   summarise(n = n_distinct(patient_uuid)) %>%
   ungroup()
 
+# Calculate the total number of patients at ages 1,2,...
+patients_total <- long %>%
+  group_by(age_years = floor(age_years)) %>%
+  summarise(total = n_distinct(patient_uuid)) %>%
+  ungroup()
+
+# Join the data frames
+tmp <- left_join(patients_by_type, patients_total, by = "age_years")
+
+# Divide by the total number of patients at each age
+normalized_df <- tmp %>%
+  mutate(prop = n / total) %>%
+  ungroup()
+
 # Create a smooth line plot
-p1_alt <- ggplot(long, aes(x = age_years, y = n)) +
+p1_alt <- ggplot(normalized_df, aes(x = age_years, y = prop)) +
+  geom_bar(data = patients_total, aes(x = age_years, y = total/max(total)), stat = "identity", fill = "lightgrey", show.legend = FALSE) +
   geom_smooth(method = loess, formula = y~x, se = FALSE, lty = 1,
               method.args = list(span = 1), aes(color = type)) +
-  labs(x = "Age (years)", y = "Individuals", color = "Seizure Type") +
-  coord_cartesian(xlim = c(0, 10)) +
+  labs(x = "Age (years)", y = "Proportion", color = "Seizure Type") +
+  coord_cartesian(xlim = c(0, 10), ylim = c(0, 1)) +
   scale_x_continuous(breaks=0:10) +
+  scale_y_continuous(sec.axis = sec_axis(~.*max(patients_total$total), name = "Total Patients")) +
   theme_classic() + 
   scale_color_simpsons()
 
@@ -86,16 +102,22 @@ p1_alt <- ggplot(long, aes(x = age_years, y = n)) +
 type_levels <- c("tonic-clonic", "focal", "other", "tonic", "spasms")
 
 # Convert 'type' to a factor and specify the order of levels
-long$type <- factor(long$type, levels = type_levels)
+normalized_df$type <- factor(normalized_df$type, levels = type_levels)
 
 # Plot
-p1 <- ggplot(long, aes(x=age_years, y=n, fill=type)) +
-  geom_area(stat="smooth", position="identity", method="loess") +
-  labs(x="Age in Years", y="Individuals", fill = "Seizure Type") +
+p1 <- ggplot(normalized_df, aes(x=age_years, y=prop)) +
+  geom_area(stat="smooth", position="identity", method="loess", aes(fill=type)) +
+  geom_line(data = patients_total, aes(x = age_years, y = total/max(total)), color = "black") +
+  geom_point(data = patients_total, aes(x = age_years, y = total/max(total)), color = "black") +
+  #geom_bar(data = patients_total, aes(x = age_years, y = total/max(total)), stat = "identity", fill = NA, color = "black") +
+  labs(x="Age (Years)", y="Proportion", fill = "Seizure Type") +
+  coord_cartesian(xlim = c(0, 10), ylim = c(0, 1)) +
+  scale_x_continuous(breaks=0:10) +
+  scale_y_continuous(sec.axis = sec_axis(~.*max(patients_total$total), name = "Total Patients")) +
   theme_classic() + 
   scale_fill_simpsons()
 
-ggsave("./figures/descriptive/types_indivs.pdf", plot = p1, width = 10, height = 7)
+ggsave("./figures/descriptive/types_line.pdf", plot = p1, width = 10, height = 7)
 ```
 
 #2. Hospitalizations
@@ -118,10 +140,19 @@ hospitalizations_freq <- hospitalizations %>%
   ungroup()
 hospitalizations_freq <- na.omit(hospitalizations_freq)
 
+# Create a separate data frame for 'seizure'
+seizure_freq <- hospitalizations_freq[hospitalizations_freq$Subgroup == "Seizure", ]
+hospitalizations_freq <- hospitalizations_freq[hospitalizations_freq$Subgroup != "Seizure", ]
+
 # Plot stacked bar chart with frequencies
-p2 <- ggplot(hospitalizations_freq, aes(x=`Admission Type`, y=n, fill=Subgroup)) +
-  geom_bar(stat="identity", color="white") +
+hospitalizations_freq$`Admission Type` <- factor(hospitalizations_freq$`Admission Type`, levels = c("Emergency", "Unplanned", "Seizure"))
+
+# Modify the second geom_bar() to use the new level
+p2 <- ggplot(hospitalizations_freq, aes(x=`Admission Type`, y=n)) +
+  geom_bar(stat="identity", aes(fill=Subgroup)) +
+  geom_bar(data = seizure_freq, aes(x="Seizure", y=n/2), stat="identity", show.legend = FALSE, fill = pal_simpsons("springfield")(11)[11]) +
   labs(x="Admission Type", y="Frequency", fill = "Subgroup") +
+  scale_y_continuous(sec.axis = sec_axis(~.*2, name = "Seizure Frequency")) +
   theme_classic() +
   scale_fill_simpsons()
 
