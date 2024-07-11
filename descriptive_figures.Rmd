@@ -137,7 +137,7 @@ hospitalization_classifier <- read_excel("./data/Grouping Hospitalizations.xlsx"
 
 # Classify hospitalizations
 hospitalizations <- left_join(hospitalizations, hospitalization_classifier, by = c("admission_diagnosis"="Hospitalization Events"))
-hospitalizations <- hospitalizations[hospitalizations$`Admission Type` %in% c("Emergency", "Unplanned"), ]
+hospitalizations <- hospitalizations[hospitalizations$`Admission Type` %in% c("Emergency", "Incidental"), ]
 
 # Calculate frequency for admission types and subgroups
 hospitalizations_freq <- hospitalizations %>%
@@ -163,7 +163,7 @@ seizure_freq$admission_diagnosis <- ifelse(seizure_freq$admission_diagnosis == "
 # Create the first plot for 'Other'
 p1 <- ggplot(hospitalizations_freq, aes(x=`Admission Type`, y=n, fill=Subgroup)) +
   geom_bar(stat="identity") +
-  labs(x="Admission Type", y="Subgroup Frequency", fill = "Subgroup") +
+  labs(x="Admission Type", y="# of Reports", fill = "Subgroup") +
   theme_classic() +
   scale_fill_simpsons() +
   ggtitle("Other")
@@ -171,12 +171,12 @@ p1 <- ggplot(hospitalizations_freq, aes(x=`Admission Type`, y=n, fill=Subgroup))
 # Create the second plot for 'Seizure'
 p2 <- ggplot(seizure_freq, aes(x=`Admission Type`, y=n, fill=admission_diagnosis)) +
   geom_bar(stat="identity") +
-  labs(x="Admission Type", y="Type Frequency", fill = "Type") +
+  labs(x="Admission Type", y="# of Reports", fill = "Type") +
   theme_classic() +
   scale_fill_manual(values = c("#370335ff", "#075149ff")) +
   ggtitle("Seizure")
 
-ggsave("./figures/descriptive/hospitalization_freq.pdf", plot = grid.arrange(p1, p2, ncol=2), width = 10, height = 7)
+ggsave("./figures/descriptive/hospitalizations_bar.pdf", plot = grid.arrange(p1, p2, ncol=2), width = 10, height = 7)
 ```
 
 ```{r}
@@ -220,14 +220,14 @@ normalized_df <- tmp %>%
 normalized_df <- na.omit(normalized_df)
 
 # Create a smooth line plot
-p3_alt <- ggplot(normalized_df, aes(x = age_years, y = prop)) +
-  geom_bar(data = patients_total, aes(x = age_years, y = total/max(total)), stat = "identity", fill = "lightgrey", show.legend = FALSE) +
+p3 <- ggplot(normalized_df, aes(x = age_years, y = prop)) +
+  #geom_bar(data = patients_total, aes(x = age_years, y = total/max(total)), stat = "identity", fill = "lightgrey", show.legend = FALSE) +
   geom_smooth(method = loess, formula = y~x, se = FALSE, lty = 1,
               method.args = list(span = 1), aes(color = Subgroup)) +
   labs(x = "Age (years)", y = "Proportion", color = "Admission Type") +
   coord_cartesian(xlim = c(0, 10), ylim = c(0, .75)) +
   scale_x_continuous(breaks=0:10) +
-  scale_y_continuous(sec.axis = sec_axis(~.*max(patients_total$total), name = "Total Patients")) +
+  #scale_y_continuous(sec.axis = sec_axis(~.*max(patients_total$total), name = "Total Patients")) +
   theme_classic() + 
   scale_color_simpsons()
 
@@ -241,7 +241,7 @@ type_levels <- c("Non-status epilepticus", "Pulmonary", "Status epilepticus", "I
 normalized_df$Subgroup <- factor(normalized_df$Subgroup, levels = type_levels)
 
 # Plot
-p3 <- ggplot(normalized_df, aes(x=age_years, y=prop)) +
+p3_alt <- ggplot(normalized_df, aes(x=age_years, y=prop)) +
   geom_area(stat="smooth", position="identity", method="loess", aes(fill=Subgroup)) +
   geom_line(stat = "smooth", method = "loess", formula = y~x, se = FALSE, lty = 1,
             aes(color = Subgroup), show.legend = FALSE) +
@@ -256,6 +256,6 @@ p3 <- ggplot(normalized_df, aes(x=age_years, y=prop)) +
   scale_fill_simpsons() +
   scale_color_simpsons()
 
-ggsave("./figures/descriptive/hospitalization_area.pdf", plot = p3, width = 10, height = 7)
+ggsave("./figures/descriptive/hospitalizations_line.pdf", plot = p3, width = 10, height = 7)
 ```
 
