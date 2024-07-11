@@ -168,6 +168,43 @@ p1 <- ggplot(hospitalizations_freq, aes(x=`Admission Type`, y=n, fill=Subgroup))
   scale_fill_simpsons() +
   ggtitle("Other")
 
+# Combine pneumonias and respiratory failures
+hospitalizations$admission_diagnosis[hospitalizations$admission_diagnosis=="Aspiration pneumonia"] <- "Pneumonia"
+hospitalizations$admission_diagnosis[hospitalizations$admission_diagnosis=="Acute respiratory failure"] <- "Respiratory failure"
+
+# Define the specific hospitalizations to mark
+specific_hospitalizations <- c("Respiratory failure", "Pneumonia")
+
+# Calculate sum within each subgroup
+specific_hospitalizations_freq <- hospitalizations %>%
+  group_by(Subgroup) %>%
+  mutate(n = n()) %>%
+  ungroup()
+
+# Calculate frequency for specific hospitalizations
+specific_hospitalizations_freq <- specific_hospitalizations_freq %>%
+  filter(`Admission Type` == "Emergency", admission_diagnosis %in% specific_hospitalizations) %>%
+  group_by(`Admission Type`, Subgroup, n, admission_diagnosis) %>%
+  summarise(n_specific = n()) %>%
+  ungroup()
+
+# Calculate cumulative sum within each subgroup
+specific_hospitalizations_freq <- specific_hospitalizations_freq %>%
+  arrange(`Admission Type`, Subgroup, admission_diagnosis) %>%
+  group_by(`Admission Type`, Subgroup) %>%
+  mutate(cumulative_n = cumsum(n_specific)) %>%
+  ungroup()
+
+# Create labels
+specific_hospitalizations_freq <- specific_hospitalizations_freq %>%
+  mutate(label = paste(admission_diagnosis, n_specific, sep = ": "))
+
+# Add text to the bars in the plot
+p1 <- p1 + geom_text(data = specific_hospitalizations_freq, aes(label = label, y = cumulative_n), color = "white", size = 2.5)
+
+# Add a lines
+p1 <- p1 + geom_segment(data = specific_hospitalizations_freq, aes(x = 0, xend = 1.5, y = cumulative_n - 3, yend = cumulative_n - 3), color = "white")
+
 # Create the second plot for 'Seizure'
 p2 <- ggplot(seizure_freq, aes(x=`Admission Type`, y=n, fill=admission_diagnosis)) +
   geom_bar(stat="identity") +
