@@ -17,6 +17,10 @@ library(readxl)
 library(ggplot2)
 library(ggsci)
 library(gridExtra)
+library(grid)
+library(ggpubr)
+library(colorspace)
+library(png)
 ```
 
 ```{r}
@@ -126,7 +130,10 @@ p1 <- ggplot(normalized_df, aes(x=age_years, y=prop)) +
 ggsave("./figures/descriptive/types.pdf", plot = p1, width = 10, height = 7)
 ```
 
+
 #2. Hospitalizations
+
+##2.1 Bar plot
 ```{r}
 # Clean and import hospitalization data
 hospitalizations <- read_excel(path_data, sheet = "hospital_admission")
@@ -216,6 +223,7 @@ p2 <- ggplot(seizure_freq, aes(x=`Admission Type`, y=n, fill=admission_diagnosis
 ggsave("./figures/descriptive/hospitalizations_bar.pdf", plot = grid.arrange(p1, p2, ncol=2), width = 10, height = 7)
 ```
 
+##2.2 Smooth line plot
 ```{r}
 # Clean and import hospitalization data
 hospitalizations <- read_excel(path_data, sheet = "hospital_admission")
@@ -294,5 +302,106 @@ p3_alt <- ggplot(normalized_df, aes(x=age_years, y=prop)) +
   scale_color_simpsons()
 
 ggsave("./figures/descriptive/hospitalizations_line.pdf", plot = p3, width = 10, height = 7)
+```
+
+
+#3. Diagnoses
+```{r}
+# Clean and import diagnosis data
+diagnoses <- read_excel(path_data, sheet = "clinical_diagnosis_features")
+diagnoses <- subset(diagnoses, select = c(1:2, 9))
+
+# Import diagnosis classifier
+diagnosis_classifier <- read_excel("./data/Grouping diagnoses.xlsx")
+diagnosis_classifier <- subset(diagnosis_classifier, select = -c(5))
+
+# Classify diagnoses
+diagnoses <- left_join(diagnoses, diagnosis_classifier, by = c("diagnosis"="Clinical Diagnoses"))
+
+# Count by patient rather than report
+diagnoses <- unique(na.omit(subset(diagnoses, select = c(1:2, 6))))
+
+# Filter diagnoses
+diagnoses <- diagnoses %>%
+  filter(!System %in% c("Endocrine", "Excretory", "Integumentary"))
+
+# Calculate overall percentage for each system
+sys_pcts <- diagnoses %>%
+  group_by(System) %>%
+  summarise(sys_pct = n()/nrow(diagnoses) * 100, sys_n = n())
+
+# Calculate individual diagnosis percentages within each system
+diagnosis_pcts <- diagnoses %>%
+  group_by(System, diagnosis) %>%
+  summarise(diagnosis_n = n())
+
+diagnosis_pcts <- left_join(diagnosis_pcts, subset(sys_pcts, select = -c(2)), by = "System")
+
+diagnosis_pcts <- diagnosis_pcts %>%
+  mutate(diagnosis_pct = (diagnosis_n / sys_n) * 100) %>%
+  ungroup()
+diagnosis_pcts <- subset(diagnosis_pcts, select = -c(3:4))
+
+# Create a list to store dataframes for each system
+sys_dfs <- list()
+
+colors <- c("#FD7446FF", "#C80813FF", "#FD8CC1FF", lighten("#46732EFF", 0.25), "#8A9197FF", "#FED439FF", "#71D0F5FF", "#709AE1FF", "#D5E4A2FF", "#D2AF81FF", "#370335FF")
+
+unique_systems <- c("Behavioral", "Musculoskeletal", "Gastrointestil", "Immunological", "Neurological", "Sensory", "Respiratory", "Cardiovascular")
+
+pdf("./figures/descriptive/diagnoses.pdf", width = 12, height = 14)
+
+img <- readPNG("./figures/anatomy.png")
+
+pushViewport(viewport(layout = grid.layout(4, 3, widths = unit(c(.325,.3,.25), "npc"), heights = unit(c(.175,.175,.175,.135), "npc"))))
+
+for (i in 1:length(unique_systems)) {
+  system <- unique_systems[i]
+  
+  # Get the system percentage
+  system_pct <- filter(sys_pcts, System == system)$sys_pct
+  system_pct <- round(system_pct, 2)
+  system_pct <- paste0(system_pct, "%")
+  
+  # Get the diagnosis percentages for this system
+  diagnosis_pct <- filter(diagnosis_pcts, System == system)
+  diagnosis_pct <- subset(diagnosis_pct, select = -c(1))
+  colnames(diagnosis_pct) = c("Diagnosis", "Percentage")
+  
+  # Sort the diagnosis percentages in descending order and select the top 7
+  diagnosis_pct <- diagnosis_pct[order(-diagnosis_pct$Percentage), ]
+  if(nrow(diagnosis_pct) > 7) {
+    diagnosis_pct <- diagnosis_pct[1:7, ]
+  }
+  
+  diagnosis_pct$Percentage <- round(diagnosis_pct$Percentage, 2)
+  diagnosis_pct$Percentage <- paste0(diagnosis_pct$Percentage, "%")
+  
+  df <- data.frame(Diagnosis = system, Percentage = system_pct)
+  df <- rbind(df, diagnosis_pct)
+  colnames(df) <- as.character(unlist(df[1,]))
+  df <- df[-1,]
+  
+  sys_dfs[[system]] <- df
+
+  # Create a table for each dataframe
+  table <- ggtexttable(sys_dfs[[system]], rows = NULL, theme = ttheme(
+             colnames.style = colnames_style(color = "white", fill = colors[i]),
+             tbody.style = tbody_style(color = "black", fill = c(lighten(colors[i], .5)))
+           ))
+
+  # Determine the position of the table
+  row <- ifelse(i %% 4 == 0, 4, i %% 4)
+  col <- ceiling(i / 4)
+  if (col == 2) {
+    col <- col + 1
+  }
+  
+  print(table, vp = viewport(layout.pos.row = row, layout.pos.col = col))
+}
+
+grid.raster(img, width = unit(1, "npc"), height = unit(1.25, "npc"), 
+            vp = viewport(layout.pos.row = 2:3, layout.pos.col = 2))
+dev.off()
 ```
 
