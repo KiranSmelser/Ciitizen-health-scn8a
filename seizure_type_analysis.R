@@ -176,5 +176,9 @@ for (predictor in unique(results_df$predictor)) {
     labs(title = predictor, x = "Seizure Type", y = "Odds Ratio") +
     theme_bw()
   
+  if (predictor %in% c("age_onset_m", "Onset_group_Onset_group7-12 Months", "Onset_group_Onset_group12+ Months", "Onset_group_Onset_groupNeonatal")) {
+    p <- p + ylim(0,1)
+  }
+  
   ggsave(paste0("./results/seizure_type/plots/", predictor, ".pdf"), plot = p)
 }
