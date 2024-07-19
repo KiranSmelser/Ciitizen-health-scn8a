@@ -1,0 +1,20 @@
+
+Call:
+glm(formula = formula, family = binomial(link = "logit"), data = data)
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)  
+(Intercept)   -1.0986     0.4714  -2.331   0.0198 *
+bilateral_tc   0.7621     0.5549   1.373   0.1696  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 94.184  on 71  degrees of freedom
+Residual deviance: 92.195  on 70  degrees of freedom
+  (11 observations deleted due to missingness)
+AIC: 96.195
+
+Number of Fisher Scoring iterations: 4
+
