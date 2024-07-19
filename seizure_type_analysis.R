@@ -32,10 +32,14 @@ data$unique_types <- as.factor(data$unique_types)
 
 
 # Predictors
-predictors <- c("bilateral_tc", "Onset_group", "focal", "absence", "infantile", "abnormal_eeg", "unique_types", "age_onset_m")
+predictors <- c("bilateral_tc", "Onset_group", "focal", "absence", "infantile", 
+                "abnormal_eeg", "unique_types", "age_onset_m")
 
 # Targets
-seizure_types <- c("seizure_focal", "seizure_spasms", "seizure_tonic-clonic", "seizure_clonic", "seizure_tonic", "seizure_myoclonic", "seizure_absence", "seizure_history_type_Status epilepticus", "seizure_history_type_Prolonged seizure (>5 minutes)")
+seizure_types <- c("seizure_focal", "seizure_spasms", "seizure_tonic-clonic", 
+                   "seizure_clonic", "seizure_tonic", "seizure_myoclonic", 
+                   "seizure_absence", "seizure_history_type_Status epilepticus", 
+                   "seizure_history_type_Prolonged seizure (>5 minutes)")
 
 results_df <- data.frame()
 significant_results_df <- data.frame()
@@ -142,12 +146,12 @@ write.csv(significant_results_df, file = "./results/seizure_type/significant_mod
 dir.create("./results/seizure_type/plots")
 
 # Create odds-ratio plots for predictors
-for (predictor in unique(significant_results_df$predictor)) {
+for (predictor in unique(results_df$predictor)) {
   # Subset the data for the current predictor
-  predictor_df <- significant_results_df[significant_results_df$predictor == predictor, ]
+  predictor_df <- results_df[results_df$predictor == predictor, ]
   
-  # Skip if predictor_df is empty
-  if (nrow(predictor_df) == 0) {
+  # Skip if predictor_df is empty or if none of the results are significant
+  if (nrow(predictor_df) == 0 || all(predictor_df$p_value >= 0.05)) {
     next
   }
   
@@ -156,6 +160,8 @@ for (predictor in unique(significant_results_df$predictor)) {
   
   # Color based on midpoint value
   predictor_df$color <- ifelse(predictor_df$midpoint < 1, "red", "blue")
+  
+  predictor_df$color <- ifelse(predictor_df$p_value > 0.05, "transparent", predictor_df$color)
   
   # Plot
   p <- ggplot(predictor_df, aes(x = seizure_type, y = midpoint, color = color)) +
