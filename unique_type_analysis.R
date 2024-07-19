@@ -11,6 +11,9 @@ directory <- getwd()
 
 data <- read_csv(path_data, show_col_types = FALSE)[, -1]
 
+# Group unique types
+data$unique_types[data$unique_types %in% c(2, 3, 4, 5)] <- '2+'
+
 # Ensure categorical variables are factors
 data$Onset_group <- as.factor(data$Onset_group)
 data$unique_types <- as.factor(data$unique_types)
@@ -160,7 +163,7 @@ for (predictor in unique(results_df$predictor)) {
     labs(title = predictor, x = "# of Seizure Types", y = "Odds Ratio") +
     theme_bw()
   
-  if (predictor %in% c("bilateral_tc", "abnormal_eeg")) {
+  if (predictor %in% c("abnormal_eeg")) {
     p <- p + ylim(0,1)
   }
   

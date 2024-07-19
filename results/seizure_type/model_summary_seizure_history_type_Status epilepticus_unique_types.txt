@@ -6,19 +6,16 @@ Coefficients:
                Estimate Std. Error z value Pr(>|z|)  
 (Intercept)     -1.2528     0.8018  -1.562   0.1182  
 unique_types1    0.1542     0.9880   0.156   0.8760  
-unique_types2    0.7673     0.9191   0.835   0.4038  
-unique_types3    2.0637     1.0020   2.060   0.0394 *
-unique_types4    2.8622     1.3575   2.108   0.0350 *
-unique_types5   18.8188  1769.2578   0.011   0.9915  
+unique_types2+   1.6582     0.8576   1.934   0.0532 .
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
     Null deviance: 96.812  on 69  degrees of freedom
-Residual deviance: 76.895  on 64  degrees of freedom
+Residual deviance: 88.100  on 67  degrees of freedom
   (13 observations deleted due to missingness)
-AIC: 88.895
+AIC: 94.1
 
-Number of Fisher Scoring iterations: 16
+Number of Fisher Scoring iterations: 4
 

@@ -26,6 +26,9 @@ for (col_name in colnames(classifier)) {
   }
 }
 
+# Group unique types
+data$unique_types[data$unique_types %in% c(2, 3, 4, 5)] <- '2+'
+
 # Ensure categorical variables are factors
 data$Onset_group <- as.factor(data$Onset_group)
 data$unique_types <- as.factor(data$unique_types)
