@@ -149,7 +149,7 @@ for (predictor in unique(results_df$predictor)) {
   predictor_df$midpoint <- with(predictor_df, (ci_lower + ci_upper) / 2)
   
   # Color based on midpoint value
-  predictor_df$color <- ifelse(predictor_df$midpoint < 1, "red", "blue")
+  predictor_df$color <- ifelse(predictor_df$midpoint < 1, "#C80813FF", "#197EC0FF")
   
   predictor_df$color <- ifelse(predictor_df$p_value > 0.05, "transparent", predictor_df$color)
   
