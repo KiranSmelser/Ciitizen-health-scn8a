@@ -1,0 +1,23 @@
+
+Call:
+glm(formula = formula, family = binomial(link = "logit"), data = data)
+
+Coefficients:
+                        Estimate Std. Error z value Pr(>|z|)   
+(Intercept)              -2.2513     0.7434  -3.028  0.00246 **
+Onset_group12+ Months   -18.3148  7238.3932  -0.003  0.99798   
+Onset_group4-7 Months   -18.3148  4577.9619  -0.004  0.99681   
+Onset_group7-12 Months   -0.4568     1.2725  -0.359  0.71964   
+Onset_groupNeonatal     -18.3148  6268.6324  -0.003  0.99767   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 24.408  on 65  degrees of freedom
+Residual deviance: 20.690  on 61  degrees of freedom
+  (17 observations deleted due to missingness)
+AIC: 30.69
+
+Number of Fisher Scoring iterations: 19
+
