@@ -124,6 +124,7 @@ p1 <- ggplot(normalized_df, aes(x=age_years, y=prop)) +
   scale_x_continuous(breaks=0:10) +
   #scale_y_continuous(sec.axis = sec_axis(~.*max(patients_total$total), name = "Total Patients")) +
   theme_classic() + 
+  theme(legend.justification = c(0.05, 1), legend.position = c(0.05, 1)) +
   scale_fill_simpsons() +
   scale_color_simpsons()
 
@@ -165,14 +166,14 @@ seizure_freq$Facet <- "Seizure"
 combined_freq <- rbind(hospitalizations_freq, seizure_freq)
 
 # Modify seizure_freq to group all Seizure types that aren't 'Status epilepticus' into 'Non-status epilepticus'
-seizure_freq$admission_diagnosis <- ifelse(seizure_freq$admission_diagnosis == "Status epilepticus", "Status epilepticus", "Non-status epilepticus")
+seizure_freq$admission_diagnosis <- ifelse(seizure_freq$admission_diagnosis == "Status epilepticus", "Status epilepticus", "Seizure")
 
 # Create the first plot for 'Other'
 p1 <- ggplot(hospitalizations_freq, aes(x=`Admission Type`, y=n, fill=Subgroup)) +
   geom_bar(stat="identity") +
   labs(x="Admission Type", y="# of Reports", fill = "Subgroup") +
   theme_classic() +
-  scale_fill_simpsons() +
+  scale_fill_manual(values = c("#FED439FF", "#709AE1FF", "#8A9197FF", "#D2AF81FF", "#FD7446FF", "#D5E4A2FF", "#C80813FF", "#46732EFF", "#FD8CC1FF", "#71D0F5FF")) +
   ggtitle("Other")
 
 # Combine pneumonias and respiratory failures
@@ -270,10 +271,11 @@ p3 <- ggplot(normalized_df, aes(x = age_years, y = prop)) +
   geom_smooth(method = loess, formula = y~x, se = FALSE, lty = 1,
               method.args = list(span = 1), aes(color = Subgroup)) +
   labs(x = "Age (years)", y = "Proportion", color = "Admission Type") +
-  coord_cartesian(xlim = c(0, 10), ylim = c(0, .75)) +
+  coord_cartesian(xlim = c(0, 10), ylim = c(0, 1)) +
   scale_x_continuous(breaks=0:10) +
   #scale_y_continuous(sec.axis = sec_axis(~.*max(patients_total$total), name = "Total Patients")) +
   theme_classic() + 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1)) +
   scale_color_simpsons()
 
 # Filter hospitalizations
@@ -400,7 +402,7 @@ for (i in 1:length(unique_systems)) {
   print(table, vp = viewport(layout.pos.row = row, layout.pos.col = col))
 }
 
-grid.raster(img, width = unit(1, "npc"), height = unit(1.25, "npc"), 
+grid.raster(img, width = unit(1, "npc"), height = unit(1.5, "npc"), 
             vp = viewport(layout.pos.row = 2:3, layout.pos.col = 2))
 dev.off()
 ```
