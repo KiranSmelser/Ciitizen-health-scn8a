@@ -1,0 +1,232 @@
+﻿Num,Patient,UID,activity,spot_date,spot_type
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Ability to roll,2019-05,A
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Ability to use at least one word,2019-08,A
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Ability to walk,2020-01,A
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Ability to cruise,2020-02,A
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Ability to pull to stand,2020-02,A
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Ability to use short phrase,2020-10,A
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Ability to perform hand functions,2021-02,A
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Ability to run,2021-02,A
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Ability to speak own name,2021-02,A
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Ability to use sentences,2021-02,A
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Ability to write,2021-02,A
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Ability to speak fluently,2021-05,A
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Seizure disorder,2019-11,2D
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Seizure disorder,2020-01,2D
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Seizure disorder,2020-02,1D
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Status epilepticus,2020-03,2D
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Seizures,2020-02,>5M
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Seizures,2020-03,>5M
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Seizures,2020-03,SE
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,Epilepsy monitoring unit admission,2022-02,1D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to control head posture,2018-05,U
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to grasp,2018-05,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to roll,2018-05,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to reach,2018-05,U
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to reach,2018-05,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to babble,2018-06,U
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to roll (back-to-front),2018-06,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to use palmar grasp,2018-06,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to roll (front-to-back),2018-06,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to control head posture,2018-07,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to sit unsupported,2018-07,U
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to babble,2018-07,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to vocalize,2018-07,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to use at least one word,2018-11,U
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to crawl,2018-11,U
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to reach,2018-11,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to walk,2018-11,U
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to weight-bear,2018-12,U
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to use verbal communication,2019-01,U
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to stand,2019-01,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to stand alone,2019-01,U
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to weight-bear,2019-01,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to transfer objects,2019-02,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to use pincer grasp,2019-03,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to belly crawl,2020-01,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to crawl,2020-02,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to crawl,2020-03,U
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to crawl,2020-06,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to sit unsupported,2021-01,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to use sign language,2021-01,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to perform hand functions,2021-01,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to walk with assistance,2021-01,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to pull to stand,2021-04,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to kneel,2021-04,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to use at least one word,2021-08,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to follow commands,2021-08,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to use augmentative and alternative communication,2021-09,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to walk with maximal assistance,2022-01,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Ability to cruise,2022-11,A
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizure disorder,2018-05,2D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizure disorder,2018-05,2D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizure disorder,2018-05,5D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Increased seizure frequency,2018-06,3D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Increased seizure frequency,2018-09,3D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Increased seizure frequency,2018-10,2D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizure disorder,2018-10,0D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizure disorder,2018-10,3D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizure disorder,2018-11,2D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizure disorder,2018-12,2D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizure disorder,2019-02,1D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Planned admission,2019-02,4D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Increased seizure frequency,2019-04,1D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Status epilepticus,2019-04,4D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Increased seizure frequency,2019-04,1D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Increased seizure frequency,2019-05,2D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Increased seizure frequency,2019-06,10D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Admitted for observation,2019-11,4D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Admitted for observation,2020-02,6D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Gastrointestinal hemorrhage,2020-06,4D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Planned procedure,2020-09,1D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Admitted for observation,2020-10,17D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Epilepsy,2021-12,2D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Vomiting,2022-11,3D
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2018-05,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2018-05,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2018-05,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2018-06,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2018-08,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2018-08,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2018-09,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2018-09,SE
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2018-10,SE
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2018-10,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2018-11,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2019-02,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2019-02,SE
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2019-04,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2019-04,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2019-05,SE
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2019-06,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2020-02,SE
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2020-02,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2020-10,SE
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2020-10,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2020-11,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2020-11,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2020-11,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2020-11,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2022-09,>5M
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,Seizures,2022-11,SE
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Increased seizure frequency,2013-05,1D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Dehydration,2013-12,8D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Increased seizure frequency,2013-12,1D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Increased seizure frequency,2014-05,1D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Increased seizure frequency,2014-05,6D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Epilepsy monitoring unit admission,2014-06,3D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Status epilepticus,2014-06,11D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Urinary tract infectious disease,2014-07,2D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Acute viral disease,2014-08,4D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Respiratory failure,2015-06,12D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Acute respiratory failure,2015-08,7D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Planned admission,2015-09,3D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Acute-on-chronic respiratory failure,2016-03,12D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Acute-on-chronic respiratory failure,2016-04,2D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Planned admission,2016-06,2D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Respiratory distress,2016-11,9D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Respiratory distress,2017-03,6D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Epilepsy monitoring unit admission,2017-07,1D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Hyponatremia,2017-08,10D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Acute respiratory failure,2018-09,17D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Respiratory insufficiency,2019-09,1D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Status epilepticus,2022-04,3D
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to control head posture,2013-05,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to reach,2013-05,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to roll,2013-05,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to use verbal communication,2013-06,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to crawl,2013-07,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to grasp,2013-07,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to sit unsupported,2013-07,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to vocalize,2013-09,A
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to babble,2013-10,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to use non-verbal communication,2014-06,A
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to scoot,2015-06,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to walk,2016-03,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to use at least one word,2019-12,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to follow commands,2020-02,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to perform hand functions,2020-12,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to speak,2020-12,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Ability to stand,2020-12,U
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Seizures,2014-06,SE
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Seizures,2018-09,SE
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,Seizures,2022-04,SE
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to roll,2009-06,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to sit unsupported,2009-10,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to use pincer grasp,2009-11,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to crawl,2010-02,U
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to belly crawl,2010-05,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to stand alone,2010-05,U
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to perform hand functions,2010-05,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to pull to stand,2010-05,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to babble,2010-07,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to use at least one word,2010-07,U
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to walk,2010-07,U
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to use sign language,2010-10,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to walk,2010-10,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to use at least one word,2010-10,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to stand alone,2011-03,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to throw,2011-03,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to use non-verbal communication,2011-03,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to use short phrase,2011-03,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to use tripod grasp,2011-03,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to run,2011-07,A
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to identify colors,2011-10,U
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,Ability to jump,2012-11,A
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to use pincer grasp,2005-05,A
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to crawl,2005-05,U
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to vocalize,2005-05,A
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to perform hand functions,2005-05,A
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to reach,2005-05,A
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to stand,2005-05,A
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to walk,2005-10,U
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to pull to stand,2005-10,U
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to sit unsupported,2005-10,U
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to babble,2007-01,A
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to cruise,2007-01,A
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to walk with assistance,2007-05,A
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to use at least one word,2007-08,A
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to use short phrase,2008-05,U
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to walk,2010-02,A
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to follow commands,2012-11,U
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to use non-verbal communication,2012-11,A
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Ability to use verbal communication,2012-11,U
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Seizure disorder,2012-04,2D
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Seizure disorder,2012-10,4D
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Increased seizure frequency,2012-10,3D
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Status epilepticus,2012-11,1D
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Increased seizure frequency,2013-05,1D
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Increased seizure frequency,2013-07,1D
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Status epilepticus,2014-08,1D
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Altered mental status,2015-07,3D
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Dehydration,2017-08,10D
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Seizures,2012-10,SE
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Seizures,2012-11,SE
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,Seizures,2013-07,SE
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to crawl,2003-01,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to cruise,2003-01,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to pull to stand,2003-01,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to walk,2004-04,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to use at least one word,2005-10,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to write,2005-10,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to follow commands,2005-10,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to jump,2005-10,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to perform hand functions,2005-10,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to use sign language,2005-10,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to use short phrase,2005-10,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to use non-verbal communication,2005-10,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to recognize letters of the alphabet,2007-02,U
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to recognize numbers,2007-02,U
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to use sentences,2007-02,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to count up to 10,2007-02,U
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to identify colors,2007-10,U
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to recognize letters of the alphabet,2011-02,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to count up to 10,2011-02,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Ability to speak fluently,2014-10,A
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Pneumonia,2006-05,2D
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Seizure disorder,2011-11,2D
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Abdominal pain,2011-12,6D
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Increased seizure frequency,2014-04,2D
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Planned procedure,2018-07,3D
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Epilepsy monitoring unit admission,2021-03,3D
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,Planned procedure,2022-08,3D

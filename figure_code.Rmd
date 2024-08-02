@@ -1,0 +1,1003 @@
+---
+title: "Figures"
+author: "Joshua Hack"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries}
+library(readxl)
+library(tidyverse)
+library(data.table)
+library(ggsci)
+library(gridExtra)
+library(grid)
+library(ggpubr)
+library(colorspace)
+library(png)
+library(ganttrify)
+# Create directory to save plots
+dir.create("./figures/figure_1")
+dir.create("./figures/figure_2")
+dir.create("./figures/figure_3")
+dir.create("./figures/figure_4")
+dir.create("./figures/figure_5")
+dir.create("./results/table_1")
+
+path_data="./data/Ciitizen_SCN8A_UArizona_2024.02.09.xlsx"
+path_classifier="./data/ciitizen_health_classifier.xlsx"
+```
+
+#Figure 1- Case Study Cohort Timelines and Development Curves
+```{r Fig-1}
+gant <- read.csv("./data/Gantrify Data Case Studies.csv")
+spot <- read.csv("./data/Spot Data Case Studies.csv")
+palette_timeline <- c("#a1c5cb", "#ffde76", "#a30234", "#7a5072", "#0076c0")
+palette_development <- c("#ce8080", "#f1b682", "#002157", "#67771a", "#a1c5cb", "#a30234", "#7a5072")
+plot_list <- list()
+
+for (i in 1:6) {
+  patient <- gant %>% filter(Num == i) 
+  patient.gant <- patient %>% select(4:7)
+  patient.spot <- spot %>% filter(Num == i) %>% select(3:6)
+  
+  plot <- ganttrify(project = patient.gant, by_date = T, spots = patient.spot, mark_quarters = T,
+                    size_text_relative = 1.2, spot_fill = alpha("white", 0.7),month_label_string = "M",
+                    month_number_label = T, month_date_label = F, x_axis_position = "top", month_breaks = 12,
+                    colour_palette = palette_timeline, hide_wp = TRUE) +
+    labs(title = paste("Clinical Timeline for Patient", patient[[2]][1]))
+  
+  plot_list[[i]] <- plot  
+}
+
+for (i in seq_along(plot_list)) {
+  # Define the filename
+  filename <- paste0("./figures/figure_1/Figure_1", LETTERS[i], ".jpeg")
+  
+  # Open a TIFF device
+  jpeg(filename, width = 16, height = 12, units = "in", res = 600)
+  
+  # Print the plot
+  print(plot_list[[i]])
+  
+  # Close the TIFF device
+  dev.off()
+}
+dev_data <- read.csv("./data/Development Curves.csv")
+
+dev_data$Age.Months <- as.integer(dev_data$Age.Months)
+
+ggplot(dev_data, aes(x = Age.Months, group = Individual, color = Individual))+
+  stat_ecdf(geom = "step", aes(y=..y.. * max(dev_data$Individual == dev_data$Individual)), size = 1) +
+  labs(x = "Age in Months", y = "% of Skills Attained")+
+  scale_y_continuous(breaks = seq(0, max(table(dev_data$Individual)), by = 1))+
+  coord_cartesian(xlim= c(0,60))+
+  theme_classic()+
+  scale_x_continuous()+
+  scale_color_manual(values = palette_development)
+
+ggsave(filename = "./figures/figure_1/Figure_1G.jpeg", height = 12, width = 16, dpi=600)
+```
+
+#Figure 2- Full Population SZ types, hospitalizations, diagnoses over time
+There is also a gene topology that is generated separately
+```{r path-fig2}
+path_fig2= "./figures/figure_2/"
+```
+
+
+##2.1. Fig 2B-Seizure Types
+```{r Figure-2B}
+# Clean and import seizure data
+seizure_types <- read_excel(path_data, sheet = "seizure_history")
+seizure_types <- subset(seizure_types, select = -c(3:7))
+
+# Import and format seizure type classifier
+classifier <- read_excel(path_classifier)
+types_classifier <- classifier[grepl("seizure_", names(classifier))]
+names(types_classifier) <- sub('^seizure_', '', names(types_classifier))
+
+# Function to add seizure types
+find_column_name <- function(value, df) {
+  for (col_name in names(df)) {
+    if (value %in% df[[col_name]]) {
+      return(col_name)
+    }
+  }
+  return(NA)
+}
+
+# Classify seizure types
+seizure_types$type <- sapply(seizure_types$seizure_history_type, find_column_name, df=types_classifier)
+seizure_types <- na.omit(seizure_types)
+seizure_types <- subset(seizure_types, select = -c(seizure_history_type))
+
+# Group into other
+#seizure_types$type <- replace(seizure_types$type, seizure_types$type %in% c("absence", "clonic", "myoclonic"), "other")
+
+# Remove clonic
+seizure_types <- seizure_types[!seizure_types$type == "clonic", ]
+
+# Convert age in days to years
+seizure_types$age_years <- seizure_types$seizure_history_age_days / 365
+
+# Convert from wide to long format for ggplot2
+long <- seizure_types %>%
+  gather(key = "age_type", value = "age_years", age_years)
+
+# Calculate the number of unique patients at ages 1,2,...
+patients_by_type <- long %>%
+  group_by(type, age_years = floor(age_years)) %>%
+  summarise(n = n_distinct(patient_uuid)) %>%
+  ungroup()
+
+# Calculate the total number of patients at ages 1,2,...
+patients_total <- long %>%
+  group_by(age_years = floor(age_years)) %>%
+  summarise(total = n_distinct(patient_uuid)) %>%
+  ungroup()
+
+# Join the data frames
+tmp <- left_join(patients_by_type, patients_total, by = "age_years")
+
+# Divide by the total number of patients at each age
+normalized_df <- tmp %>%
+  mutate(prop = n / total) %>%
+  ungroup()
+
+# # Create a smooth line plot
+# p1_alt <- ggplot(normalized_df, aes(x = age_years, y = prop)) +
+#   geom_bar(data = patients_total, aes(x = age_years, y = total/max(total)), stat = "identity", fill = "lightgrey", show.legend = FALSE) +
+#   geom_smooth(method = loess, formula = y~x, se = FALSE, lty = 1,
+#               method.args = list(span = 1), aes(color = type)) +
+#   labs(x = "Age (years)", y = "Proportion", color = "Seizure Type") +
+#   coord_cartesian(xlim = c(0, 10), ylim = c(0, 1)) +
+#   scale_x_continuous(breaks=0:10) +
+#   scale_y_continuous(sec.axis = sec_axis(~.*max(patients_total$total), name = "Total Patients")) +
+#   theme_classic() + 
+#   scale_color_manual(values = c("#ffde76", "#5698a3", "#67771a", "#511d24", "#e37c1d", "#7a50"))
+
+# Define the order
+type_levels <- c("tonic-clonic", "focal", "tonic", "myoclonic", "absence", "spasms")
+
+# Convert 'type' to a factor and specify the order of levels
+normalized_df$type <- factor(normalized_df$type, levels = type_levels)
+
+# Plot
+p1 <- ggplot(normalized_df, aes(x=age_years, y=prop)) +
+  geom_area(stat="smooth", position="identity", method="loess", aes(fill=type)) +
+  geom_line(stat = "smooth", method = "loess", formula = y~x, se = FALSE, lty = 1,
+            aes(color = type), show.legend = FALSE) +
+  #geom_line(data = patients_total, aes(x = age_years, y = total/max(total)), color = "black") +
+  #geom_point(data = patients_total, aes(x = age_years, y = total/max(total)), color = "black") +
+  #geom_bar(data = patients_total, aes(x = age_years, y = total/max(total)), stat = "identity", fill = NA, color = "black") +
+  labs(x="Age (Years)", y="Proportion", fill = "Seizure Type") +
+  coord_cartesian(xlim = c(0, 10), ylim = c(0, 1)) +
+  scale_x_continuous(breaks=0:10) +
+  #scale_y_continuous(sec.axis = sec_axis(~.*max(patients_total$total), name = "Total Patients")) +
+  theme_classic() + 
+  theme(legend.justification = c(0.05, 1), legend.position = c(0.05, 1)) +
+  scale_fill_manual(values =c("#5698a3", "#ffde76", "#67771a", "#0076c0", "#e37c1d", "#7a5072")) +
+  scale_color_manual(values = c("#5698a3", "#ffde76", "#67771a", "#0076c0", "#e37c1d", "#7a5072"))
+
+ggsave(paste(path_fig2, "Fig_2B.jpeg", sep = ""), plot = p1, width = 10, height = 7, dpi = 600)
+```
+
+
+##2.2 Hospitalizations
+
+###2.2.1 Figure 2C- Bar plot
+```{r Figure-2C}
+# Clean and import hospitalization data
+hospitalizations <- read_excel(path_data, sheet = "hospital_admission")
+hospitalizations <- subset(hospitalizations, select = c(1:2))
+
+# Import hospitalization classifier
+hospitalization_classifier <- read_excel("./data/Grouping Hospitalizations.xlsx")
+
+# Classify hospitalizations
+hospitalizations <- left_join(hospitalizations, hospitalization_classifier, by = c("admission_diagnosis"="Hospitalization Events"))
+hospitalizations <- hospitalizations[hospitalizations$`Admission Type` %in% c("Emergency", "Incidental"), ]
+
+# Calculate frequency for admission types and subgroups
+hospitalizations_freq <- hospitalizations %>%
+  group_by(`Admission Type`, Subgroup, admission_diagnosis) %>%
+  summarise(n = n()) %>%
+  ungroup()
+hospitalizations_freq <- na.omit(hospitalizations_freq)
+
+# Create a separate data frame for 'seizure'
+seizure_freq <- hospitalizations_freq[hospitalizations_freq$Subgroup == "Seizure", ]
+hospitalizations_freq <- hospitalizations_freq[hospitalizations_freq$Subgroup != "Seizure", ]
+
+# Add a new column for facetting
+hospitalizations_freq$Facet <- "Other"
+seizure_freq$Facet <- "Seizure"
+
+# Combine the data frames
+combined_freq <- rbind(hospitalizations_freq, seizure_freq)
+
+# Modify seizure_freq to group all Seizure types that aren't 'Status epilepticus' into 'Non-status epilepticus'
+seizure_freq$admission_diagnosis <- ifelse(seizure_freq$admission_diagnosis == "Status epilepticus", "Status epilepticus", "Seizure")
+
+# Create the first plot for 'Other'
+p1 <- ggplot(hospitalizations_freq, aes(x=`Admission Type`, y=n, fill=Subgroup)) +
+  geom_bar(stat="identity") +
+  labs(x="Admission Type", y="# of Reports", fill = "Subgroup") +
+  theme_classic() +
+  scale_fill_manual(values = c("#ffde76", "#bacfec", "#8A9197FF", "#f1b682", "#e37c1d", "#abb47d", "#a30234", "#67771a", "#e4b8b4", "#5698a3")) +
+  ggtitle("Other")
+
+# Combine pneumonias and respiratory failures
+hospitalizations$admission_diagnosis[hospitalizations$admission_diagnosis=="Aspiration pneumonia"] <- "Pneumonia"
+hospitalizations$admission_diagnosis[hospitalizations$admission_diagnosis=="Acute respiratory failure"] <- "Respiratory failure"
+
+# Define the specific hospitalizations to mark
+specific_hospitalizations <- c("Respiratory failure", "Pneumonia")
+
+# Calculate sum within each subgroup
+specific_hospitalizations_freq <- hospitalizations %>%
+  group_by(Subgroup) %>%
+  mutate(n = n()) %>%
+  ungroup()
+
+# Calculate frequency for specific hospitalizations
+specific_hospitalizations_freq <- specific_hospitalizations_freq %>%
+  filter(`Admission Type` == "Emergency", admission_diagnosis %in% specific_hospitalizations) %>%
+  group_by(`Admission Type`, Subgroup, n, admission_diagnosis) %>%
+  summarise(n_specific = n()) %>%
+  ungroup()
+
+# Calculate cumulative sum within each subgroup
+specific_hospitalizations_freq <- specific_hospitalizations_freq %>%
+  arrange(`Admission Type`, Subgroup, admission_diagnosis) %>%
+  group_by(`Admission Type`, Subgroup) %>%
+  mutate(cumulative_n = cumsum(n_specific)) %>%
+  ungroup()
+
+# Create labels
+specific_hospitalizations_freq <- specific_hospitalizations_freq %>%
+  mutate(label = paste(admission_diagnosis, n_specific, sep = ": "))
+
+# Add text to the bars in the plot
+p1 <- p1 + geom_text(data = specific_hospitalizations_freq, aes(label = label, y = cumulative_n), color = "white", size = 2.5)
+
+# Add a lines
+p1 <- p1 + geom_segment(data = specific_hospitalizations_freq, aes(x = 0, xend = 1.5, y = cumulative_n - 3, yend = cumulative_n - 3), color = "white")
+
+# Create the second plot for 'Seizure'
+p2 <- ggplot(seizure_freq, aes(x=`Admission Type`, y=n, fill=admission_diagnosis)) +
+  geom_bar(stat="identity") +
+  labs(x="Admission Type", y="# of Reports", fill = "Type") +
+  theme_classic() +
+  scale_fill_manual(values = c("#7a5072", "#002F30")) +
+  ggtitle("Seizure")
+
+ggsave(paste(path_fig2, "Fig_2C.jpeg", sep = ""), plot = grid.arrange(p1, p2, ncol=2), width = 10, height = 7, dpi = 600)
+```
+
+###2.2.2 Figure 2D- Smooth line plot
+```{r Figure-2D}
+# Clean and import hospitalization data
+hospitalizations <- read_excel(path_data, sheet = "hospital_admission")
+hospitalizations <- subset(hospitalizations, select = c(1:2, 10))
+
+# Classify hospitalizations
+hospitalizations <- left_join(hospitalizations, hospitalization_classifier, by = c("admission_diagnosis"="Hospitalization Events"))
+#hospitalizations <- hospitalizations[hospitalizations$`Admission Type` %in% c("Emergency", "Unplanned"), ]
+
+# Split Seizure into Status and Non-status
+hospitalizations$Subgroup <- ifelse(hospitalizations$Subgroup == "Seizure" & hospitalizations$admission_diagnosis == "Status epilepticus", "Status epilepticus", ifelse(hospitalizations$Subgroup == "Seizure", "Non-status epilepticus", hospitalizations$Subgroup))
+
+# Convert age in days to years
+hospitalizations$admission_age_days_firstDate <- hospitalizations$admission_age_days_firstDate / 365
+
+# Convert from wide to long format for ggplot2
+long <- hospitalizations %>%
+  gather(key = "age_type", value = "age_years", admission_age_days_firstDate)
+
+# Calculate the number of unique patients at ages 1,2,...
+patients_by_subgroup <- long %>%
+  group_by(Subgroup, age_years = floor(age_years)) %>%
+  summarise(n = n_distinct(patient_uuid)) %>%
+  ungroup()
+
+# Calculate the total number of patients at ages 1,2,...
+patients_total <- long %>%
+  group_by(age_years = floor(age_years)) %>%
+  summarise(total = n_distinct(patient_uuid)) %>%
+  ungroup()
+
+# Join the data frames
+tmp <- left_join(patients_by_subgroup, patients_total, by = "age_years")
+
+# Divide by the total number of patients at each age
+normalized_df <- tmp %>%
+  mutate(prop = n / total) %>%
+  ungroup()
+normalized_df <- na.omit(normalized_df)
+
+# Create a smooth line plot
+p3 <- ggplot(normalized_df, aes(x = age_years, y = prop)) +
+  #geom_bar(data = patients_total, aes(x = age_years, y = total/max(total)), stat = "identity", fill = "lightgrey", show.legend = FALSE) +
+  geom_smooth(method = loess, formula = y~x, se = FALSE, lty = 1,
+              method.args = list(span = 1), aes(color = Subgroup)) +
+  labs(x = "Age (years)", y = "Proportion", color = "Admission Type") +
+  coord_cartesian(xlim = c(0, 10), ylim = c(0, 1)) +
+  scale_x_continuous(breaks=0:10) +
+  #scale_y_continuous(sec.axis = sec_axis(~.*max(patients_total$total), name = "Total Patients")) +
+  theme_classic() + 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1)) +
+  scale_color_manual(values = c("lightgrey", "#ffde76", "#5698a3", "#511d24", "#e37c1d", "#002157", "#0076c0", "#e4b8b4", "#67771a", "#a30234", "#7a5072"))
+
+# # Filter hospitalizations
+# normalized_df <- normalized_df[normalized_df$Subgroup %in% c("Status epilepticus", "Non-status epilepticus", "GI", "Infection", "Pulmonary"), ]
+# 
+# # Define the order
+# type_levels <- c("Non-status epilepticus", "Pulmonary", "Status epilepticus", "Infection", "GI")
+# 
+# # Convert 'Subgroup' to a factor and specify the order of levels
+# normalized_df$Subgroup <- factor(normalized_df$Subgroup, levels = type_levels)
+# 
+# # Plot
+# p3_alt <- ggplot(normalized_df, aes(x=age_years, y=prop)) +
+#   geom_area(stat="smooth", position="identity", method="loess", aes(fill=Subgroup)) +
+#   geom_line(stat = "smooth", method = "loess", formula = y~x, se = FALSE, lty = 1,
+#             aes(color = Subgroup), show.legend = FALSE) +
+#   #geom_line(data = patients_total, aes(x = age_years, y = total/max(total)), color = "black") +
+#   #geom_point(data = patients_total, aes(x = age_years, y = total/max(total)), color = "black") +
+#   #geom_bar(data = patients_total, aes(x = age_years, y = total/max(total)), stat = "identity", fill = NA, color = "black") +
+#   labs(x="Age (Years)", y="Proportion", fill = "Admission Type") +
+#   coord_cartesian(xlim = c(0, 10), ylim = c(0, .75)) +
+#   scale_x_continuous(breaks=0:10) +
+#   #scale_y_continuous(sec.axis = sec_axis(~.*max(patients_total$total), name = "Total Patients")) +
+#   theme_classic() + 
+#   scale_fill_simpsons() +
+#   scale_color_simpsons()
+
+ggsave(paste(path_fig2, "Fig_2D.jpeg", sep = ""), plot = p3, width = 10, height = 7, dpi = 600)
+```
+
+
+#3 Figure 3- Diagnoses by body system
+```{r figure-3}
+# Clean and import diagnosis data
+diagnoses <- read_excel(path_data, sheet = "clinical_diagnosis_features")
+diagnoses <- subset(diagnoses, select = c(1:2, 9))
+
+# Import diagnosis classifier
+diagnosis_classifier <- read_excel("./data/Grouping diagnoses.xlsx")
+diagnosis_classifier <- subset(diagnosis_classifier, select = -c(5))
+
+# Classify diagnoses
+diagnoses <- left_join(diagnoses, diagnosis_classifier, by = c("diagnosis"="Clinical Diagnoses"))
+
+# Count by patient rather than report
+diagnoses <- unique(na.omit(subset(diagnoses, select = c(1:2, 6))))
+
+# Filter diagnoses
+diagnoses <- diagnoses %>%
+  filter(!System %in% c("Endocrine", "Excretory", "Integumentary"))
+
+# Calculate overall percentage for each system
+sys_pcts <- diagnoses %>%
+  group_by(System) %>%
+  summarise(sys_pct = n()/nrow(diagnoses) * 100, sys_n = n())
+
+# Calculate individual diagnosis percentages within each system
+diagnosis_pcts <- diagnoses %>%
+  group_by(System, diagnosis) %>%
+  summarise(diagnosis_n = n())
+
+diagnosis_pcts <- left_join(diagnosis_pcts, subset(sys_pcts, select = -c(2)), by = "System")
+
+diagnosis_pcts <- diagnosis_pcts %>%
+  mutate(diagnosis_pct = (diagnosis_n / sys_n) * 100) %>%
+  ungroup()
+diagnosis_pcts <- subset(diagnosis_pcts, select = -c(3:4))
+
+# Create a list to store dataframes for each system
+sys_dfs <- list()
+
+colors <- c("#a30234", "#e4b8b4", "#e37c1d", "#bacfec", "#ffde76", lighten("#00545f", 0.25), "#0076c0", lighten("#67771a", 0.25), "#abb47d", "#a1c5fb", "#7a5072")
+
+unique_systems <- c("Musculoskeletal", "Gastrointestinal", "Behavioral", "Neurological", "Sensory", "Respiratory", "Cardiovascular", "Immunological")
+
+jpeg(filename = "./figures/figure_3/Figure_3.jpeg", width = 12, height = 14, units = "in", res = 600)
+
+img <- readPNG("./figures/anatomy.png")
+
+pushViewport(viewport(layout = grid.layout(5, 3, widths = unit(c(.325,.3,.25), "npc"), heights = unit(c(.175, .175,.175,.175,.135), "npc"))))
+
+for (i in 1:length(unique_systems)) {
+  system <- unique_systems[i]
+  
+  # Get the system percentage
+  system_pct <- filter(sys_pcts, System == system)$sys_pct
+  system_pct <- round(system_pct, 2)
+  system_pct <- paste0(system_pct, "%")
+  
+  # Get the diagnosis percentages for this system
+  diagnosis_pct <- filter(diagnosis_pcts, System == system)
+  diagnosis_pct <- subset(diagnosis_pct, select = -c(1))
+  colnames(diagnosis_pct) = c("Diagnosis", "Percentage")
+  
+  # Sort the diagnosis percentages in descending order and select the top 7
+  diagnosis_pct <- diagnosis_pct[order(-diagnosis_pct$Percentage), ]
+  if(nrow(diagnosis_pct) > 7) {
+    diagnosis_pct <- diagnosis_pct[1:7, ]
+  }
+  
+  diagnosis_pct$Percentage <- round(diagnosis_pct$Percentage, 2)
+  diagnosis_pct$Percentage <- paste0(diagnosis_pct$Percentage, "%")
+  
+  df <- data.frame(Diagnosis = system, Percentage = system_pct)
+  df <- rbind(df, diagnosis_pct)
+  colnames(df) <- as.character(unlist(df[1,]))
+  df <- df[-1,]
+  
+  sys_dfs[[system]] <- df
+
+  # Create a table for each dataframe
+  if(system == "Neurological" || system == "Sensory" || system == "Gastrointestinal"){
+    table <- ggtexttable(sys_dfs[[system]], rows = NULL, theme = ttheme(
+             colnames.style = colnames_style(color = "black", fill = colors[i]),
+             tbody.style = tbody_style(color = "black", fill = c(lighten(colors[i], .5)))
+           ))
+  } else{
+  table <- ggtexttable(sys_dfs[[system]], rows = NULL, theme = ttheme(
+             colnames.style = colnames_style(color = "white", fill = colors[i]),
+             tbody.style = tbody_style(color = "black", fill = c(lighten(colors[i], .5)))
+           ))
+  }
+
+  # Determine the position of the table
+  if(system == "Neurological") {
+    row <- 1
+    col <- 2
+  } else if(system == "Immunological") {
+    row <- 5
+    col <- 2
+  } else if(system == "Cardiovascular"){
+    row <- 2
+    col <- 3
+  } else if(system == "Respiratory"){
+    row <- 3
+    col <- 3
+  } else if(system == "Sensory"){
+    row <- 4
+    col <- 3
+  } else {
+    row <- ((i - 1) %% 3) + 2
+    col <- ceiling(i / 3)
+    if(col == 2) {
+      col <- 3
+    } else if(col == 3) {
+      col <- 1
+    }
+  }
+
+  if(!(row == 1 && col == 1 || row == 1 && col == 3)){
+    if (col == 1) {
+      print(table, vp = viewport(layout.pos.row = row, layout.pos.col = col))
+    } else if (col == 3) {
+      print(table, vp = viewport(layout.pos.row = row, layout.pos.col = col))
+    } else {
+      print(table, vp = viewport(layout.pos.row = row, layout.pos.col = col))
+    }
+  }
+}
+
+
+grid.raster(img, width = unit(1, "npc"), height = unit(1, "npc"), 
+            vp = viewport(layout.pos.row = 2:4, layout.pos.col = 2))
+dev.off()
+```
+
+#4. Figure 4- Medication prescriptions
+```{r data-load, warning=FALSE}
+data <- read_excel(path_data, sheet = "medication_aggregate")
+```
+
+###4.0.1 Preprocessing
+```{r Figure-4-preproc}
+Ciitizen_medication <- data
+
+meds_to_use <- paste(c("Adrenocorticotropin (ACTH 1-18),I-125 (TYR)", "Clonazepam", "Levetiracetam", "Phenytoin", "Oxcarbazepine", "Carbamazepine", "Phenobarbital", "Lamotrigine", "Briveracetam", "Cannabidiol", "Clobazam", "Epidiolex", "Eslicarbazepine", "Ethosuximide", "Felbamate","Gabapentin", "Prednisolone", "Lacosamide", "Primidone", "Rufinamide", "Topiramate", "Valproate", "Vigabatrin", "Zonisamide", "Stiripentol", "Tiagabine", "Perampanel"), collapse = "|")
+Ciitizen_medication <- Ciitizen_medication %>%
+  mutate(medication = ifelse(grepl("ACTH", medication), "ACTH", medication),
+         medication = recode(medication, Epidiolex="Epidiolex/CBD", Cannabidiol = "Epidiolex/CBD"))
+Ciitizen_medication <- subset(Ciitizen_medication, grepl(meds_to_use, medication))
+Ciitizen_medication <- subset(Ciitizen_medication, select = -c(3:6, 9:11))
+```
+
+
+```{r Figure-4-functions}
+find_first_four_medications <- function(data) {
+  data <- data %>%
+    group_by(patient_uuid) %>%
+    arrange(patient_uuid, medication_age_days_firstDate) %>%
+    mutate(medication_number = row_number()) %>%
+    filter(medication_number <= 4) %>%
+    ungroup()
+  
+  overlaps <- logical(nrow(data))
+  
+  for (i in 1:(nrow(data) - 1)) {
+    for (j in (i + 1):nrow(data)) {
+      if (data$patient_uuid[i] == data$patient_uuid[j] &&
+          data$medication_age_days_lastDate[i] >= data$medication_age_days_firstDate[j] &&
+          data$medication_age_days_firstDate[i] <= data$medication_age_days_lastDate[j]) {
+        overlaps[i] <- TRUE
+        overlaps[j] <- TRUE
+      }
+    }
+  }
+  
+  data <- data %>%
+    mutate(
+      medication_overlaps = overlaps,
+      age_days_start = medication_age_days_firstDate,
+      age_days_end = medication_age_days_lastDate
+    )
+  
+  return(data)
+}
+
+result <- find_first_four_medications(Ciitizen_medication)
+
+pivoted_result <- result %>%
+  pivot_wider(
+    id_cols = patient_uuid,
+    names_from = medication_number,
+    values_from = c(medication, age_days_start, age_days_end, medication_overlaps),
+    names_glue = "{.value}_{medication_number}"
+  )
+
+print(pivoted_result)
+```
+
+```{r Figure-4-datafinal}
+final_result <- pivoted_result %>%
+  rowwise() %>% 
+   mutate(
+    levetiracetam_col = case_when(
+      medication_1 == "Levetiracetam" ~ age_days_end_1,
+      medication_2 == "Levetiracetam" ~ age_days_end_2,
+      medication_3 == "Levetiracetam" ~ age_days_end_3,
+      medication_4 == "Levetiracetam" ~ age_days_end_4,
+      TRUE ~ NA_real_
+    )) %>%
+  ungroup() %>%
+  #distinct(patient_uuid, .keep_all = TRUE) %>% 
+  select(patient_uuid, starts_with("medication_"), starts_with("age_days_end_"))
+```
+
+
+##4.1 Figure 4A-B: Prescription Order practices
+```{r Figure-4AB}
+library(reshape2)
+order <- c("Oxcarbazepine", "Lamotrigine", "Valproate","Phenytoin", "Lacosamide","Carbamazepine", "Eslicarbazepine", "Phenobarbital",  "Clonazepam", "Clobazam", "Vigabatrin", "Primidone", "Zonisamide", "Gabapentin", "Ethosuximide", "Levetiracetam", "Topiramate", "Prednisolone", "Epidiolex/CBD")
+df_long <- final_result %>% 
+  gather(key = "medication_type", value = "medication", medication_1:medication_4) %>% 
+  filter(!is.na(medication))
+
+total_counts <- df_long %>% 
+  group_by(medication) %>% 
+  summarise(total_count = n())
+
+df_binary <- df_long %>% 
+  mutate(value = 1) %>% 
+  dcast(medication_type~medication, value.var = "value", fun.aggregate = length)
+
+df_binary[is.na(df_binary)] <- 0
+
+df_heatmap <- df_binary %>%
+  gather(key = "medication", value = "count", -medication_type)
+
+df_heatmap <- df_heatmap %>% 
+  left_join(total_counts, by = "medication") %>% 
+  mutate(normalized_count = count/total_count,
+         medication_type = recode(medication_type, medication_1= "Medication 1", medication_2 = "Medication 2", medication_3= "Medication 3", medication_4 = "Medication 4"))
+
+Figure_4A <- ggplot(df_heatmap, aes(x = factor(medication, level = order), y = medication_type, fill = normalized_count)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "#bacfec", high = "#a70234") +
+  labs(x = "Medications", y = "Medication Type", fill = "Frequency") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.background  = element_rect("white"))
+print(Figure_4A)
+medication_freq <- df_long %>% 
+  group_by(medication) %>% 
+  summarise(frequency = n())
+
+medication_counts <- df_long %>%
+  group_by(medication, medication_type) %>%
+  summarise(count = n()) %>%
+  ungroup()
+
+medication_counts <- medication_counts %>%
+  left_join(total_counts, by = "medication") %>%
+  mutate(normalized_count = count / total_count)
+
+medication_counts$medication_type <- factor(medication_counts$medication_type, levels = c("medication_4", "medication_3", "medication_2", "medication_1"))
+
+df_long$medication_type <- factor(df_long$medication_type, levels = c("medication_4", "medication_3", "medication_2", "medication_1"))
+Figure_4B <- df_long %>% 
+  count(medication, medication_type) %>% 
+  ggplot(aes(x = factor(medication, level=order), y = n, fill = medication_type))+
+  geom_bar(stat = "identity")+
+  labs(x = "Medications", y = "Frequency")+
+  theme(axis.text.x = element_text(angle = 0, size = 9, vjust = 0.5, face = "bold"))+
+  scale_fill_manual(name = "Medication #", labels = c("Medication 4", "Medication 3", "Medication 2", "Medication 1"),values = c("#a70234", "#ce8080", "#f1b682", "#ffde76"))+
+  scale_x_discrete(name = "Medication", labels = c("Oxcarbazepine" = "OXC", 
+                        "Lamotrigine" = "LTG", 
+                        "Lacosamide" = "LAC", 
+                        "Phenytoin" = "PHT", 
+                        "Carbamazepine" = "CBZ", 
+                        "Eslicarbazepine" = "ESL", 
+                        "Phenobarbital" = "PBT", 
+                        "Clonazepam" = "CLZ", 
+                        "Clobazam" = "CLB", 
+                        "Vigabatrin" = "VBG", 
+                        "Primidone" = "PRM", 
+                        "Zonisamide" = "ZNS", 
+                        "Gabapentin" = "GBP", 
+                        "Ethosuximide" = "ETX", 
+                        "Levetiracetam" = "LEV", 
+                        "Topiramate" = "TPM", 
+                        "Valproate" = "VPA", 
+                        "Prednisolone" = "PRD", 
+                        "Epidiolex/CBD" = "CBD"))
+print(Figure_4B)
+
+ggsave(filename = "./figures/figure_4/Figure_4A.jpeg", height = 12, width = 16, dpi = 600, plot = Figure_4A)
+ggsave(filename = "./figures/figure_4/Figure_4B.jpeg", height = 12, width = 16, dpi = 600, plot = Figure_4B)
+```
+
+##4.2 Figure 4C-D: Spaghetti plots of prescriptions split by GOF and LOF
+```{r Figure-4CD}
+data <- Ciitizen_medication %>% 
+  mutate(age_years_firstDate = medication_age_days_firstDate/365.25,
+         age_years_lastDate = medication_age_days_lastDate/365.25)
+
+generate_medication_timeline <- function(patient_data) {
+  # Create a sequence from the earliest start to the latest end
+  first_date <- min(patient_data$age_years_firstDate)
+  last_date <- max(patient_data$age_years_lastDate)
+  
+  age_seq <- seq(first_date, last_date, by = 0.1)
+  
+  # Count medications at each time point
+  medication_count <- sapply(age_seq, function(age) {
+    sum(age >= patient_data$age_years_firstDate & age <= patient_data$age_years_lastDate)
+  })
+  
+  data.frame(age_years = age_seq, medication_count = medication_count)
+}
+
+data_final <- data %>% 
+  group_by(patient_uuid) %>% 
+  do(generate_medication_timeline(.)) %>% 
+  ungroup()
+
+LOF_ids <- c('944f05de-9853-4cc5-9fcf-d47ee7a8dc0f','409008b9-671d-456e-96a0-8236a5ee7dbf',
+'6acf6198-f2b4-4468-9234-7d2b4710e14f','ec227c21-6fdc-46c2-95ef-4ecb6603083c',
+'588a77f3-6a37-4757-8941-070f69cf95b1','a6a301ea-bdf5-4111-be04-78a0fb73960a',
+'85ec6265-8a3f-48e4-b1fb-16661647d977','d3b527d5-0662-42a1-9e0c-67d4cc908595',
+'5c8bb15f-1f87-41a1-8932-ff18afdba917','56d3dc1e-63d5-4ad6-9493-57de0fd7ef0e',
+'9527087a-40c6-48e4-993c-e3f12f746ee2','47c27adc-27bd-41df-b39c-ae70495716cb',
+'5979a566-cb58-460e-932f-af259f152547','ce45fc4e-0416-4001-895c-6275a532d2e6',
+'84bad343-f2e0-4ec6-8f19-9d8f22c2d97e','b9a324cc-affd-4302-8949-12988004bfb7',
+'fb67ec01-0ced-4abb-a71e-07621dc999ce','1e66ce47-b9fe-460f-9346-796a9e2bf5f3',
+'b17a5dff-ebfb-4621-97b9-a0072da41851')
+
+data_lof <- data_final %>% filter(patient_uuid %in% LOF_ids)
+data_gof <- data_final %>% filter(!(patient_uuid %in% LOF_ids))
+
+average_medication_lof <- data_lof %>% 
+  group_by(age_years) %>% 
+  summarise(average_medication_count = mean(medication_count), .groups = "drop")
+
+average_medication_gof <- data_gof %>% 
+  group_by(age_years) %>% 
+  summarise(average_medication_count = mean(medication_count), .groups = "drop")
+
+
+Figure_4C <- ggplot()+
+  geom_line(data = data_gof, aes(x= age_years, y = medication_count, group = patient_uuid), alpha = 0.5)+
+  geom_smooth(data = average_medication_gof, aes(x = age_years, y = average_medication_count), 
+              method = "loess", color = "#a30234", linewidth = 0.8)+
+  labs(
+    x = "Age (y)",
+    y = "Number of Medications"
+  )+
+  theme_classic()+
+  xlim(c(0,10))
+
+Figure_4D <- ggplot()+
+  geom_line(data = data_lof, aes(x = age_years, y = medication_count, group = patient_uuid), alpha = 0.5)+
+  geom_smooth(data = average_medication_lof, aes(x = age_years, y = average_medication_count),
+              method = "loess", color = "#0076c0", linewidth = 0.8)+
+  labs(x= "Age (y)", y = "Number of Medications")+
+  theme_classic()+
+  xlim(c(0,10))
+
+
+ggsave(filename = "./figures/figure_4/Figure_4C.jpeg", height = 12, width = 16, dpi = 600, plot = Figure_4C)
+ggsave(filename = "./figures/figure_4/Figure_4D.jpeg", height = 12, width = 16, dpi = 600, plot = Figure_4D)
+```
+
+#5. Figure 5: Odds Ratio Plots
+```{r}
+
+```
+
+#Table 1: Descriptive statistics for cohort
+Split into All, GOF, LOF
+```{r table-1}
+Ciitizen_diagnoses <- read_excel(path_data, sheet = "clinical_diagnosis")
+Ciitizen_seizure <- read_excel(path_data, sheet = "seizure_history")
+Ciitizen_medication <- read_excel(path_data, sheet = "medication_aggregate") %>% 
+  mutate(medication = ifelse(grepl("ACTH", medication), "ACTH", medication),
+      medication = recode(medication, Epidiolex="Epidiolex/CBD", Cannabidiol = "Epidiolex/CBD")) %>% 
+  filter(., grepl(meds_to_use, medication))
+Ciitizen_hospitalization <- read_excel(path_data, sheet = "hospital_admission")
+Ciitizen_genetics <- read_excel(path_data, sheet = "genetic_findings")
+Ciitizen_primary_dx <- read_excel(path_data, sheet = "primary_diagnosis")
+Ciitizen_dx_procedures <- read_excel(path_data, sheet = "diagnostic_procedures")
+Ciitizen_demographics <- read_excel(path_data, sheet = "demographics")
+
+LOF_ids <- c('944f05de-9853-4cc5-9fcf-d47ee7a8dc0f','409008b9-671d-456e-96a0-8236a5ee7dbf',
+'6acf6198-f2b4-4468-9234-7d2b4710e14f','ec227c21-6fdc-46c2-95ef-4ecb6603083c',
+'588a77f3-6a37-4757-8941-070f69cf95b1','a6a301ea-bdf5-4111-be04-78a0fb73960a',
+'85ec6265-8a3f-48e4-b1fb-16661647d977','d3b527d5-0662-42a1-9e0c-67d4cc908595',
+'5c8bb15f-1f87-41a1-8932-ff18afdba917','56d3dc1e-63d5-4ad6-9493-57de0fd7ef0e',
+'9527087a-40c6-48e4-993c-e3f12f746ee2','47c27adc-27bd-41df-b39c-ae70495716cb',
+'5979a566-cb58-460e-932f-af259f152547','ce45fc4e-0416-4001-895c-6275a532d2e6',
+'84bad343-f2e0-4ec6-8f19-9d8f22c2d97e','b9a324cc-affd-4302-8949-12988004bfb7',
+'fb67ec01-0ced-4abb-a71e-07621dc999ce','1e66ce47-b9fe-460f-9346-796a9e2bf5f3',
+'b17a5dff-ebfb-4621-97b9-a0072da41851')
+
+compute_statistics <- function(df_name, df) {
+  results <- tibble()
+
+  if (df_name == "Ciitizen_demographics") {
+    if (all(c("patient_uuid", "most_recent_records_age_days", "sex") %in% colnames(df))) {
+      demographics <- df %>% 
+        group_by(patient_uuid) %>% 
+        mutate(age_years = most_recent_records_age_days / 365.25,
+               sex = recode(sex, female = "0", male = "1"))
+      
+      results <- tibble(
+        statistic = c("count", "average_age", "sd_age", "percent_male"),
+        value = c(
+          nrow(demographics),
+          mean(demographics$age_years, na.rm = TRUE),
+          sd(demographics$age_years, na.rm = TRUE),
+          sum(demographics$sex)/nrow(demographics)*100
+        )
+      )
+    }
+  } else if (df_name == "Ciitizen_seizure") {
+    if (all(c("patient_uuid", "seizure_history_age_days") %in% colnames(df))) {
+      min_onset_values <- df %>% 
+        group_by(patient_uuid) %>% 
+        mutate(age_onset_m = seizure_history_age_days / 30) %>% 
+        summarize(min_age = min(age_onset_m, na.rm = TRUE)) %>% 
+        pull(min_age)
+      
+      results <- tibble(
+        statistic = c("average_age_onset", "sd_age_onset"),
+        value = c(
+          mean(min_onset_values, na.rm = TRUE),
+          sd(min_onset_values, na.rm = TRUE)
+        )
+      )
+    }
+  } else if (df_name == "Ciitizen_primary_dx") {
+    if (all(c("patient_uuid", "primary_diagnosis_age_days", "primary_diagnosis") %in% colnames(df))) {
+      dx_age <- df %>% 
+        filter(primary_diagnosis == "SCN8A-related epilepsy with encephalopathy") %>% 
+        group_by(patient_uuid) %>% 
+        mutate(age_years = primary_diagnosis_age_days / 365.25) %>% 
+        summarize(min_age = min(age_years, na.rm = TRUE)) %>% 
+        pull(min_age)
+      
+      results <- tibble(
+        statistic = c("average_SCN8A_dx_age", "sd_SCN8A_dx_age"),
+        value = c(
+          mean(dx_age, na.rm = TRUE),
+          sd(dx_age, na.rm = TRUE)
+        )
+      )
+    }
+  } else if (df_name == "Ciitizen_genetics") {
+    if (all(c("patient_uuid", "report_date_age_days", "gene", "variant_DNA") %in% colnames(df))) {
+      age_testing <- df %>% 
+        group_by(patient_uuid) %>% 
+        mutate(age_test_years = report_date_age_days / 365.25) %>% 
+        summarize(min_test = min(age_test_years, na.rm = TRUE)) %>% 
+        pull(min_test)
+      
+      SCN8A_vars_count <- df %>% 
+        filter(gene == "SCN8A") %>% 
+        distinct(patient_uuid, .keep_all = TRUE) %>% 
+        count(variant_DNA) %>% 
+        arrange(desc(n))
+      
+      top_3_recurr <- SCN8A_vars_count %>% 
+        top_n(3, n)
+      
+      recurr_SCN8A <- SCN8A_vars_count %>% 
+        filter(n > 1)
+      total_recurr_SCN8A <- nrow(recurr_SCN8A)
+      
+      VUS_count <- df %>% 
+        filter(gene != "SCN8A") %>% 
+        distinct(patient_uuid, gene, .keep_all = TRUE) %>% 
+        count(gene) %>% 
+        arrange(desc(n))
+      
+      top_2_recurr <- VUS_count %>% 
+        top_n(2, n)
+      
+      results <- tibble(
+        statistic = c("ave_age_first_genetic_test", "sd_age_first_test", "SCN8A_num_recurr", "num_VUS"),
+        value = c(
+          mean(age_testing, na.rm = TRUE),
+          sd(age_testing, na.rm = TRUE),
+          total_recurr_SCN8A,
+          nrow(VUS_count)
+        )
+      )
+    }
+  } else if (df_name == "Ciitizen_dx_procedures") {
+    if (all(c("patient_uuid", "procedure_age_days", "procedure", "procedure_findings") %in% colnames(df))) {
+      EEG_first_age <- df %>% 
+        group_by(patient_uuid) %>% 
+        filter(grepl("EEG", procedure)) %>% 
+        mutate(age_months_eeg = procedure_age_days / 30) %>% 
+        summarize(min_age_EEG = min(age_months_eeg, na.rm = TRUE)) %>% 
+        pull(min_age_EEG)
+      
+      abnormal_EEG_age <- df %>% 
+        group_by(patient_uuid) %>% 
+        filter(grepl("EEG", procedure)) %>% 
+        filter(!grepl("EEG normal", procedure_findings)) %>% 
+        mutate(age_months_abnormal = procedure_age_days / 30) %>% 
+        summarize(min_age_abnormal = min(age_months_abnormal, na.rm = TRUE)) %>% 
+        pull(min_age_abnormal)
+      
+      results <- tibble(
+        statistic = c("average_age_at_first_eeg", "sd_age_first_eeg", "average_age_abnormal", "sd_age_abnormal", "count_abnormal"),
+        value = c(
+          mean(EEG_first_age, na.rm = TRUE),
+          sd(EEG_first_age, na.rm = TRUE),
+          mean(abnormal_EEG_age, na.rm = TRUE),
+          sd(abnormal_EEG_age, na.rm = TRUE),
+          length(abnormal_EEG_age)
+        )
+      )
+    }
+  } else if (df_name == "Ciitizen_medication") {
+    if (all(c("patient_uuid", "medication_age_days_firstDate", "medication_age_days_lastDate", "medication") %in% colnames(df))) {
+      age_first_med <- df %>% 
+        group_by(patient_uuid) %>% 
+        mutate(age_months_med = medication_age_days_firstDate / 30) %>% 
+        summarize(age_months_first_med = min(age_months_med, na.rm = TRUE)) %>% 
+        pull(age_months_first_med)
+      
+      medication_duration <- df %>% 
+        group_by(patient_uuid) %>% 
+        mutate(duration_months = (medication_age_days_lastDate - medication_age_days_firstDate) / 30) %>% 
+        pull(duration_months)
+      
+      count_meds <- df %>% 
+        distinct(patient_uuid, medication, .keep_all = TRUE) %>% 
+        count(medication) %>% 
+        arrange(desc(n))
+      
+      top_5_med <- count_meds %>% 
+        top_n(5, n)
+      
+      medication_count <- df %>% 
+        group_by(patient_uuid) %>% 
+        summarize(medication_count = n())
+      
+      results <- tibble(
+        statistic = c("average_age_first_med", "sd_age_first_med", "average_med_duration", "sd_med_duration", "average_num_meds", "sd_num_meds"),
+        value = c(
+          mean(age_first_med, na.rm = TRUE),
+          sd(age_first_med, na.rm = TRUE),
+          mean(medication_duration, na.rm = TRUE),
+          sd(medication_duration, na.rm = TRUE),
+          mean(medication_count$medication_count, na.rm = TRUE),
+          sd(medication_count$medication_count, na.rm = TRUE)
+        )
+      )
+    }
+  } else if (df_name == "Ciitizen_diagnoses") {
+    if (all(c("patient_uuid", "clinical_diagnosis_age_days_firstDate", "clinical_diagnosis_age_days_lastDate", "clinical_diagnosis") %in% colnames(df))) {
+      count_sz_free <- df %>% 
+        group_by(patient_uuid) %>% 
+        filter(grepl("Seizure free", clinical_diagnosis)) %>% 
+        nrow()
+      
+      age_sz_free <- df %>% 
+        group_by(patient_uuid) %>% 
+        filter(grepl("Seizure free", clinical_diagnosis)) %>% 
+        mutate(age_sz_free_months = clinical_diagnosis_age_days_firstDate / 30) %>% 
+        pull(age_sz_free_months)
+      
+      dur_sz_free <- df %>% 
+        group_by(patient_uuid) %>% 
+        filter(clinical_diagnosis == "Seizure free") %>% 
+        mutate(dur_sz_free_m = (clinical_diagnosis_age_days_lastDate - clinical_diagnosis_age_days_firstDate) / 30) %>% 
+        pull(dur_sz_free_m)
+      
+      count_dx <- df %>% 
+        distinct(patient_uuid, clinical_diagnosis, .keep_all = TRUE) %>% 
+        count(clinical_diagnosis) %>% 
+        arrange(desc(n))
+      
+      top_5_dx <- count_dx %>% 
+        top_n(5, n)
+      
+      results <- tibble(
+        statistic = c("count_sz_free", "average_age_sz_free","sd_age_sz_free", "average_dur_sz_free", "sd_dur_sz_free"),
+        value = c(
+          count_sz_free,
+          mean(age_sz_free, na.rm = TRUE),
+          sd(age_sz_free, na.rm = T),
+          mean(dur_sz_free, na.rm = TRUE),
+          sd(dur_sz_free, na.rm = T)
+        )
+      )
+    }
+  }
+  return(results)
+}
+
+
+
+process_data <- function(df_name, df) {
+  results <- map(subsets, ~ compute_statistics(df_name, .x(df)))
+  bind_rows(results, .id = "subset")
+}
+
+subsets <- list(
+  Total = function(df) df,
+  GOF = function(df) df %>% filter(!patient_uuid %in% LOF_ids),
+  LOF = function(df) df %>% filter(patient_uuid %in% LOF_ids)
+)
+
+data_frames <- list(
+  Ciitizen_diagnoses = Ciitizen_diagnoses,
+  Ciitizen_seizure = Ciitizen_seizure,
+  Ciitizen_medication = Ciitizen_medication,
+  Ciitizen_hospitalization = Ciitizen_hospitalization,
+  Ciitizen_genetics = Ciitizen_genetics,
+  Ciitizen_primary_dx = Ciitizen_primary_dx,
+  Ciitizen_dx_procedures = Ciitizen_dx_procedures,
+  Ciitizen_demographics = Ciitizen_demographics
+)
+
+results_list <- map2(names(data_frames), data_frames, process_data)
+
+final_results <- bind_rows(results_list, .id = "data_frame")
+
+reshaped_final <- final_results %>% 
+  pivot_wider(
+    names_from = subset,
+    values_from = value
+  )
+
+
+write.csv(reshaped_final, "./results/table_1/Table 1- Descriptive Statistics.csv")
+```
+

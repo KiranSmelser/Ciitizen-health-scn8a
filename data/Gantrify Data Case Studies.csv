@@ -1,0 +1,277 @@
+﻿Num,Patient,UID,wp,activity,start_date,end_date
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,A. Study Time,Study Time,2019-01,2023-07
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,A. Study Time,Study Time,2004-07,2023-07
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,A. Study Time,Study Time,2018-02,2023-12
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,A. Study Time,Study Time,2012-11,2023-01
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,A. Study Time,Study Time,2009-04,2023-01
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,A. Study Time,Study Time,2002-01,2023-01
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,B. Medication,CBD/Epidiolex,2020-04,2022-08
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,B. Medication,Lacosamide,2020-04,2022-08
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,B. Medication,Levetiracetam,2019-11,2020-07
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,B. Medication,Clobazam,2015-06,2016-08
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,B. Medication,Clonazepam,2008-03,2022-09
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,B. Medication,Eslicarbazepine,2014-08,2016-08
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,B. Medication,Levetiracetam,2007-07,2015-07
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,B. Medication,Levetiracetam,2015-07,2015-07
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,B. Medication,Oxcarbazepine,2006-02,2014-08
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,B. Medication,Oxcarbazepine,2017-02,2022-09
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,B. Medication,Topiramate,2005-10,2005-10
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,B. Medication,Valproic acid,2008-03,2009-06
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,B. Medication,Zonisamide,2012-10,2015-12
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,B. Medication,Zonisamide,2017-02,2017-08
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,B. Medication,Zonisamide,2022-05,2022-05
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,B. Medication,Clorazepate,2019-02,2019-09
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,B. Medication,Gabapentin,2018-06,2022-11
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,B. Medication,Levetiracetam,2018-05,2018-12
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,B. Medication,Oxcarbazepine,2018-05,2020-10
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,B. Medication,Phenytoin,2018-09,2020-11
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,B. Medication,Rufinamide,2020-11,2022-11
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,B. Medication,Valproate,2020-10,2022-11
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,B. Medication,Clobazam,2014-03,2022-11
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,B. Medication,Felbamate,2014-05,2022-11
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,B. Medication,Lacosamide,2017-08,2020-12
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,B. Medication,Lamotrigine,2020-09,2022-11
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,B. Medication,Levetiracetam,2013-03,2013-05
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,B. Medication,Oxcarbazepine,2014-03,2017-08
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,B. Medication,Phenobarbital,2014-05,2015-06
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,B. Medication,Phenobarbital,2018-09,2018-09
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,B. Medication,Prednisolone,2013-05,2013-05
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,B. Medication,Rufinamide,2013-10,2013-12
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,B. Medication,Topiramate,2013-08,2013-10
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,B. Medication,Vigabatrin,2013-05,2017-08
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,B. Medication,Zonisamide,2014-03,2014-06
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,B. Medication,Cholecalciferol,2019-04,2020-12
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,B. Medication,Guanfacine,2019-04,2022-01
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,B. Medication,Melatonin,2021-04,2022-01
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,B. Medication,Methylphenidate,2016-01,2017-09
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,B. Medication,Clobazam,2014-03,2015-10
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,B. Medication,Clonazepam,2016-01,2016-01
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,B. Medication,Ethosuximide,2011-11,2016-01
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,B. Medication,Lamotrigine,2010-08,2010-11
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,B. Medication,Levetiracetam,2011-08,2015-10
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,B. Medication,Valproic acid,2006-05,2011-11
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,B. Medication,Zonisamide,2011-11,2011-12
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,C. Seizure,Seizures,2019-11,2020-05
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,C. Seizure,Bilateral Tonic-Clonic Seizures,2019-11,2020-05
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,C. Seizure,Seizure Free,2020-05,2022-08
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,C. Seizure,Seizures,2005-10,2010-08
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,C. Seizure,Seizures,2012-04,2023-07
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,C. Seizure,Tonic Seizures,2008-02,2010-08
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,C. Seizure,Myoclonic Seizures,2008-03,2010-08
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,C. Seizure,Bilateral Tonic-Clonic Seizures,2009-01,2010-08
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,C. Seizure,Tonic Seizures,2015-08,2023-07
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,C. Seizure,Bilateral Tonic-Clonic Seizures,2017-02,2023-07
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,C. Seizure,Seizure Free,2010-08,2012-04
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,C. Seizure,Seizures,2018-05,2021-04
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,C. Seizure,Seizures,2021-12,2022-03
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,C. Seizure,Seizures,2022-07,2023-12
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,C. Seizure,Tonic Seizures,2018-05,2021-04
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,C. Seizure,Focal Seizures,2018-05,2021-04
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,C. Seizure,Bilateral Tonic-Clonic Seizures,2018-10,2021-04
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,C. Seizure,Atonic Seizures,2018-11,2021-04
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,C. Seizure,Bilateral Tonic-Clonic Seizures,2021-12,2022-03
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,C. Seizure,Focal Seizures,2022-02,2022-03
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,C. Seizure,Focal Seizures,2022-07,2023-12
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,C. Seizure,Seizure Free,2021-08,2021-11
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,C. Seizure,Seizure Free,2022-02,2022-06
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,C. Seizure,Focal Seizures,2013-05,2022-06
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,C. Seizure,Infantile Spasms,2013-05,2013-12
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,C. Seizure,Myoclonic Seizures,2013-06,2020-09
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,C. Seizure,Seizures,2013-05,2022-10
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,C. Seizure,Absence Seizures,2005-05,2012-03
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,C. Seizure,Seizures,2006-09,2022-09
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,D. Development,Ability to cruise,2020-02,2020-02
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,D. Development,Ability to perform hand functions,2021-02,2021-05
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,D. Development,Ability to pull to stand,2020-02,2020-02
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,D. Development,Ability to roll,2019-05,2019-05
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,D. Development,Ability to run,2021-02,2021-05
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,D. Development,Ability to speak fluently,2021-05,2021-05
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,D. Development,Ability to speak own name,2021-02,2021-02
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,D. Development,Ability to use at least one word,2019-08,2020-06
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,D. Development,Ability to use sentences,2021-02,2021-07
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,D. Development,Ability to use short phrase,2020-10,2020-10
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,D. Development,Ability to walk,2020-01,2020-01
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,D. Development,Ability to write,2021-02,2021-05
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to babble,2007-01,2019-11
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to crawl,2005-05,2005-10
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to cruise,2007-01,2007-05
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to follow commands,2012-11,2015-07
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to perform hand functions,2005-05,2005-05
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to pull to stand,2005-10,2005-10
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to reach,2005-05,2005-05
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to sit unsupported,2005-10,2005-10
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to stand,2005-05,2005-05
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to use at least one word,2007-08,2021-09
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to use non-verbal communication,2012-11,2021-09
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to use pincer grasp,2005-05,2019-11
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to use short phrase,2008-05,2008-05
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to use verbal communication,2012-11,2022-05
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to vocalize,2005-05,2016-08
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to walk,2005-10,2005-10
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to walk,2010-02,2021-09
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,D. Development,Ability to walk with assistance,2007-05,2009-07
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to babble,2018-06,2018-06
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to babble,2018-07,2022-07
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to belly crawl,2020-01,2022-11
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to control head posture,2018-05,2018-05
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to control head posture,2018-07,2020-12
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to crawl,2018-11,2018-12
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to crawl,2020-02,2020-02
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to crawl,2020-03,2020-03
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to crawl,2020-06,2020-06
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to cruise,2022-11,2022-11
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to follow commands,2021-08,2022-04
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to grasp,2018-05,2022-01
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to kneel,2021-04,2021-04
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to perform hand functions,2021-01,2021-01
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to pull to stand,2021-04,2022-01
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to reach,2018-05,2018-05
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to reach,2018-05,2018-05
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to reach,2018-11,2019-02
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to roll,2018-05,2021-04
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to roll (back-to-front),2018-06,2018-09
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to roll (front-to-back),2018-06,2019-02
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to sit unsupported,2018-07,2020-03
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to sit unsupported,2021-01,2022-11
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to stand,2019-01,2022-11
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to stand alone,2019-01,2022-11
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to transfer objects,2019-02,2020-12
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to use at least one word,2018-11,2019-09
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to use at least one word,2021-08,2022-07
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to use augmentative and alternative communication,2021-09,2021-09
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to use palmar grasp,2018-06,2018-06
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to use pincer grasp,2019-03,2019-03
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to use sign language,2021-01,2022-07
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to use verbal communication,2019-01,2020-03
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to vocalize,2018-07,2022-02
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to walk,2018-11,2020-03
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to walk with assistance,2021-01,2022-12
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to walk with maximal assistance,2022-01,2022-01
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to weight-bear,2018-12,2018-12
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,D. Development,Ability to weight-bear,2019-01,2021-01
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to babble,2013-10,2013-10
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to control head posture,2013-05,2022-06
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to crawl,2013-07,2020-12
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to follow commands,2020-02,2022-08
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to grasp,2013-07,2018-05
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to perform hand functions,2020-12,2020-12
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to reach,2013-05,2022-08
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to roll,2013-05,2022-06
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to scoot,2015-06,2015-06
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to sit unsupported,2013-07,2022-09
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to speak,2020-12,2020-12
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to stand,2020-12,2022-09
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to use at least one word,2019-12,2022-06
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to use non-verbal communication,2014-06,2020-12
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to use verbal communication,2013-06,2020-12
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to vocalize,2013-09,2022-06
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,D. Development,Ability to walk,2016-03,2022-09
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to babble,2010-07,2010-07
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to belly crawl,2010-05,2010-05
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to crawl,2010-02,2010-02
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to identify colors,2011-10,2011-10
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to jump,2012-11,2012-11
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to perform hand functions,2010-05,2012-03
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to pull to stand,2010-05,2010-05
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to roll,2009-06,2009-06
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to run,2011-07,2011-07
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to sit unsupported,2009-10,2010-05
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to stand alone,2010-05,2010-05
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to stand alone,2011-03,2011-03
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to throw,2011-03,2011-03
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to use at least one word,2010-07,2010-10
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to use at least one word,2010-10,2010-10
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to use non-verbal communication,2011-03,2011-03
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to use pincer grasp,2009-11,2010-10
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to use short phrase,2011-03,2022-06
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to use sign language,2010-10,2010-10
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to use tripod grasp,2011-03,2011-03
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to walk,2010-07,2010-07
+5,5 (G964R),85ec6265-8a3f-48e4-b1fb-16661647d977,D. Development,Ability to walk,2010-10,2011-03
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to count up to 10,2007-02,2009-12
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to count up to 10,2011-02,2011-02
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to crawl,2003-01,2003-01
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to cruise,2003-01,2003-01
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to follow commands,2005-10,2005-10
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to identify colors,2007-10,2009-12
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to jump,2005-10,2005-10
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to perform hand functions,2005-10,2005-10
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to pull to stand,2003-01,2003-01
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to recognize letters of the alphabet,2007-02,2010-09
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to recognize letters of the alphabet,2011-02,2011-02
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to recognize numbers,2007-02,2010-09
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to speak fluently,2014-10,2014-10
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to use at least one word,2005-10,2005-10
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to use non-verbal communication,2005-10,2005-10
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to use sentences,2007-02,2007-02
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to use short phrase,2005-10,2005-10
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to use sign language,2005-10,2005-10
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to walk,2004-04,2004-04
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,D. Development,Ability to write,2005-10,2005-10
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,E. Hospitalization,Seizure disorder,2019-11,2019-11
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,E. Hospitalization,Seizure disorder,2020-01,2020-01
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,E. Hospitalization,Seizure disorder,2020-02,2020-02
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,E. Hospitalization,Status epilepticus,2020-03,2020-03
+1,1 (N1877S),12958865-1073-4404-a54a-f855b6c44b85,E. Hospitalization,Epilepsy monitoring unit admission,2022-02,2022-02
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,E. Hospitalization,Seizure disorder,2012-04,2012-04
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,E. Hospitalization,Seizure disorder,2012-10,2012-10
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,E. Hospitalization,Increased seizure frequency,2012-10,2012-10
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,E. Hospitalization,Status epilepticus,2012-11,2012-11
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,E. Hospitalization,Increased seizure frequency,2013-05,2013-05
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,E. Hospitalization,Increased seizure frequency,2013-07,2013-07
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,E. Hospitalization,Status epilepticus,2014-08,2014-08
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,E. Hospitalization,Altered mental status,2015-07,2015-07
+2,2 (R1617Q),52928f64-eb12-44b7-a63c-7276af7a9c71,E. Hospitalization,Dehydration,2017-08,2017-08
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Seizure disorder,2018-05,2018-05
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Seizure disorder,2018-05,2018-05
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Seizure disorder,2018-05,2018-05
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Increased seizure frequency,2018-06,2018-07
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Increased seizure frequency,2018-09,2018-09
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Increased seizure frequency,2018-10,2018-10
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Seizure disorder,2018-10,2018-10
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Seizure disorder,2018-10,2018-10
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Seizure disorder,2018-11,2018-11
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Seizure disorder,2018-12,2018-12
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Seizure disorder,2019-02,2019-02
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Planned admission,2019-02,2019-02
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Increased seizure frequency,2019-04,2019-04
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Status epilepticus,2019-04,2019-04
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Increased seizure frequency,2019-04,2019-04
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Increased seizure frequency,2019-05,2019-05
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Increased seizure frequency,2019-06,2019-06
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Admitted for observation,2019-11,2019-11
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Admitted for observation,2020-02,2020-02
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Gastrointestinal hemorrhage,2020-06,2020-06
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Planned procedure,2020-09,2020-09
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Admitted for observation,2020-10,2020-11
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Epilepsy,2021-12,2021-12
+3,3 (R1872W),12a26181-f80d-4993-a2af-1e3019d4ec95,E. Hospitalization,Vomiting,2022-11,2022-11
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Increased seizure frequency,2013-05,2013-05
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Dehydration,2013-12,2013-12
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Increased seizure frequency,2013-12,2013-12
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Increased seizure frequency,2014-05,2014-05
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Increased seizure frequency,2014-05,2014-05
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Epilepsy monitoring unit admission,2014-06,2014-06
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Status epilepticus,2014-06,2014-06
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Urinary tract infectious disease,2014-07,2014-07
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Acute viral disease,2014-08,2014-08
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Respiratory failure,2015-06,2015-06
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Acute respiratory failure,2015-08,2015-08
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Planned admission,2015-09,2015-09
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Acute-on-chronic respiratory failure,2016-03,2016-03
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Acute-on-chronic respiratory failure,2016-04,2016-05
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Planned admission,2016-06,2016-07
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Respiratory distress,2016-11,2016-11
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Respiratory distress,2017-03,2017-04
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Epilepsy monitoring unit admission,2017-07,2017-07
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Hyponatremia,2017-08,2017-09
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Acute respiratory failure,2018-09,2018-10
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Respiratory insufficiency,2019-09,2019-09
+4,4 (R850Q),51f1227c-8312-4c5c-bb8a-fd240a7fb5ab,E. Hospitalization,Status epilepticus,2022-04,2022-04
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,E. Hospitalization,Pneumonia,2006-05,2006-05
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,E. Hospitalization,Seizure disorder,2011-11,2011-12
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,E. Hospitalization,Abdominal pain,2011-12,2011-12
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,E. Hospitalization,Increased seizure frequency,2014-04,2014-04
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,E. Hospitalization,Planned procedure,2018-07,2018-07
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,E. Hospitalization,Epilepsy monitoring unit admission,2021-03,2021-03
+6,6 (E587Ter),ec227c21-6fdc-46c2-95ef-4ecb6603083c,E. Hospitalization,Planned procedure,2022-08,2022-08
