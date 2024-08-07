@@ -329,7 +329,7 @@ filtered_df <- normalized_df %>% filter(Subgroup %in% c("Seizure", "Status epile
 
 # Define colors and line types for each category
 colors <- c("Seizure" = "#a30234", "Status epilepticus" = "#7a5072", "Pulmonary" = "#67771a", "Infection" = "#0076c0", "GI" = "#e37c1d")
-line_types <- c("Seizure" = "solid", "Status epilepticus" = "dashed", "Pulmonary" = "dotted", "Infection" = "dotdash", "GI" = "longdash")
+line_types <- c("Seizure" = "solid", "Status epilepticus" = "solid", "Pulmonary" = "dotted", "Infection" = "dotdash", "GI" = "dashed")
 
 # Create a smooth line plot
 p3 <- ggplot(filtered_df, aes(x = age_years, y = prop)) +

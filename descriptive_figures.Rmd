@@ -416,6 +416,7 @@ dev.off()
 # Clean and import adverse effect data
 effects <- read_excel(path_data, sheet = "adverse_effects")
 effects <- subset(effects, select = c(1:2, 5, 10:11))
+order <- c("Oxcarbazepine", "Lamotrigine", "Valproate", "Phenytoin", "Lacosamide", "Phenobarbital",  "Clobazam", "Levetiracetam", "Topiramate", "Epidiolex")
 
 # Calculate the number of unique patients with a given effect, medication pairing
 patients_by_pair <- effects %>%
@@ -441,7 +442,7 @@ filtered_patients_by_pair <- patients_by_pair %>%
 filtered_patients_by_pair <- filtered_patients_by_pair %>%
   semi_join(top_effects, by = "adverse_effect")
 
-p4 <- ggplot(filtered_patients_by_pair, aes(x=medication_procedure, y=n, fill=adverse_effect)) +
+p4 <- ggplot(filtered_patients_by_pair, aes(x=factor(medication_procedure, level=order), y=n, fill=adverse_effect)) +
   geom_bar(stat="identity") +
   labs(x="Medication", y="# of Patients", fill = "Adverse Effect") +
   scale_fill_manual(values = c("#ffde76", "#bacfec", "#8A9197FF", "#f1b682", "#e37c1d", "#abb47d", "#a30234", "#67771a", "#e4b8b4", "#5698a3")) +
@@ -459,8 +460,11 @@ effects <- subset(effects, select = c(1:2, 5, 10:11))
 # Import adverse effect classifier
 effect_classifier <- read_excel("./data/effects_severity.xlsx")
 
-# Classify adverse effeects
+# Classify adverse effects
 effects <- left_join(effects, effect_classifier, by = "adverse_effect")
+
+# Remove `medication not effective`
+effects <- subset(effects, effects$adverse_effect != "Medication not effective")
 
 # Calculate the number of unique patients with a given effect, severity pairing
 patients_by_severity <- effects %>%
@@ -472,7 +476,7 @@ patients_by_severity <- effects %>%
 filtered_patients_by_severity <- patients_by_severity %>%
   top_n(10, n)
 
-p5 <- ggplot(filtered_patients_by_severity, aes(x=severity_score, y=n, fill=adverse_effect)) +
+p5 <- ggplot(na.omit(filtered_patients_by_severity), aes(x=severity_score, y=n, fill=adverse_effect)) +
   geom_bar(stat="identity") +
   labs(x="Severity", y="# of Patients", fill = "Adverse Effect") +
   scale_fill_manual(values = c("#ffde76", "#bacfec", "#8A9197FF", "#f1b682", "#e37c1d", "#abb47d", "#a30234", "#67771a", "#e4b8b4", "#5698a3")) +
