@@ -14,6 +14,7 @@ library(dplyr)
 library(tidyverse)
 library(data.table)
 library(readxl)
+library(writexl)
 library(ggplot2)
 library(ggsci)
 library(gridExtra)
@@ -405,5 +406,78 @@ for (i in 1:length(unique_systems)) {
 grid.raster(img, width = unit(1, "npc"), height = unit(1.5, "npc"), 
             vp = viewport(layout.pos.row = 2:3, layout.pos.col = 2))
 dev.off()
+```
+
+
+#4. Adverse Effects
+
+##4.1 Medication Bar Plot
+```{r}
+# Clean and import adverse effect data
+effects <- read_excel(path_data, sheet = "adverse_effects")
+effects <- subset(effects, select = c(1:2, 5, 10:11))
+
+# Calculate the number of unique patients with a given effect, medication pairing
+patients_by_pair <- effects %>%
+  group_by(medication_procedure, adverse_effect) %>%
+  summarise(n = n_distinct(patient_uuid)) %>%
+  ungroup()
+
+# Filter for the top 10 most common medications
+top_medications <- patients_by_pair %>%
+  group_by(medication_procedure) %>%
+  summarise(total_reports = sum(n)) %>%
+  top_n(10, total_reports)
+
+# Filter for the top 10 most common adverse effects
+top_effects <- patients_by_pair %>%
+  group_by(adverse_effect) %>%
+  summarise(total_reports = sum(n)) %>%
+  top_n(10, total_reports)
+
+# Filter patients_by_pair for reports of top medications and effects
+filtered_patients_by_pair <- patients_by_pair %>%
+  semi_join(top_medications, by = "medication_procedure")
+filtered_patients_by_pair <- filtered_patients_by_pair %>%
+  semi_join(top_effects, by = "adverse_effect")
+
+p4 <- ggplot(filtered_patients_by_pair, aes(x=medication_procedure, y=n, fill=adverse_effect)) +
+  geom_bar(stat="identity") +
+  labs(x="Medication", y="# of Patients", fill = "Adverse Effect") +
+  scale_fill_manual(values = c("#ffde76", "#bacfec", "#8A9197FF", "#f1b682", "#e37c1d", "#abb47d", "#a30234", "#67771a", "#e4b8b4", "#5698a3")) +
+  theme_classic() 
+
+ggsave("./figures/descriptive/effects_by_med.pdf", plot = p4, width = 12, height = 8)
+```
+
+##4.2 Severity Bar Plot
+```{r}
+# Clean and import adverse effect data
+effects <- read_excel(path_data, sheet = "adverse_effects")
+effects <- subset(effects, select = c(1:2, 5, 10:11))
+
+# Import adverse effect classifier
+effect_classifier <- read_excel("./data/effects_severity.xlsx")
+
+# Classify adverse effeects
+effects <- left_join(effects, effect_classifier, by = "adverse_effect")
+
+# Calculate the number of unique patients with a given effect, severity pairing
+patients_by_severity <- effects %>%
+  group_by(severity_score, adverse_effect) %>%
+  summarise(n = n_distinct(patient_uuid)) %>%
+  ungroup()
+
+# Filter for the top 10 most common adverse effects
+filtered_patients_by_severity <- patients_by_severity %>%
+  top_n(10, n)
+
+p5 <- ggplot(filtered_patients_by_severity, aes(x=severity_score, y=n, fill=adverse_effect)) +
+  geom_bar(stat="identity") +
+  labs(x="Severity", y="# of Patients", fill = "Adverse Effect") +
+  scale_fill_manual(values = c("#ffde76", "#bacfec", "#8A9197FF", "#f1b682", "#e37c1d", "#abb47d", "#a30234", "#67771a", "#e4b8b4", "#5698a3")) +
+  theme_classic() 
+
+ggsave("./figures/descriptive/effects_by_severity.pdf", plot = p5, width = 10, height = 7)
 ```
 
