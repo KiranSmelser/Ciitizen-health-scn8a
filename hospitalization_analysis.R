@@ -153,6 +153,40 @@ for (predictor in unique(results_df$predictor)) {
   # Subset the data for the current predictor
   predictor_df <- results_df[results_df$predictor == predictor, ]
   
+  # Determine n
+  obs = c()
+  for (type in predictor_df$hospitalization_type) {
+    if (grepl("Onset_group", predictor)) {
+      if (predictor == "Onset_group_(Intercept)") {
+        subset_data <- data[data[["Onset_group"]] == "Onset_group_1-4 Months" & data[[type]] == 1, ]
+        obs = append(obs, nrow(subset_data))
+      } else {
+        subset_data <- data[data[["Onset_group"]] == predictor & data[[type]] == 1, ]
+        obs = append(obs, nrow(subset_data))
+      }
+    } else if (grepl("unique_types", predictor)) {
+      if (predictor == "unique_types_(Intercept)") {
+        subset_data <- data[data[["unique_types"]] == 0 & data[[type]] == 1, ]
+        obs = append(obs, nrow(subset_data))
+      } else {
+        if (grepl("2+", predictor)) {
+          subset_data <- data[data[["unique_types"]] == "2+" & data[[type]] == 1, ]
+          obs = append(obs, nrow(subset_data))
+        } else {
+          subset_data <- data[data[["unique_types"]] == substring(predictor, nchar(predictor)) & data[[type]] == 1, ]
+          obs = append(obs, nrow(subset_data))
+        }
+      }
+    } else if (predictor == "age_onset_m") {
+      subset_data <- data[data[[type]] == 1, ]
+      obs = append(obs, nrow(subset_data))
+    } else {
+      subset_data <- data[data[[predictor]] == 1 & data[[type]] == 1, ]
+      obs = append(obs, nrow(subset_data))
+    }
+  }
+  predictor_df$n <- obs
+  
   # Skip if predictor_df is empty or if none of the results are significant
   if (nrow(predictor_df) == 0 || all(predictor_df$p_value >= 0.05)) {
     next
@@ -172,9 +206,11 @@ for (predictor in unique(results_df$predictor)) {
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.2) +
     geom_hline(yintercept = 1, linetype = "dashed") +
     scale_color_identity() +
-    coord_flip() +
+    coord_flip(clip = "off") +
     labs(title = predictor, x = "Hospitalization Type", y = "Odds Ratio") +
     theme_bw()
+  
+  p <- p + geom_text(aes(y = -Inf, label = paste("n =", as.character(n))), vjust = 2.5, hjust = 1.75, size=3)
   
   if (predictor %in% c("age_onset_m", "Onset_group_(Intercept)", "Onset_group_Onset_group7-12 Months")) {
     p <- p + ylim(0,1)
