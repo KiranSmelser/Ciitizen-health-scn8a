@@ -485,3 +485,67 @@ p5 <- ggplot(na.omit(filtered_patients_by_severity), aes(x=severity_score, y=n, 
 ggsave("./figures/descriptive/effects_by_severity.pdf", plot = p5, width = 10, height = 7)
 ```
 
+
+# Medications
+```{r}
+# Clean and import hospitalization data
+meds <- read_excel(path_data, sheet = "medication")
+meds <- subset(meds, select = c(1:2, 7:8))
+
+# Filter medications
+meds_to_use <- paste(c("Adrenocorticotropin (ACTH 1-18),I-125 (TYR)", "Clonazepam", "Levetiracetam", "Phenytoin", "Oxcarbazepine", "Carbamazepine", "Phenobarbital", "Lamotrigine", "Briveracetam", "Cannabidiol", "Clobazam", "Epidiolex", "Eslicarbazepine", "Ethosuximide", "Felbamate","Gabapentin", "Prednisolone", "Lacosamide", "Primidone", "Rufinamide", "Topiramate", "Valproate", "Vigabatrin", "Zonisamide", "Stiripentol", "Tiagabine", "Perampanel"), collapse = "|")
+meds <- meds %>%
+  mutate(medication = ifelse(grepl("ACTH", medication), "ACTH", medication),
+         medication = recode(medication, Epidiolex="Epidiolex/CBD", Cannabidiol = "Epidiolex/CBD"))
+meds <- subset(meds, grepl(meds_to_use, medication))
+top <- meds %>%
+  count(medication) %>%
+  top_n(10)
+meds <- meds %>%
+  filter(medication %in% top$medication)
+
+# Convert age in days to years
+meds$medication_age_days_firstDate <- meds$medication_age_days_firstDate / 365
+
+# Convert from wide to long format for ggplot2
+long <- meds %>%
+  gather(key = "age_type", value = "age_years", medication_age_days_firstDate)
+
+# Calculate the number of unique patients at ages 1,2,...
+patients_by_medication <- long %>%
+  group_by(medication, age_years = floor(age_years)) %>%
+  summarise(n = n_distinct(patient_uuid)) %>%
+  ungroup()
+
+# Calculate the total number of patients at ages 1,2,...
+patients_total <- long %>%
+  group_by(age_years = floor(age_years)) %>%
+  summarise(total = n_distinct(patient_uuid)) %>%
+  ungroup()
+
+# Join the data frames
+tmp <- left_join(patients_by_medication, patients_total, by = "age_years")
+
+# Divide by the total number of patients at each age
+normalized_df <- tmp %>%
+  mutate(prop = n / total) %>%
+  ungroup()
+normalized_df <- na.omit(normalized_df)
+
+order <- c("Oxcarbazepine", "Lamotrigine", "Valproate","Phenytoin", "Lacosamide", "Phenobarbital",  "Clonazepam", "Clobazam", "Levetiracetam", "Topiramate")
+line_types <- c("Oxcarbazepine" = "solid", "Lamotrigine" = "solid", "Lacosamide" = "solid", "Valproate" = "solid", "Phenytoin" = "solid", "Phenobarbital" = "dotted", "Clonazepam" = "dotted", "Clobazam" = "dotted", "Levetiracetam" = "dotdash", "Topiramate" = "dashed")
+
+# Create a smooth line plot
+p6 <- ggplot(normalized_df, aes(x = age_years, y = prop)) +
+  geom_smooth(method = loess, formula = y~x, se = FALSE, aes(color = factor(medication, level = order), linetype = factor(medication, level = order)), method.args = list(span = 1)) +
+  labs(x = "Age (years)", y = "Proportion", color = "Medication", linetype = "Medication") +
+  coord_cartesian(xlim = c(0, 10), ylim = c(0, 1)) +
+  scale_x_continuous(breaks=0:10) +
+  theme_classic() + 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1)) +
+  scale_color_manual(values = c("#ffde76", "#bacfec", "#8A9197FF", "#f1b682", "#e37c1d", "#abb47d", "#a30234", "#67771a", "#e4b8b4", "#5698a3")) +
+  scale_linetype_manual(values = line_types)
+
+ggsave("./figures/descriptive/meds.pdf", plot = p6, width = 10, height = 7)
+```
+
