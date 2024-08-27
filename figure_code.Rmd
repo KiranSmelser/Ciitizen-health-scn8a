@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r libraries}
+```{r libraries, warning=FALSE}
 library(readxl)
 library(tidyverse)
 library(data.table)
@@ -71,14 +71,15 @@ dev_data <- read.csv("./data/Development Curves.csv")
 
 dev_data$Age.Months <- as.integer(dev_data$Age.Months)
 
-ggplot(dev_data, aes(x = Age.Months, group = Individual, color = Individual))+
+ggplot(dev_data, aes(x = Age.Months, group = Individual, color = Individual, linetype = Individual))+
   stat_ecdf(geom = "step", aes(y=..y.. * max(dev_data$Individual == dev_data$Individual)), size = 1) +
-  labs(x = "Age in Months", y = "% of Skills Attained")+
+  labs(x = "Age in Months", y = "Proportion of Skills Attained")+
   scale_y_continuous(breaks = seq(0, max(table(dev_data$Individual)), by = 1))+
   coord_cartesian(xlim= c(0,60))+
   theme_classic()+
   scale_x_continuous()+
-  scale_color_manual(values = palette_development)
+  scale_color_manual(values = palette_development)+
+  theme(axis.text.x = element_text(angle = 0, size = 12, vjust = 0.5, face = "bold"), axis.text.y = element_text(size = 14, face = "bold"), axis.title = element_text(size = 16, face = "bold"), legend.text = element_text(size = 12), legend.title = element_text(size = 16, face = "bold"))
 
 ggsave(filename = "./figures/figure_1/Figure_1G.jpeg", height = 12, width = 16, dpi=600)
 ```
@@ -415,7 +416,7 @@ colors <- c("#a30234", "#e4b8b4", "#e37c1d", "#bacfec", "#ffde76", lighten("#005
 
 unique_systems <- c("Musculoskeletal", "Gastrointestinal", "Behavioral", "Neurological", "Sensory", "Respiratory", "Cardiovascular", "Immunological")
 
-jpeg(filename = "./figures/figure_3/Figure_3.jpeg", width = 12, height = 14, units = "in", res = 600)
+jpeg(filename = "./figures/figure_3/Figure_3 opt 2.jpeg", width = 12, height = 14, units = "in", res = 600)
 
 img <- readPNG("./figures/anatomy.png")
 
@@ -466,9 +467,9 @@ for (i in 1:length(unique_systems)) {
   # Determine the position of the table
   if(system == "Neurological") {
     row <- 1
-    col <- 2
+    col <- 3
   } else if(system == "Immunological") {
-    row <- 5
+    row <- 1
     col <- 2
   } else if(system == "Cardiovascular"){
     row <- 2
@@ -489,7 +490,7 @@ for (i in 1:length(unique_systems)) {
     }
   }
 
-  if(!(row == 1 && col == 1 || row == 1 && col == 3)){
+  if(!(row == 1 && col == 1)){
     if (col == 1) {
       print(table, vp = viewport(layout.pos.row = row, layout.pos.col = col))
     } else if (col == 3) {
@@ -525,12 +526,18 @@ Ciitizen_medication <- subset(Ciitizen_medication, select = -c(3:6, 9:11))
 
 
 ```{r Figure-4-functions}
-find_first_four_medications <- function(data) {
+find_medications_with_categories <- function(data) {
   data <- data %>%
     group_by(patient_uuid) %>%
     arrange(patient_uuid, medication_age_days_firstDate) %>%
     mutate(medication_number = row_number()) %>%
-    filter(medication_number <= 4) %>%
+    mutate(medication_category = case_when(
+      medication_number == 1 ~ "Medication 1",
+      medication_number == 2 ~ "Medication 2",
+      medication_number == 3 ~ "Medication 3",
+      medication_number == 4 ~ "Medication 4",
+      medication_number >= 5 ~ "5th or later"
+    )) %>%
     ungroup()
   
   overlaps <- logical(nrow(data))
@@ -556,115 +563,79 @@ find_first_four_medications <- function(data) {
   return(data)
 }
 
-result <- find_first_four_medications(Ciitizen_medication)
+result <- find_medications_with_categories(Ciitizen_medication)
 
-pivoted_result <- result %>%
-  pivot_wider(
-    id_cols = patient_uuid,
-    names_from = medication_number,
-    values_from = c(medication, age_days_start, age_days_end, medication_overlaps),
-    names_glue = "{.value}_{medication_number}"
-  )
-
-print(pivoted_result)
-```
-
-```{r Figure-4-datafinal}
-final_result <- pivoted_result %>%
-  rowwise() %>% 
-   mutate(
-    levetiracetam_col = case_when(
-      medication_1 == "Levetiracetam" ~ age_days_end_1,
-      medication_2 == "Levetiracetam" ~ age_days_end_2,
-      medication_3 == "Levetiracetam" ~ age_days_end_3,
-      medication_4 == "Levetiracetam" ~ age_days_end_4,
-      TRUE ~ NA_real_
-    )) %>%
-  ungroup() %>%
-  #distinct(patient_uuid, .keep_all = TRUE) %>% 
-  select(patient_uuid, starts_with("medication_"), starts_with("age_days_end_"))
 ```
 
 
 ##4.1 Figure 4A-B: Prescription Order practices
 ```{r Figure-4AB}
 library(reshape2)
-order <- c("Oxcarbazepine", "Lamotrigine", "Valproate","Phenytoin", "Lacosamide","Carbamazepine", "Eslicarbazepine", "Phenobarbital",  "Clonazepam", "Clobazam", "Vigabatrin", "Primidone", "Zonisamide", "Gabapentin", "Ethosuximide", "Levetiracetam", "Topiramate", "Prednisolone", "Epidiolex/CBD")
-df_long <- final_result %>% 
-  gather(key = "medication_type", value = "medication", medication_1:medication_4) %>% 
-  filter(!is.na(medication))
+order <- c("Oxcarbazepine", "Lacosamide", "Phenytoin", "Valproate", "Lamotrigine", "Carbamazepine", "Rufinamide", "Eslicarbazepine", "Clonazepam", "Clobazam", "Phenobarbital", "Vigabatrin", "Felbamate", "Primidone", "Stiripentol", "Tiagabine", "Zonisamide", "Gabapentin", "Ethosuximide", "Levetiracetam", "Briveracetam", "ACTH", "Epidiolex/CBD", "Topiramate", "Prednisolone", "Perampanel")
 
-total_counts <- df_long %>% 
+total_counts <- result %>% 
   group_by(medication) %>% 
-  summarise(total_count = n())
+  summarise(total_count = n(), .groups = "drop")
 
-df_binary <- df_long %>% 
-  mutate(value = 1) %>% 
-  dcast(medication_type~medication, value.var = "value", fun.aggregate = length)
-
-df_binary[is.na(df_binary)] <- 0
-
-df_heatmap <- df_binary %>%
-  gather(key = "medication", value = "count", -medication_type)
-
-df_heatmap <- df_heatmap %>% 
-  left_join(total_counts, by = "medication") %>% 
-  mutate(normalized_count = count/total_count,
-         medication_type = recode(medication_type, medication_1= "Medication 1", medication_2 = "Medication 2", medication_3= "Medication 3", medication_4 = "Medication 4"))
-
-Figure_4A <- ggplot(df_heatmap, aes(x = factor(medication, level = order), y = medication_type, fill = normalized_count)) +
-  geom_tile(color = "white") +
-  scale_fill_gradient(low = "#bacfec", high = "#a70234") +
-  labs(x = "Medications", y = "Medication Type", fill = "Frequency") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.background  = element_rect("white"))
-print(Figure_4A)
-medication_freq <- df_long %>% 
-  group_by(medication) %>% 
-  summarise(frequency = n())
-
-medication_counts <- df_long %>%
-  group_by(medication, medication_type) %>%
-  summarise(count = n()) %>%
-  ungroup()
-
-medication_counts <- medication_counts %>%
+df_heatmap <- result %>%
+  filter(!is.na(medication)) %>%  # Drop NA values
+  group_by(medication_category, medication) %>%
+  summarise(count = n(), .groups = 'drop') %>%
   left_join(total_counts, by = "medication") %>%
   mutate(normalized_count = count / total_count)
 
-medication_counts$medication_type <- factor(medication_counts$medication_type, levels = c("medication_4", "medication_3", "medication_2", "medication_1"))
+Figure_4A <- ggplot(df_heatmap, aes(y = factor(medication, level = rev(order)), x = factor(medication_category, level = c("Medication 1", "Medication 2", "Medication 3", "Medication 4", "5th or later")), fill = normalized_count))+
+  geom_tile(color = "white")+
+  scale_fill_gradient(low = "#bacfec", high = "#a70234")+
+  labs(x = "Medications", y = "Medication Order", fill = "Frequency")+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.background = element_rect("white"))
+print(Figure_4A)
 
-df_long$medication_type <- factor(df_long$medication_type, levels = c("medication_4", "medication_3", "medication_2", "medication_1"))
-Figure_4B <- df_long %>% 
-  count(medication, medication_type) %>% 
-  ggplot(aes(x = factor(medication, level=order), y = n, fill = medication_type))+
-  geom_bar(stat = "identity")+
-  labs(x = "Medications", y = "Frequency")+
-  theme(axis.text.x = element_text(angle = 0, size = 9, vjust = 0.5, face = "bold"))+
-  scale_fill_manual(name = "Medication #", labels = c("Medication 4", "Medication 3", "Medication 2", "Medication 1"),values = c("#a70234", "#ce8080", "#f1b682", "#ffde76"))+
-  scale_x_discrete(name = "Medication", labels = c("Oxcarbazepine" = "OXC", 
-                        "Lamotrigine" = "LTG", 
-                        "Lacosamide" = "LAC", 
-                        "Phenytoin" = "PHT", 
-                        "Carbamazepine" = "CBZ", 
-                        "Eslicarbazepine" = "ESL", 
-                        "Phenobarbital" = "PBT", 
-                        "Clonazepam" = "CLZ", 
-                        "Clobazam" = "CLB", 
-                        "Vigabatrin" = "VBG", 
-                        "Primidone" = "PRM", 
-                        "Zonisamide" = "ZNS", 
-                        "Gabapentin" = "GBP", 
-                        "Ethosuximide" = "ETX", 
-                        "Levetiracetam" = "LEV", 
-                        "Topiramate" = "TPM", 
-                        "Valproate" = "VPA", 
-                        "Prednisolone" = "PRD", 
-                        "Epidiolex/CBD" = "CBD"))
+
+# Prepare data for the stacked bar plot, dropping NA values
+df_long <- result %>%
+  filter(!is.na(medication))  # Drop NA values
+
+# Generate Stacked Bar Plot
+Figure_4B <- df_long %>%
+  count(medication, medication_category) %>%
+  ggplot(aes(x = factor(medication, level = rev(order)), y = n, fill = factor(medication_category, level = rev(c("Medication 1", "Medication 2", "Medication 3", "Medication 4", "5th or later"))))) +
+  geom_bar(stat = "identity") +
+  labs(x = "Medications", y = "Frequency") +
+  scale_fill_manual(name = "Medication Category", values = c("#a70234", "#ce8080", "#e4b8b4", "#f1b682","#ffde76")) +
+  theme(axis.text.x = element_text(angle = 0, size = 12, vjust = 0.5, face = "bold"), axis.text.y = element_text(size = 14, face = "bold"), axis.title = element_text(size = 16, face = "bold"))+
+  scale_x_discrete(name = "Medication", labels = c("Oxcarbazepine" = "OXC",
+                                                   "Lacosamide" = "LAC",
+                                                   "Phenytoin" = "PHT", 
+                                                   "Valproate" = "VPA", 
+                                                   "Lamotrigine" = "LTG", 
+                                                   "Carbamazepine" = "CBZ", 
+                                                   "Rufinamide" = "RFM",
+                                                   "Eslicarbazepine" = "ESL", 
+                                                   "Clonazepam" = "CLZ",
+                                                   "Clobazam" = "CLB",
+                                                   "Phenobarbital" = "PBT", 
+                                                   "Vigabatrin" = "VBG", 
+                                                   "Felbamate" = "FBM",
+                                                   "Primidone" = "PRM", 
+                                                   "Stiripentol" = "STP", 
+                                                   "Tiagabine" = "TGB", 
+                                                   "Zonisamide" = "ZNS",
+                                                   "Gabapentin" = "GBP",
+                                                   "Ethosuximide" = "ETX", 
+                                                   "Levetiracetam" = "LEV", 
+                                                   "Briveracetam" = "BRV", 
+                                                   "ACTH",
+                                                   "Epidiolex/CBD" = "CBD",
+                                                   "Topiramate" = "TPM",
+                                                   "Prednisolone" = "PRD",
+                                                   "Perampanel" = "PER"))+
+  coord_flip()
 print(Figure_4B)
 
 ggsave(filename = "./figures/figure_4/Figure_4A.jpeg", height = 12, width = 16, dpi = 600, plot = Figure_4A)
-ggsave(filename = "./figures/figure_4/Figure_4B.jpeg", height = 12, width = 16, dpi = 600, plot = Figure_4B)
+ggsave(filename = "./figures/figure_4/Figure_4B hor.jpeg", height = 12, width = 16, dpi = 600, plot = Figure_4B)
 ```
 
 ##4.2 Figure 4C-D: Spaghetti plots of prescriptions split by GOF and LOF
@@ -673,6 +644,12 @@ data <- Ciitizen_medication %>%
   mutate(age_years_firstDate = medication_age_days_firstDate/365.25,
          age_years_lastDate = medication_age_days_lastDate/365.25)
 
+classifier <- read_excel("./data/ciitizen_health_classifier.xlsx")
+LOF_ids <- classifier$subgroup_lof
+DEE_ids <- classifier$subgroup_dee
+non_dee_ids <- classifier$subgroup_nondee
+
+  
 generate_medication_timeline <- function(patient_data) {
   # Create a sequence from the earliest start to the latest end
   first_date <- min(patient_data$age_years_firstDate)
@@ -693,32 +670,25 @@ data_final <- data %>%
   do(generate_medication_timeline(.)) %>% 
   ungroup()
 
-LOF_ids <- c('944f05de-9853-4cc5-9fcf-d47ee7a8dc0f','409008b9-671d-456e-96a0-8236a5ee7dbf',
-'6acf6198-f2b4-4468-9234-7d2b4710e14f','ec227c21-6fdc-46c2-95ef-4ecb6603083c',
-'588a77f3-6a37-4757-8941-070f69cf95b1','a6a301ea-bdf5-4111-be04-78a0fb73960a',
-'85ec6265-8a3f-48e4-b1fb-16661647d977','d3b527d5-0662-42a1-9e0c-67d4cc908595',
-'5c8bb15f-1f87-41a1-8932-ff18afdba917','56d3dc1e-63d5-4ad6-9493-57de0fd7ef0e',
-'9527087a-40c6-48e4-993c-e3f12f746ee2','47c27adc-27bd-41df-b39c-ae70495716cb',
-'5979a566-cb58-460e-932f-af259f152547','ce45fc4e-0416-4001-895c-6275a532d2e6',
-'84bad343-f2e0-4ec6-8f19-9d8f22c2d97e','b9a324cc-affd-4302-8949-12988004bfb7',
-'fb67ec01-0ced-4abb-a71e-07621dc999ce','1e66ce47-b9fe-460f-9346-796a9e2bf5f3',
-'b17a5dff-ebfb-4621-97b9-a0072da41851')
-
 data_lof <- data_final %>% filter(patient_uuid %in% LOF_ids)
-data_gof <- data_final %>% filter(!(patient_uuid %in% LOF_ids))
+data_dee <- data_final %>% filter(patient_uuid %in% DEE_ids)
+data_non_dee <- data_final %>% filter(patient_uuid %in% non_dee_ids)
 
 average_medication_lof <- data_lof %>% 
   group_by(age_years) %>% 
   summarise(average_medication_count = mean(medication_count), .groups = "drop")
 
-average_medication_gof <- data_gof %>% 
+average_medication_dee <- data_dee %>% 
   group_by(age_years) %>% 
   summarise(average_medication_count = mean(medication_count), .groups = "drop")
 
+average_medication_non_dee <- data_non_dee %>% 
+  group_by(age_years) %>% 
+  summarise(average_medication_count = mean(medication_count), .groups="drop")
 
 Figure_4C <- ggplot()+
-  geom_line(data = data_gof, aes(x= age_years, y = medication_count, group = patient_uuid), alpha = 0.5)+
-  geom_smooth(data = average_medication_gof, aes(x = age_years, y = average_medication_count), 
+  geom_line(data = data_dee, aes(x= age_years, y = medication_count, group = patient_uuid), alpha = 0.5)+
+  geom_smooth(data = average_medication_dee, aes(x = age_years, y = average_medication_count), 
               method = "loess", color = "#a30234", linewidth = 0.8)+
   labs(
     x = "Age (y)",
@@ -728,6 +698,14 @@ Figure_4C <- ggplot()+
   xlim(c(0,10))
 
 Figure_4D <- ggplot()+
+  geom_line(data = data_non_dee, aes(x = age_years, y = medication_count, group = patient_uuid), alpha = 0.5)+
+  geom_smooth(data = average_medication_non_dee, aes(x = age_years, y = average_medication_count),
+              method = "loess", color = "#0076c0", linewidth = 0.8)+
+  labs(x= "Age (y)", y = "Number of Medications")+
+  theme_classic()+
+  xlim(c(0,10))
+
+Figure_4E <- ggplot()+
   geom_line(data = data_lof, aes(x = age_years, y = medication_count, group = patient_uuid), alpha = 0.5)+
   geom_smooth(data = average_medication_lof, aes(x = age_years, y = average_medication_count),
               method = "loess", color = "#0076c0", linewidth = 0.8)+
@@ -738,6 +716,7 @@ Figure_4D <- ggplot()+
 
 ggsave(filename = "./figures/figure_4/Figure_4C.jpeg", height = 12, width = 16, dpi = 600, plot = Figure_4C)
 ggsave(filename = "./figures/figure_4/Figure_4D.jpeg", height = 12, width = 16, dpi = 600, plot = Figure_4D)
+ggsave(filename = "./figures/figure_4/Figure_4E.jpeg", height = 12, width = 16, dpi = 600, plot = Figure_4E)
 ```
 
 #5. Figure 5: Odds Ratio Plots
