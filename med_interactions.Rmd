@@ -1,0 +1,91 @@
+---
+title: "Medication Interactions"
+author: "Kiran Smelser"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(data.table)
+library(readxl)
+library(writexl)
+library(ggplot2)
+library(ggsci)
+library(vcd)
+library(lubridate)
+library(epitools)
+```
+
+```{r}
+path_data="./data/Ciitizen_SCN8A_UArizona_2024.02.09.xlsx"
+path_classifier="./data/ciitizen_health_classifier.xlsx"
+```
+
+#1. Clean Medication data
+```{r}
+df_med <- read_excel(path_data, sheet = "medication_aggregate")
+
+meds_to_use <- paste(c("Adrenocorticotropin (ACTH 1-18),I-125 (TYR)", "Clonazepam", "Levetiracetam", "Phenytoin", "Oxcarbazepine", "Carbamazepine", "Phenobarbital", "Lamotrigine", "Briveracetam", "Cannabidiol", "Clobazam", "Epidiolex", "Eslicarbazepine", "Ethosuximide", "Felbamate","Gabapentin", "Prednisolone", "Lacosamide", "Primidone", "Rufinamide", "Topiramate", "Valproate", "Vigabatrin", "Zonisamide", "Stiripentol", "Tiagabine", "Perampanel"), collapse = "|")
+df_med <- df_med %>%
+  mutate(medication = ifelse(grepl("ACTH", medication), "ACTH", medication),
+         medication = recode(medication, Epidiolex="Epidiolex/CBD", Cannabidiol = "Epidiolex/CBD"))
+df_med <- subset(df_med, grepl(meds_to_use, medication))
+```
+
+```{r}
+#
+df_med$medication_firstDate <- ym(df_med$medication_firstDate)
+df_duration <- df_med %>% 
+  group_by(patient_uuid, medication) %>% 
+  summarise(start_med_date=min(medication_firstDate),                                       end_med_date=max(medication_firstDate))
+
+#
+df_duration <- df_duration %>% group_by(patient_uuid, medication) %>% mutate(med_time=diff(range(start_med_date, end_med_date)))
+df_duration <- na.omit(df_duration[df_duration$med_time >= 182.5,])
+df_duration <- subset(df_duration, select = -c(5))
+```
+
+#2. Medication Interactions
+
+```{r}
+# Continue from your existing code
+df_duration <- df_duration %>% 
+  group_by(patient_uuid, medication) %>% 
+  summarise(start_med_date = min(start_med_date), end_med_date = max(end_med_date))
+
+# Create a matrix for interactions
+medications <- unique(df_duration$medication)
+interaction_matrix <- matrix(0, nrow = length(medications), ncol = length(medications), 
+                              dimnames = list(medications, medications))
+
+# Loop through each patient to calculate overlaps
+for (patient in unique(df_duration$patient_uuid)) {
+  patient_meds <- df_duration %>% filter(patient_uuid == patient)
+
+  for (i in 1:nrow(patient_meds)) {
+    for (j in 1:nrow(patient_meds)) {
+      if (i != j) {
+        # Check if the medication periods overlap
+        if (patient_meds$start_med_date[i] <= patient_meds$end_med_date[j] &&
+            patient_meds$end_med_date[i] >= patient_meds$start_med_date[j]) {
+          # Increment the count in the interaction matrix
+          interaction_matrix[patient_meds$medication[i], patient_meds$medication[j]] <- 
+            interaction_matrix[patient_meds$medication[i], patient_meds$medication[j]] + 1
+        }
+      }
+    }
+  }
+}
+interaction_df <- as.data.frame(interaction_matrix)
+
+interaction_df[upper.tri(interaction_df)] <- 0
+
+write.csv(interaction_df, "./data/med_interactions.csv")
+```
+

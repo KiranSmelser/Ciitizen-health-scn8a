@@ -1,0 +1,144 @@
+---
+title: "Siezure intensity"
+author: "Kiran Smelser"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(data.table)
+library(readxl)
+library(writexl)
+library(ggplot2)
+library(ggsci)
+library(vcd)
+library(lubridate)
+```
+
+```{r}
+path_data="./data/Ciitizen_SCN8A_UArizona_2024.02.09.xlsx"
+path_classifier="./data/ciitizen_health_classifier.xlsx"
+```
+
+```{r}
+# Helper function for handling symbols
+convert_symbols <- function(x) {
+  if (grepl("≤", x)) {
+    x <- as.numeric(sub("≤", "", x))/2
+  }
+  
+  if (grepl("<", x)) {
+    x <- (as.numeric(sub("<", "", x)) - 1)/2
+  }
+  
+  if (grepl("≥", x)) {
+    x <- (as.numeric(sub("≥", "", x)) + as.numeric(max(indexTable$seizure_history_value)))/2
+  }
+  
+  if (grepl(">=", x)) {
+    x <- (as.numeric(sub(">=", "", x)) + as.numeric(max(indexTable$seizure_history_value)))/2
+  }
+  
+  if (grepl(">", x)) {
+    x <- (as.numeric(sub(">", "", x)) + as.numeric(max(indexTable$seizure_history_value)) + 1)/2
+  }
+  
+  return(x)
+}
+```
+
+```{r}
+renamePatients=function(df){
+  allPatients=unique(df$patient_uuid)
+  dictionary=paste0("P",1:length(allPatients)) 
+  names(dictionary)=allPatients
+  df["PatientID"]=dictionary[df$patient_uuid]
+  return(df)
+}
+```
+
+```{r}
+compute_SE <- function(data) {
+  # Calculate the standard error of the mean (SEM)
+  sem <- sd(data,na.rm=TRUE) / sqrt(length(data))
+  return(sem)
+}
+
+data_summary <- function(data, varname, groupnames){
+  require(plyr)
+  summary_func <- function(x, col){
+    c(mean = mean(x[[col]], na.rm=TRUE),
+      #       sd = sd(x[[col]], na.rm=TRUE))
+      sd=compute_SE(x[[col]]))
+  }
+  data_sum<-ddply(data, groupnames, .fun=summary_func,
+                  varname)
+  data_sum <- rename(data_sum, c("mean" = varname))
+  return(data_sum)
+}
+```
+
+```{r}
+classifier <- as.data.frame(read_excel(path_classifier))
+filterToken = classifier$`seizure_focal` %>% unique()
+filterToken = filterToken[!is.na(filterToken)]
+```
+
+```{r}
+demo=as.data.frame(read_excel(path_data,sheet="demographics"))
+demo=demo[,c("patient_uuid","sex")]
+```
+
+```{r}
+# Import and format seizure history from Ciitizen Health data
+df <- as.data.frame(read_excel(path_data, sheet = "seizure_history"))
+df=merge(df,demo)
+df=df %>% filter(seizure_history_type %in% filterToken) %>% 
+          mutate(seizure_history_value=ifelse(is.na(seizure_history_value),1,seizure_history_value),
+                 seizure_history_unit=ifelse(is.na(seizure_history_unit),"Per Day",seizure_history_unit))
+df=renamePatients(df)
+df=df %>% mutate( key=paste0(seizure_history_value,seizure_history_unit))
+```
+
+```{r}
+indexTable=df[,c("seizure_history_value", "seizure_history_unit")] %>% unique() %>% arrange(seizure_history_unit,seizure_history_value)
+
+temp=c()
+for (unit in indexTable$seizure_history_unit){
+  if (grepl("Hour",unit)){
+    scalar=168
+  }else if (grepl("Day",unit)){
+    scalar=7
+  }else if (grepl("Week",unit)){
+    scalar=1
+  }else if(grepl("Month",unit)){
+    scalar=1/4.34524
+  }else if (grepl("Year",unit)){
+    scalar=1/52.1429  }
+  temp=c(temp,scalar)
+}
+indexTable["scalar"]=temp
+
+indexTable <- indexTable %>% 
+  mutate(seizure_history_value = str_trim(seizure_history_value))
+indexTable["values"]=as.numeric(sapply(indexTable$seizure_history_value, convert_symbols))
+indexTable=indexTable %>% mutate(adj_value=scalar*values) %>% arrange(adj_value)
+################################
+breaks=c(0,6.5,14,42,133,1680)
+################################
+labels=paste0(breaks[2:length(breaks)])
+indexTable["seizure_index"]=cut(indexTable$adj_value,breaks=breaks,labels = labels,right = T)
+indexTable=indexTable %>% mutate(seizure_index=ifelse(is.na(seizure_index),0,seizure_index),
+                                 key=paste0(seizure_history_value,seizure_history_unit))
+```
+
+```{r}
+write_xlsx(indexTable, "./data/focal_index.xlsx")
+```
+
