@@ -299,21 +299,21 @@ adverse_effects <- adverse_effects %>%
 create_heatmap <- function(data, fill_var, title_suffix, limits = NULL) {
   ggplot(data, aes(x = type, y = medication, fill = !!sym(fill_var))) +
     geom_tile(color = "white") +
-    # scale_fill_gradient2(
-    #   low = "#083681",
-    #   mid = "#F7F7F7",
-    #   high = "#C80813FF",
-    #   midpoint = 0,
-    #   na.value = "#F7F7F7",
-    #   limits = limits
-    # ) +
+    scale_fill_gradient2(
+      low = "#083681",
+      mid = "#F7F7F7",
+      high = "#C80813FF",
+      midpoint = 0,
+      na.value = "#F7F7F7",
+      limits = limits
+    ) +
     #scale_fill_distiller(palette = "RdBu", limits = limits) +
     # scale_fill_gradientn(
     #   colors = hcl.colors(3, palette = "Blue-Red"),
     #   limits = limits,
     #   na.value = "#F7F7F7"
     # ) +
-    scale_fill_viridis(discrete = FALSE, option = "E") +
+    #scale_fill_viridis(discrete = FALSE, option = "E") +
     theme_classic() +
     labs(
       title = title_suffix,
@@ -362,11 +362,11 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
     theme(legend.position = "none")
   
   # Compute legend limits for the on vs. after heatmap from the diff columns
-  # legend_limits <- c(
-  #   min(c(pt_data$diff_on_vs_after, pt_data$diff_on_vs_before), na.rm = TRUE),
-  #   max(c(pt_data$diff_on_vs_after, pt_data$diff_on_vs_before), na.rm = TRUE)
-  # )
-  legend_limits <- max(abs(pt_data$diff_on_vs_after), abs(pt_data$diff_on_vs_before), na.rm = TRUE) * c(-1, 1)
+  legend_limits <- c(
+    min(c(pt_data$diff_on_vs_after, pt_data$diff_on_vs_before, -0.5), na.rm = TRUE),
+    max(c(pt_data$diff_on_vs_after, pt_data$diff_on_vs_before), na.rm = TRUE)
+  )
+  #legend_limits <- max(abs(pt_data$diff_on_vs_after), abs(pt_data$diff_on_vs_before), na.rm = TRUE) * c(-1, 1)
   
   
   heatmap_on_vs_after <- create_heatmap(pt_data, "diff_on_vs_after", "On vs. After", limits = legend_limits) +
@@ -460,11 +460,11 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
       color = "#1A9993FF", size = 3, shape = 17, alpha = 0.6
     ) +
     # Most recent appointment marker
-    geom_point(
-      data = pt_demographics,
-      aes(x = most_recent_record_age_months, y = "Appointments"),
-      color = "#370335FF", size = 3, shape = 17, alpha = 0.6
-    ) +
+    # geom_point(
+    #   data = pt_demographics,
+    #   aes(x = most_recent_record_age_months, y = "Appointments"),
+    #   color = "#370335FF", size = 3, shape = 17, alpha = 0.6
+    # ) +
     theme_linedraw() +
     labs(
       title = paste(pt, " (", protein_mutation, ")", title_suffix, sep = ""),
