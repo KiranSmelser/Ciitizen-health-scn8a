@@ -42,15 +42,85 @@ df_med <- df_med %>%
                              Cannabidiol = "Epidiolex/CBD")) %>%
   filter(grepl(meds_to_use, medication))
 
+# Function for handling medication intervals
+merge_intervals <- function(intervals_df) {
+  intervals_df <- intervals_df %>%
+    arrange(start_med_age)
+  
+  if (nrow(intervals_df) == 0) {
+    return(tibble(
+      start_med_age = numeric(0),
+      end_med_age   = numeric(0)
+    ))
+  }
+  
+  # Initialize first interval
+  current_start <- intervals_df$start_med_age[1]
+  current_end   <- intervals_df$end_med_age[1]
+  merged_list   <- list()
+  
+  if (nrow(intervals_df) > 1) {
+    for (i in seq(2, nrow(intervals_df))) {
+      s <- intervals_df$start_med_age[i]
+      e <- intervals_df$end_med_age[i]
+      
+      if (s <= current_end) {
+        # Overlapping intervals so merge them
+        current_end <- max(current_end, e, na.rm = TRUE)
+      } else {
+        # No overlap so add the previous interval
+        merged_list[[length(merged_list) + 1]] <- tibble(
+          start_med_age = current_start,
+          end_med_age   = current_end
+        )
+        # Resetinterval
+        current_start <- s
+        current_end   <- e
+      }
+    }
+  }
+  
+  # Push last interval
+  merged_list[[length(merged_list) + 1]] <- tibble(
+    start_med_age = current_start,
+    end_med_age   = current_end
+  )
+  
+  bind_rows(merged_list)
+}
+
 # Compute medication durations per patient/medication
-df_duration <- df_med %>% 
+df_duration <- df_med %>%
+  transmute(
+    patient_uuid,
+    medication,
+    start_med_age = medication_age_days_firstDate,
+    end_med_age   = medication_age_days_lastDate
+  ) %>%
+  distinct() %>%
+  arrange(patient_uuid, medication, start_med_age, end_med_age) %>%
   group_by(patient_uuid, medication) %>%
-  summarise(start_med_age = medication_age_days_firstDate,
-            end_med_age   = medication_age_days_lastDate,
-            .groups = "drop") %>%
+  group_modify(~ merge_intervals(.x)) %>%
+  ungroup() %>%
+  
+  # Remove any intervals that are 0 days or negative
+  filter((end_med_age - start_med_age) > 0) %>%
+  
+  # Each patient/med group now has valid, non-overlapping intervals
   group_by(patient_uuid, medication) %>%
-  mutate(med_time = diff(range(start_med_age, end_med_age))) %>%
-  ungroup()
+  mutate(
+    interval_id = row_number(),
+    intervals_for_this_med = n()
+  ) %>%
+  ungroup() %>%
+  
+  mutate(
+    medication = if_else(
+      intervals_for_this_med > 1,
+      paste0(medication, " ", interval_id),
+      medication
+    )
+  )
 
 ##############################
 # 3. Import & Clean Seizure Data
@@ -457,8 +527,10 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
     filter(patient_uuid == pt) %>%
     mutate(
       start_med_age_months = start_med_age / 30,
-      end_med_age_months = end_med_age / 30,
-      first_3_months_end = pmin(start_med_age_months + 3, end_med_age_months)
+      end_med_age_months   = end_med_age / 30,
+      first_3_months_end   = pmin(start_med_age_months + 3, end_med_age_months),
+      # Add a base name for plotting
+      medication_base = sub(" \\d+$", "", medication)
     )
   
   # Adverse effects (convert age to months)
@@ -477,13 +549,13 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
     geom_segment(
       data = pt_data_duration,
       aes(x = start_med_age_months, xend = first_3_months_end,
-          y = medication, yend = medication),
+          y = medication_base, yend = medication_base),
       size = 2, color = "#8A9197FF"
     ) +
     geom_segment(
       data = pt_data_duration,
       aes(x = first_3_months_end, xend = end_med_age_months,
-          y = medication, yend = medication),
+          y = medication_base, yend = medication_base),
       size = 2, color = "#709AE1FF"
     ) +
     # Seizure events
@@ -525,7 +597,7 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
     scale_y_discrete(limits = c("Appointments", "Status epilepticus", 
                                 rev(unique(pt_data_type$type)),
                                 "Adverse Effects",
-                                rev(unique(pt_data_duration$medication))))
+                                rev(unique(pt_data_duration$medication_base))))
   
   # Combine the plots
   combined_plot <- (p_smooth | heatmap_on_vs_before | heatmap_on_vs_after) /
