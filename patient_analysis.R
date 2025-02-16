@@ -161,6 +161,66 @@ safe_mean <- function(x) {
   if(is.nan(m)) return(0) else return(m)
 }
 
+##############################
+# Determine meds_to_keep across ALL seizure types
+##############################
+df_combined_all_types <- df_type %>%
+  left_join(df_duration, by = "patient_uuid")
+
+# Exclude meds with < 3-month duration
+df_combined_all_types <- df_combined_all_types %>%
+  filter((end_med_age - start_med_age) > 91)
+
+# Adjust the medication start age by adding 91 days when possible
+df_combined_all_types <- df_combined_all_types %>%
+  mutate(
+    adjusted_start_med_age = if_else(
+      (start_med_age + 91) < end_med_age,
+      start_med_age + 91,
+      start_med_age
+    )
+  )
+
+# Define logical flags
+df_combined_all_types <- df_combined_all_types %>%
+  mutate(
+    on_med       = (age_days >= adjusted_start_med_age) & (age_days <= end_med_age),
+    before_med   = age_days < start_med_age,
+    after_med    = age_days > end_med_age,
+    within_3months_before = age_days >= pmax(start_med_age - 91, 0) & age_days < start_med_age,
+    within_3months_after  = age_days > end_med_age & age_days <= (end_med_age + 91)
+  )
+
+# Handle overlapping medication periods
+df_assigned_all <- df_combined_all_types %>%
+  arrange(patient_uuid, age_days, adjusted_start_med_age) %>%
+  group_by(patient_uuid, age_days) %>%
+  filter(on_med) %>%
+  ungroup()
+
+df_combined_all_types <- df_combined_all_types %>%
+  left_join(
+    df_assigned_all %>%
+      select(patient_uuid, age_days, medication) %>%
+      rename(assigned_med = medication),
+    by = c("patient_uuid", "age_days")
+  ) %>%
+  group_by(patient_uuid, age_days) %>%
+  mutate(on_med_final = medication %in% assigned_med) %>%
+  ungroup()
+
+# Summarize to figure out which meds have at least one seizure on-med or within 
+# 3 months before/after, across ALL seizure types
+meds_to_keep <- df_combined_all_types %>%
+  group_by(patient_uuid, medication) %>%
+  summarise(
+    has_seizure_on_med      = any(on_med_final, na.rm = TRUE),
+    has_seizure_before_after = any(within_3months_before | within_3months_after, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  filter(has_seizure_on_med | has_seizure_before_after) %>%
+  select(patient_uuid, medication)
+
 seizure_types <- unique(df_type$type)
 seizures_summary_list <- list()
 
@@ -213,17 +273,8 @@ for (s_type in seizure_types) {
     )
   
   # Retain only medication episodes with at least one seizure on med or within 3 months before/after
-  meds_to_keep <- df_combined %>%
-    group_by(patient_uuid, medication) %>%
-    summarise(
-      has_seizure_on_med = any(on_med_final, na.rm = TRUE),
-      has_seizure_before_after = any(within_3months_before | within_3months_after, na.rm = TRUE),
-      .groups = 'drop'
-    ) %>%
-    filter(has_seizure_on_med | has_seizure_before_after) %>%
-    select(patient_uuid, medication)
-  
-  df_combined <- df_combined %>% inner_join(meds_to_keep, by = c("patient_uuid", "medication"))
+  df_combined <- df_combined %>%
+    inner_join(meds_to_keep, by = c("patient_uuid", "medication"))
   
   # Join the first and last appointment (in months) for each patient
   df_combined <- df_combined %>% left_join(appointment_summary, by = "patient_uuid") %>%
