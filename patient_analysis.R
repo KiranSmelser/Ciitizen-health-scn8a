@@ -447,6 +447,10 @@ create_heatmap <- function(data, fill_var, title_suffix, limits = NULL) {
 ##############################
 # 8. Generate Patient Reports (Timelines, Heatmaps, & Line Plots)
 ##############################
+
+#Import developmental data
+df_dev <- read_excel(path_data, sheet='development')
+
 for (pt in unique(seizures_summary_combined$patient_uuid)) {
   
   # Create output folder for patient reports
