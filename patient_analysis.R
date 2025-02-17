@@ -377,10 +377,10 @@ for (s_type in seizure_types) {
       .groups = "drop"
     ) %>%
     mutate(
-      weighted_index_med    = if_else(duration_on > 0, on_med_avg / duration_on, 0),
-      weighted_index_before = if_else(duration_before > 0, before_med_avg / duration_before, 0),
-      weighted_index_after  = if_else(duration_after > 0, after_med_avg / duration_after, 0),
-      weighted_index_off    = if_else(duration_off > 0, off_med_avg / duration_off, 0),
+      weighted_index_med    = if_else(duration_on > 0, on_med_avg / sqrt(duration_on), 0),
+      weighted_index_before = if_else(duration_before > 0, before_med_avg / sqrt(duration_before), 0),
+      weighted_index_after  = if_else(duration_after > 0, after_med_avg / sqrt(duration_after), 0),
+      weighted_index_off    = if_else(duration_off > 0, off_med_avg / sqrt(duration_off), 0),
       diff_on_vs_off   = weighted_index_med - weighted_index_off,
       diff_on_vs_before = weighted_index_med - weighted_index_before,
       diff_on_vs_after  = weighted_index_med - weighted_index_after,
@@ -483,11 +483,11 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
     theme(legend.position = "none")
   
   # Compute legend limits for the on vs. after heatmap from the diff columns
-  legend_limits <- c(
-    min(c(pt_data$diff_on_vs_after, pt_data$diff_on_vs_before, -0.5), na.rm = TRUE),
-    max(c(pt_data$diff_on_vs_after, pt_data$diff_on_vs_before), na.rm = TRUE)
-  )
-  #legend_limits <- max(abs(pt_data$diff_on_vs_after), abs(pt_data$diff_on_vs_before), na.rm = TRUE) * c(-1, 1)
+  # legend_limits <- c(
+  #   min(c(pt_data$diff_on_vs_after, pt_data$diff_on_vs_before, -0.5), na.rm = TRUE),
+  #   max(c(pt_data$diff_on_vs_after, pt_data$diff_on_vs_before), na.rm = TRUE)
+  # )
+  legend_limits <- max(abs(pt_data$diff_on_vs_after), abs(pt_data$diff_on_vs_before), na.rm = TRUE) * c(-1, 1)
   
   
   heatmap_on_vs_after <- create_heatmap(pt_data, "diff_on_vs_after", "On vs. After", limits = legend_limits) +
