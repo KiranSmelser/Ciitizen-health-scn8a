@@ -447,10 +447,13 @@ create_heatmap <- function(data, fill_var, title_suffix, limits = NULL) {
 
 ##############################
 # 8. Generate Patient Reports (Timelines, Heatmaps, & Line Plots)
-#############################
+##############################
 # Save patient charts to single PDF
 pdf_file <- "./figures/patients/combined_patients_report.pdf"
 pdf(pdf_file, width = 16, height = 12)
+
+#Import developmental data
+df_dev <- read_excel(path_data, sheet='development')
 
 for (pt in unique(seizures_summary_combined$patient_uuid)) {
   
@@ -560,6 +563,38 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
   pt_data_status <- hospitalizations %>%
     filter(patient_uuid == pt, admission_diagnosis == "Status epilepticus") %>%
     mutate(age_months = admission_age_days_firstDate / 30)
+ 
+  ####################################
+  
+  #development milestones
+  
+  # add developments to a line on the plot
+  # filter by patient within for loop right below
+  # group by milestone, determine aquired vs regressed milestones
+  # where regressed is defined as able -> unable
+  # aquired is able -> able    no change          
+  # gained = green not digressed = red never gained = not on plot
+  
+  pt_dev_data <- df_dev %>%
+    filter(patient_uuid == pt)%>%
+    group_by(domain_milestone)%>%
+    arrange(domain_age_days_firstDate)%>%
+    mutate(
+      age_months = domain_age_days_firstDate/30,
+      status_change = case_when(
+        domain_status == 'Unable' & lag(domain_status) == 'Able' ~ 'Loss',
+        domain_status == 'Able' & lag(domain_status) == 'Unable' ~ 'Gained',
+        TRUE ~ NA_character_
+      )
+    )%>%
+    ungroup()
+  
+  pt_dev_data <- pt_dev_data %>%
+    filter(!is.na(status_change)) %>%
+    mutate(status_change = factor(status_change, levels = c("Gained", "Loss")))
+  
+  
+ #####################################
   
   # Compute earliest start age per medication
   pt_data_duration <- pt_data_duration %>%
@@ -606,6 +641,17 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
       aes(x = age_months, y = "Status epilepticus"),
       color = "#FED439FF", size = 5, shape = 18, alpha = 0.9
     ) +
+    # Development Loss and Gains
+    geom_point(
+      data = pt_dev_data,
+      aes(x = age_months, y='Developmental Milestones',
+      color = status_change, shape = domain), alpha = 0.7, size = 3
+    ) +
+    
+    scale_color_manual(values = c("Loss" = "red", "Gained" = "green3"), guide = 'none') +
+    
+    scale_shape_discrete(name = "Developmental Domain") +
+    
     # Appointment markers
     geom_point(
       data = appointment_data,
@@ -624,7 +670,8 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
       x = "Age (months)",
       y = ""
     ) +
-    scale_y_discrete(limits = c("Appointments", "Status epilepticus", 
+    scale_y_discrete(limits = c("Appointments", "Developmental Milestones",
+                                "Status epilepticus",
                                 rev(unique(pt_data_type$type)),
                                 "Adverse Effects",
                                 rev(med_order)))
