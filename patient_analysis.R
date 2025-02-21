@@ -42,15 +42,85 @@ df_med <- df_med %>%
                              Cannabidiol = "Epidiolex/CBD")) %>%
   filter(grepl(meds_to_use, medication))
 
+# Function for handling medication intervals
+merge_intervals <- function(intervals_df) {
+  intervals_df <- intervals_df %>%
+    arrange(start_med_age)
+  
+  if (nrow(intervals_df) == 0) {
+    return(tibble(
+      start_med_age = numeric(0),
+      end_med_age   = numeric(0)
+    ))
+  }
+  
+  # Initialize first interval
+  current_start <- intervals_df$start_med_age[1]
+  current_end   <- intervals_df$end_med_age[1]
+  merged_list   <- list()
+  
+  if (nrow(intervals_df) > 1) {
+    for (i in seq(2, nrow(intervals_df))) {
+      s <- intervals_df$start_med_age[i]
+      e <- intervals_df$end_med_age[i]
+      
+      if (s <= current_end) {
+        # Overlapping intervals so merge them
+        current_end <- max(current_end, e, na.rm = TRUE)
+      } else {
+        # No overlap so add the previous interval
+        merged_list[[length(merged_list) + 1]] <- tibble(
+          start_med_age = current_start,
+          end_med_age   = current_end
+        )
+        # Resetinterval
+        current_start <- s
+        current_end   <- e
+      }
+    }
+  }
+  
+  # Push last interval
+  merged_list[[length(merged_list) + 1]] <- tibble(
+    start_med_age = current_start,
+    end_med_age   = current_end
+  )
+  
+  bind_rows(merged_list)
+}
+
 # Compute medication durations per patient/medication
-df_duration <- df_med %>% 
+df_duration <- df_med %>%
+  transmute(
+    patient_uuid,
+    medication,
+    start_med_age = medication_age_days_firstDate,
+    end_med_age   = medication_age_days_lastDate
+  ) %>%
+  distinct() %>%
+  arrange(patient_uuid, medication, start_med_age, end_med_age) %>%
   group_by(patient_uuid, medication) %>%
-  summarise(start_med_age = medication_age_days_firstDate,
-            end_med_age   = medication_age_days_lastDate,
-            .groups = "drop") %>%
+  group_modify(~ merge_intervals(.x)) %>%
+  ungroup() %>%
+  
+  # Remove any intervals that are 0 days or negative
+  filter((end_med_age - start_med_age) > 0) %>%
+  
+  # Each patient/med group now has valid, non-overlapping intervals
   group_by(patient_uuid, medication) %>%
-  mutate(med_time = diff(range(start_med_age, end_med_age))) %>%
-  ungroup()
+  mutate(
+    interval_id = row_number(),
+    intervals_for_this_med = n()
+  ) %>%
+  ungroup() %>%
+  
+  mutate(
+    medication = if_else(
+      intervals_for_this_med > 1,
+      paste0(medication, " ", interval_id),
+      medication
+    )
+  )
 
 ##############################
 # 3. Import & Clean Seizure Data
@@ -161,6 +231,66 @@ safe_mean <- function(x) {
   if(is.nan(m)) return(0) else return(m)
 }
 
+##############################
+# Determine meds_to_keep across ALL seizure types
+##############################
+df_combined_all_types <- df_type %>%
+  left_join(df_duration, by = "patient_uuid")
+
+# Exclude meds with < 3-month duration
+df_combined_all_types <- df_combined_all_types %>%
+  filter((end_med_age - start_med_age) > 91)
+
+# Adjust the medication start age by adding 91 days when possible
+df_combined_all_types <- df_combined_all_types %>%
+  mutate(
+    adjusted_start_med_age = if_else(
+      (start_med_age + 91) < end_med_age,
+      start_med_age + 91,
+      start_med_age
+    )
+  )
+
+# Define logical flags
+df_combined_all_types <- df_combined_all_types %>%
+  mutate(
+    on_med       = (age_days >= adjusted_start_med_age) & (age_days <= end_med_age),
+    before_med   = age_days < start_med_age,
+    after_med    = age_days > end_med_age,
+    within_3months_before = age_days >= pmax(start_med_age - 91, 0) & age_days < start_med_age,
+    within_3months_after  = age_days > end_med_age & age_days <= (end_med_age + 91)
+  )
+
+# Handle overlapping medication periods
+df_assigned_all <- df_combined_all_types %>%
+  arrange(patient_uuid, age_days, adjusted_start_med_age) %>%
+  group_by(patient_uuid, age_days) %>%
+  filter(on_med) %>%
+  ungroup()
+
+df_combined_all_types <- df_combined_all_types %>%
+  left_join(
+    df_assigned_all %>%
+      select(patient_uuid, age_days, medication) %>%
+      rename(assigned_med = medication),
+    by = c("patient_uuid", "age_days")
+  ) %>%
+  group_by(patient_uuid, age_days) %>%
+  mutate(on_med_final = medication %in% assigned_med) %>%
+  ungroup()
+
+# Summarize to figure out which meds have at least one seizure on-med or within 
+# 3 months before/after, across ALL seizure types
+meds_to_keep <- df_combined_all_types %>%
+  group_by(patient_uuid, medication) %>%
+  summarise(
+    has_seizure_on_med      = any(on_med_final, na.rm = TRUE),
+    has_seizure_before_after = any(within_3months_before | within_3months_after, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  filter(has_seizure_on_med | has_seizure_before_after) %>%
+  select(patient_uuid, medication)
+
 seizure_types <- unique(df_type$type)
 seizures_summary_list <- list()
 
@@ -213,17 +343,8 @@ for (s_type in seizure_types) {
     )
   
   # Retain only medication episodes with at least one seizure on med or within 3 months before/after
-  meds_to_keep <- df_combined %>%
-    group_by(patient_uuid, medication) %>%
-    summarise(
-      has_seizure_on_med = any(on_med_final, na.rm = TRUE),
-      has_seizure_before_after = any(within_3months_before | within_3months_after, na.rm = TRUE),
-      .groups = 'drop'
-    ) %>%
-    filter(has_seizure_on_med | has_seizure_before_after) %>%
-    select(patient_uuid, medication)
-  
-  df_combined <- df_combined %>% inner_join(meds_to_keep, by = c("patient_uuid", "medication"))
+  df_combined <- df_combined %>%
+    inner_join(meds_to_keep, by = c("patient_uuid", "medication"))
   
   # Join the first and last appointment (in months) for each patient
   df_combined <- df_combined %>% left_join(appointment_summary, by = "patient_uuid") %>%
@@ -256,10 +377,10 @@ for (s_type in seizure_types) {
       .groups = "drop"
     ) %>%
     mutate(
-      weighted_index_med    = if_else(duration_on > 0, on_med_avg / duration_on, 0),
-      weighted_index_before = if_else(duration_before > 0, before_med_avg / duration_before, 0),
-      weighted_index_after  = if_else(duration_after > 0, after_med_avg / duration_after, 0),
-      weighted_index_off    = if_else(duration_off > 0, off_med_avg / duration_off, 0),
+      weighted_index_med    = if_else(duration_on > 0, on_med_avg / sqrt(duration_on), 0),
+      weighted_index_before = if_else(duration_before > 0, before_med_avg / sqrt(duration_before), 0),
+      weighted_index_after  = if_else(duration_after > 0, after_med_avg / sqrt(duration_after), 0),
+      weighted_index_off    = if_else(duration_off > 0, off_med_avg / sqrt(duration_off), 0),
       diff_on_vs_off   = weighted_index_med - weighted_index_off,
       diff_on_vs_before = weighted_index_med - weighted_index_before,
       diff_on_vs_after  = weighted_index_med - weighted_index_after,
@@ -299,21 +420,22 @@ adverse_effects <- adverse_effects %>%
 create_heatmap <- function(data, fill_var, title_suffix, limits = NULL) {
   ggplot(data, aes(x = type, y = medication, fill = !!sym(fill_var))) +
     geom_tile(color = "white") +
-    # scale_fill_gradient2(
-    #   low = "#083681",
-    #   mid = "#F7F7F7",
-    #   high = "#C80813FF",
-    #   midpoint = 0,
-    #   na.value = "#F7F7F7",
-    #   limits = limits
-    # ) +
+    geom_text(aes(label = round(!!sym(fill_var), 2)), size = 3, color = "black", na.rm = TRUE) +
+    scale_fill_gradient2(
+      low = "#083681",
+      mid = "#F7F7F7",
+      high = "#C80813FF",
+      midpoint = 0,
+      na.value = "#F7F7F7",
+      limits = limits
+    ) +
     #scale_fill_distiller(palette = "RdBu", limits = limits) +
     # scale_fill_gradientn(
     #   colors = hcl.colors(3, palette = "Blue-Red"),
     #   limits = limits,
     #   na.value = "#F7F7F7"
     # ) +
-    scale_fill_viridis(discrete = FALSE, option = "E") +
+    #scale_fill_viridis(discrete = FALSE, option = "E") +
     theme_classic() +
     labs(
       title = title_suffix,
@@ -325,14 +447,12 @@ create_heatmap <- function(data, fill_var, title_suffix, limits = NULL) {
 
 ##############################
 # 8. Generate Patient Reports (Timelines, Heatmaps, & Line Plots)
-##############################
+#############################
+# Save patient charts to single PDF
+pdf_file <- "./figures/patients/combined_patients_report.pdf"
+pdf(pdf_file, width = 16, height = 12)
+
 for (pt in unique(seizures_summary_combined$patient_uuid)) {
-  
-  # Create output folder for patient reports
-  patient_dir <- file.path("./figures/patients", pt)
-  if (!dir.exists(patient_dir)) {
-    dir.create(patient_dir, recursive = TRUE)
-  }
   
   # Retrieve the patient’s protein mutation (from genetics or overlap file)
   protein_mutation <- genetics %>%
@@ -356,6 +476,36 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
   # Subset seizure summary data for the current patient
   pt_data <- seizures_summary_combined %>% filter(patient_uuid == pt)
   
+  # Prepare medication duration data (convert days to months)
+  pt_data_duration <- df_duration %>%
+    filter(patient_uuid == pt) %>%
+    mutate(
+      start_med_age_months = start_med_age / 30,
+      end_med_age_months   = end_med_age / 30,
+      first_3_months_end   = pmin(start_med_age_months + 3, end_med_age_months),
+      # Add a base name for plotting
+      medication_base = sub(" \\d+$", "", medication)
+    )
+  
+  # Compute total duration per medication for this patient (sum across intervals if needed)
+  duration_order <- pt_data_duration %>%
+    mutate(total_duration = end_med_age - start_med_age) %>%
+    group_by(medication_base) %>%
+    summarise(total_duration = sum(total_duration, na.rm = TRUE), .groups = "drop") %>%
+    arrange(desc(total_duration))
+  
+  # Use 'medication_base' to track which medication it maps to
+  pt_data <- pt_data %>%
+    mutate(medication_base = sub(" \\d+$", "", medication))
+  
+  # Factor 'medication' in descending order
+  pt_data <- pt_data %>%
+    left_join(duration_order, by = "medication_base") %>%
+    arrange(total_duration) %>%
+    mutate(
+      medication = factor(medication, levels = unique(medication))
+    )
+  
   # Create heatmaps for different seizure index comparisons
   heatmap_on_vs_off <- create_heatmap(pt_data, "diff_on_vs_off", "On vs. Off")
   heatmap_on_vs_before <- create_heatmap(pt_data, "diff_on_vs_before", "On vs. Before") +
@@ -363,7 +513,7 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
   
   # Compute legend limits for the on vs. after heatmap from the diff columns
   # legend_limits <- c(
-  #   min(c(pt_data$diff_on_vs_after, pt_data$diff_on_vs_before), na.rm = TRUE),
+  #   min(c(pt_data$diff_on_vs_after, pt_data$diff_on_vs_before, -0.5), na.rm = TRUE),
   #   max(c(pt_data$diff_on_vs_after, pt_data$diff_on_vs_before), na.rm = TRUE)
   # )
   legend_limits <- max(abs(pt_data$diff_on_vs_after), abs(pt_data$diff_on_vs_before), na.rm = TRUE) * c(-1, 1)
@@ -401,15 +551,6 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
     filter(patient_uuid == pt) %>%
     mutate(most_recent_record_age_months = most_recent_records_age_days / 30)
   
-  # Prepare medication duration data (convert days to months)
-  pt_data_duration <- df_duration %>%
-    filter(patient_uuid == pt) %>%
-    mutate(
-      start_med_age_months = start_med_age / 30,
-      end_med_age_months = end_med_age / 30,
-      first_3_months_end = pmin(start_med_age_months + 3, end_med_age_months)
-    )
-  
   # Adverse effects (convert age to months)
   pt_data_adverse <- adverse_effects %>%
     filter(patient_uuid == pt) %>%
@@ -420,19 +561,31 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
     filter(patient_uuid == pt, admission_diagnosis == "Status epilepticus") %>%
     mutate(age_months = admission_age_days_firstDate / 30)
   
+  # Compute earliest start age per medication
+  pt_data_duration <- pt_data_duration %>%
+    group_by(medication_base) %>%
+    mutate(earliest_start = min(start_med_age_months)) %>%
+    ungroup()
+  
+  # Order medications by start age in ascending order
+  med_order <- pt_data_duration %>%
+    distinct(medication_base, earliest_start) %>%
+    arrange(earliest_start) %>%
+    pull(medication_base)
+  
   # Timeline plot: medication periods, seizure events, adverse effects, status events, and appointments
   p_timeline <- ggplot() +
     # Medication timeline: first 3 months in gray, remainder in blue
     geom_segment(
       data = pt_data_duration,
       aes(x = start_med_age_months, xend = first_3_months_end,
-          y = medication, yend = medication),
+          y = medication_base, yend = medication_base),
       size = 2, color = "#8A9197FF"
     ) +
     geom_segment(
       data = pt_data_duration,
       aes(x = first_3_months_end, xend = end_med_age_months,
-          y = medication, yend = medication),
+          y = medication_base, yend = medication_base),
       size = 2, color = "#709AE1FF"
     ) +
     # Seizure events
@@ -460,11 +613,11 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
       color = "#1A9993FF", size = 3, shape = 17, alpha = 0.6
     ) +
     # Most recent appointment marker
-    geom_point(
-      data = pt_demographics,
-      aes(x = most_recent_record_age_months, y = "Appointments"),
-      color = "#370335FF", size = 3, shape = 17, alpha = 0.6
-    ) +
+    # geom_point(
+    #   data = pt_demographics,
+    #   aes(x = most_recent_record_age_months, y = "Appointments"),
+    #   color = "#370335FF", size = 3, shape = 17, alpha = 0.6
+    # ) +
     theme_linedraw() +
     labs(
       title = paste(pt, " (", protein_mutation, ")", title_suffix, sep = ""),
@@ -474,13 +627,14 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
     scale_y_discrete(limits = c("Appointments", "Status epilepticus", 
                                 rev(unique(pt_data_type$type)),
                                 "Adverse Effects",
-                                rev(unique(pt_data_duration$medication))))
+                                rev(med_order)))
   
   # Combine the plots
   combined_plot <- (p_smooth | heatmap_on_vs_before | heatmap_on_vs_after) /
     p_timeline +
     plot_layout(heights = c(1, 1))
   
-  pdf_file <- file.path(patient_dir, paste0(pt, "_report.pdf"))
-  ggsave(filename = pdf_file, plot = combined_plot, width = 16, height = 12, dpi = 300)
+  print(combined_plot)
 }
+
+dev.off()
