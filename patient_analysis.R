@@ -420,6 +420,7 @@ adverse_effects <- adverse_effects %>%
 create_heatmap <- function(data, fill_var, title_suffix, limits = NULL) {
   ggplot(data, aes(x = type, y = medication, fill = !!sym(fill_var))) +
     geom_tile(color = "white") +
+    geom_text(aes(label = round(!!sym(fill_var), 2)), size = 3, color = "black", na.rm = TRUE) +
     scale_fill_gradient2(
       low = "#083681",
       mid = "#F7F7F7",
@@ -446,14 +447,12 @@ create_heatmap <- function(data, fill_var, title_suffix, limits = NULL) {
 
 ##############################
 # 8. Generate Patient Reports (Timelines, Heatmaps, & Line Plots)
-##############################
+#############################
+# Save patient charts to single PDF
+pdf_file <- "./figures/patients/combined_patients_report.pdf"
+pdf(pdf_file, width = 16, height = 12)
+
 for (pt in unique(seizures_summary_combined$patient_uuid)) {
-  
-  # Create output folder for patient reports
-  patient_dir <- file.path("./figures/patients", pt)
-  if (!dir.exists(patient_dir)) {
-    dir.create(patient_dir, recursive = TRUE)
-  }
   
   # Retrieve the patient’s protein mutation (from genetics or overlap file)
   protein_mutation <- genetics %>%
@@ -476,6 +475,36 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
   
   # Subset seizure summary data for the current patient
   pt_data <- seizures_summary_combined %>% filter(patient_uuid == pt)
+  
+  # Prepare medication duration data (convert days to months)
+  pt_data_duration <- df_duration %>%
+    filter(patient_uuid == pt) %>%
+    mutate(
+      start_med_age_months = start_med_age / 30,
+      end_med_age_months   = end_med_age / 30,
+      first_3_months_end   = pmin(start_med_age_months + 3, end_med_age_months),
+      # Add a base name for plotting
+      medication_base = sub(" \\d+$", "", medication)
+    )
+  
+  # Compute total duration per medication for this patient (sum across intervals if needed)
+  duration_order <- pt_data_duration %>%
+    mutate(total_duration = end_med_age - start_med_age) %>%
+    group_by(medication_base) %>%
+    summarise(total_duration = sum(total_duration, na.rm = TRUE), .groups = "drop") %>%
+    arrange(desc(total_duration))
+  
+  # Use 'medication_base' to track which medication it maps to
+  pt_data <- pt_data %>%
+    mutate(medication_base = sub(" \\d+$", "", medication))
+  
+  # Factor 'medication' in descending order
+  pt_data <- pt_data %>%
+    left_join(duration_order, by = "medication_base") %>%
+    arrange(total_duration) %>%
+    mutate(
+      medication = factor(medication, levels = unique(medication))
+    )
   
   # Create heatmaps for different seizure index comparisons
   heatmap_on_vs_off <- create_heatmap(pt_data, "diff_on_vs_off", "On vs. Off")
@@ -522,17 +551,6 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
     filter(patient_uuid == pt) %>%
     mutate(most_recent_record_age_months = most_recent_records_age_days / 30)
   
-  # Prepare medication duration data (convert days to months)
-  pt_data_duration <- df_duration %>%
-    filter(patient_uuid == pt) %>%
-    mutate(
-      start_med_age_months = start_med_age / 30,
-      end_med_age_months   = end_med_age / 30,
-      first_3_months_end   = pmin(start_med_age_months + 3, end_med_age_months),
-      # Add a base name for plotting
-      medication_base = sub(" \\d+$", "", medication)
-    )
-  
   # Adverse effects (convert age to months)
   pt_data_adverse <- adverse_effects %>%
     filter(patient_uuid == pt) %>%
@@ -542,6 +560,18 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
   pt_data_status <- hospitalizations %>%
     filter(patient_uuid == pt, admission_diagnosis == "Status epilepticus") %>%
     mutate(age_months = admission_age_days_firstDate / 30)
+  
+  # Compute earliest start age per medication
+  pt_data_duration <- pt_data_duration %>%
+    group_by(medication_base) %>%
+    mutate(earliest_start = min(start_med_age_months)) %>%
+    ungroup()
+  
+  # Order medications by start age in ascending order
+  med_order <- pt_data_duration %>%
+    distinct(medication_base, earliest_start) %>%
+    arrange(earliest_start) %>%
+    pull(medication_base)
   
   # Timeline plot: medication periods, seizure events, adverse effects, status events, and appointments
   p_timeline <- ggplot() +
@@ -597,13 +627,14 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
     scale_y_discrete(limits = c("Appointments", "Status epilepticus", 
                                 rev(unique(pt_data_type$type)),
                                 "Adverse Effects",
-                                rev(unique(pt_data_duration$medication_base))))
+                                rev(med_order)))
   
   # Combine the plots
   combined_plot <- (p_smooth | heatmap_on_vs_before | heatmap_on_vs_after) /
     p_timeline +
     plot_layout(heights = c(1, 1))
   
-  pdf_file <- file.path(patient_dir, paste0(pt, "_report.pdf"))
-  ggsave(filename = pdf_file, plot = combined_plot, width = 16, height = 12, dpi = 300)
+  print(combined_plot)
 }
+
+dev.off()
