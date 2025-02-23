@@ -490,22 +490,21 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
       medication_base = sub(" \\d+$", "", medication)
     )
   
-  # Compute total duration per medication for this patient (sum across intervals if needed)
+  # Compute total duration per medication for this patient
   duration_order <- pt_data_duration %>%
-    mutate(total_duration = end_med_age - start_med_age) %>%
-    group_by(medication_base) %>%
-    summarise(total_duration = sum(total_duration, na.rm = TRUE), .groups = "drop") %>%
+    group_by(medication) %>%
+    summarise(
+      total_duration = sum(end_med_age - start_med_age, na.rm = TRUE),
+      .groups        = "drop"
+    ) %>%
     arrange(desc(total_duration))
-  
-  # Use 'medication_base' to track which medication it maps to
-  pt_data <- pt_data %>%
-    mutate(medication_base = sub(" \\d+$", "", medication))
   
   # Factor 'medication' in descending order
   pt_data <- pt_data %>%
-    left_join(duration_order, by = "medication_base") %>%
+    left_join(duration_order, by = "medication") %>%
     arrange(total_duration) %>%
     mutate(
+      # Convert to factor in the order of earliest_start
       medication = factor(medication, levels = unique(medication))
     )
   
