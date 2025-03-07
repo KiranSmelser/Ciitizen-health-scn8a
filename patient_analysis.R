@@ -767,14 +767,14 @@ for (pt in unique(patient_list)) {
     geom_point(
       data = df_eeg %>% filter(patient_uuid == pt),
       aes(x = age_months, y = "Infantile Spasms"),
-      size = 2, color = "black", shape = 6, position = position_nudge(y = 0.18)
+      size = 3, color = "black", shape = 124, position = position_nudge(y = 0.14)
     ) +
     
     # Hypsarrhythmia
     geom_point(
       data = df_hyps %>% filter(patient_uuid == pt),
       aes(x = age_months, y = "Infantile Spasms"),
-      size = 2, color = "black", shape = 2, position = position_nudge(y = -0.18)
+      size = 3, color = "black", shape = 124, position = position_nudge(y = -0.16)
     ) +
     # Adverse effects
     geom_point(
