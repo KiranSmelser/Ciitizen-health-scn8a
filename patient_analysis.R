@@ -714,6 +714,15 @@ for (pt in unique(patient_list)) {
   pt_dev_data <- pt_dev_data %>%
     filter(!is.na(status_change)) %>%
     mutate(status_change = factor(status_change, levels = c("Gained", "Loss")))
+ 
+###### Trying to only add spread to points that need it 
+  pt_dev_data <- pt_dev_data %>%
+    group_by(age_months, status_change, domain) %>%
+    mutate(
+      n_points = n(),  # Count how many overlap
+      y_offset = row_number() - (n_points + 1) / 2
+    ) %>%
+    ungroup()
   
   
  #####################################
@@ -791,13 +800,14 @@ for (pt in unique(patient_list)) {
     # Development Loss and Gains
     geom_point(
       data = pt_dev_data,
-      aes(x = age_months, y='Developmental Milestones',
-      color = status_change, shape = domain), alpha = 0.7, size = 3
-    ) +
+      aes(x = age_months, y = "Developmental Milestones",
+          color = status_change, shape = domain), alpha = 0.6, size = 3, position = position_nudge(y = pt_dev_data$y_offset * 0.2)
+    ) +                                                                   ### change here
     
     scale_color_manual(values = c("Loss" = "red", "Gained" = "green3"), guide = 'none') +
     
-    scale_shape_discrete(name = "Developmental Domain") +
+    scale_shape_manual(values = c('Academic Performance' = 3, 'Fine Motor Development' = 8, 'Gross Motor Development' = 5, 'Language Development' = 2),
+                       name = "Developmental Domain") +
     
     # Appointment markers
     geom_point(
