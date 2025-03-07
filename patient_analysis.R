@@ -28,9 +28,9 @@ path_overlap_patients <- "./data/Overlap Patients corrected.xlsx"
 ##############################
 df_med <- read_excel(path_data, sheet = "medication_aggregate")
 
-meds_to_use <- paste(c("Adrenocorticotropin (ACTH 1-18),I-125 (TYR)", "Clonazepam", "Levetiracetam", 
+meds_to_use <- paste(c("Adrenocorticotropin (ACTH 1-18),I-125 (TYR)", "ACTH", "Clonazepam", "Levetiracetam", 
                        "Phenytoin", "Oxcarbazepine", "Carbamazepine", "Phenobarbital", 
-                       "Lamotrigine", "Briveracetam", "Cannabidiol", "Clobazam", "Epidiolex", 
+                       "Lamotrigine", "Briveracetam", "Cannabidiol", "Clobazam", "Epidiolex", "Epidiolex/CBD", 
                        "Eslicarbazepine", "Ethosuximide", "Felbamate", "Gabapentin", 
                        "Prednisolone", "Lacosamide", "Primidone", "Rufinamide", "Topiramate", 
                        "Valproate", "Vigabatrin", "Zonisamide", "Stiripentol", "Tiagabine", 
@@ -398,6 +398,7 @@ seizures_summary_combined <- bind_rows(seizures_summary_list)
 ##############################
 genetics <- read_excel(path_data, sheet = "genetic_findings")
 demographics <- read_excel(path_data, sheet = "demographics")
+df_diag <- read_excel(path_data, sheet = "diagnostic_procedures")
 # (Re-read appointment data)
 df_med_apts <- read_excel(path_data, sheet = "medication_aggregate")
 df_sz_apts <- read_excel(path_data, sheet = "seizure_history")
@@ -412,6 +413,46 @@ adverse_effects <- adverse_effects %>%
   inner_join(
     adverse_effect_severity %>% filter(severity_score %in% c("Moderate", "Severe")), 
     by = c("adverse_effect" = "adverse_effect")
+  )
+
+# Extract Infantile Spasms Data with Logic for Continuous Segments
+df_spasms <- df_sz %>% 
+  filter(type %in% classifier$spasms) %>% 
+  mutate(type = "Infantile Spasms")
+
+# Create periods where seizure reports are not 0
+df_spasm_periods <- df_spasms %>%
+  arrange(patient_uuid, age_days) %>%
+  group_by(patient_uuid) %>%
+  mutate(
+    age_months = age_days / 30,
+    value_zero = (value == 0),
+    period_id = cumsum(lag(value_zero, default = TRUE) & !value_zero)
+  ) %>%
+  filter(value > 0) %>%
+  group_by(patient_uuid, period_id) %>%
+  summarise(
+    spasm_start_age = min(age_months, na.rm = TRUE),
+    spasm_end_age   = max(age_months, na.rm = TRUE),
+    num_reports     = n(),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    is_single_report = (num_reports == 1)
+  )
+
+# Filter for EEG reports
+df_eeg <- df_diag %>%
+  filter(str_detect(tolower(procedure), "eeg")) %>%
+  mutate(
+    age_months = procedure_age_days / 30
+  )
+
+# Filter for hypsarrhythmia
+df_hyps <- df_diag %>%
+  filter(str_detect(tolower(procedure_findings), "hypsarrhythmia")) %>%
+  mutate(
+    age_months = procedure_age_days / 30
   )
 
 ##############################
@@ -445,6 +486,61 @@ create_heatmap <- function(data, fill_var, title_suffix, limits = NULL) {
     )
 }
 
+create_combined_heatmap_modified <- function(data, limits = NULL) {
+  # Pivot the diff columns and recode to "Before" and "After"
+  data_long <- data %>%
+    pivot_longer(
+      cols = c(diff_on_vs_before, diff_on_vs_after),
+      names_to = "comparison",
+      values_to = "diff_value"
+    ) %>%
+    mutate(
+      comparison = recode(comparison,
+                          diff_on_vs_before = "Before",
+                          diff_on_vs_after  = "After"),
+      comparison = factor(comparison, levels = c("Before", "After"))
+    )
+  
+  # Create a nested x-axis variable, e.g., "Before|Tonic-clonic"
+  data_long <- data_long %>%
+    mutate(x_axis = paste(comparison, type, sep = "|"))
+  
+  # Order x_axis factor so that for each seizure type, "Before" comes first then "After"
+  seizure_types <- unique(data_long$type)
+  x_levels <- unlist(lapply(seizure_types, function(t) {
+    c(paste("Before", t, sep = "|"), paste("After", t, sep = "|"))
+  }))
+  data_long$x_axis <- factor(data_long$x_axis, levels = x_levels)
+  
+  # Compute positions for vertical separators between seizure type groups.
+  # Each seizure type produces 2 x-axis cells; vertical lines are drawn between these groups.
+  n_groups <- length(seizure_types)
+  vline_positions <- if(n_groups > 1) sapply(1:(n_groups - 1), function(i) i * 2 + 0.5) else NULL
+  
+  ggplot(data_long, aes(x = x_axis, y = medication, fill = diff_value)) +
+    geom_tile(color = "white") +
+    geom_text(aes(label = round(diff_value, 2)), size = 3, color = "black", na.rm = TRUE) +
+    # Add vertical separators between seizure type groups
+    geom_vline(xintercept = vline_positions, linetype = "solid", color = "black", size = 1) +
+    scale_fill_gradient2(
+      low = "#083681",
+      mid = "#F7F7F7",
+      high = "#C80813FF",
+      midpoint = 0,
+      na.value = "#F7F7F7",
+      limits = limits
+    ) +
+    theme_classic() +
+    labs(
+      title = "Seizure Index Comparisons",
+      x = "Comparison and Seizure Type",
+      y = "Medication",
+      fill = "Change in Seizure Index"
+    ) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_x_discrete(guide = ggh4x::guide_axis_nested(delim = "|"))
+}
+
 ##############################
 # 8. Generate Patient Reports (Timelines, Heatmaps, & Line Plots)
 ##############################
@@ -455,11 +551,29 @@ pdf(pdf_file, width = 16, height = 12)
 #Import developmental data
 df_dev <- read_excel(path_data, sheet='development')
 
-for (pt in unique(seizures_summary_combined$patient_uuid)) {
+# Order patients by registry status and protein mutation
+patient_list <- unique(seizures_summary_combined$patient_uuid) %>%
+  as_tibble() %>%
+  rename(patient_uuid = value) %>%
+  left_join(overlap_patients %>% select(`Patient ID`, `Registry #`), 
+            by = c("patient_uuid" = "Patient ID")) %>%
+  left_join(genetics %>% filter(gene == "SCN8A") %>% select(patient_uuid, variant_protein), 
+            by = "patient_uuid") %>%
+  left_join(overlap_patients %>% select(`Patient ID`, `p.`), 
+            by = c("patient_uuid" = "Patient ID")) %>%
+  mutate(
+    protein_mutation = coalesce(variant_protein, `p.`),
+    registry_status = if_else(!is.na(`Registry #`), 1, 0),
+    mutation_number = as.numeric(str_extract(protein_mutation, "\\d+"))
+  ) %>%
+  arrange(desc(registry_status), mutation_number) %>%
+  pull(patient_uuid)
+
+for (pt in unique(patient_list)) {
   
   # Retrieve the patient’s protein mutation (from genetics or overlap file)
   protein_mutation <- genetics %>%
-    filter(patient_uuid == pt) %>%
+    filter(patient_uuid == pt & gene == "SCN8A") %>%
     pull(variant_protein) %>%
     first()
   if (is.na(protein_mutation)) {
@@ -470,11 +584,20 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
   }
   protein_mutation <- ifelse(is.na(protein_mutation), "NA", protein_mutation)
   
+  # Patient Registry numbers
+  patient_reg_num <- overlap_patients %>%
+    filter(`Patient ID` == pt) %>%
+    pull(`Registry #`) %>%
+    first()
+  patient_reg_num <- ifelse(!is.na(patient_reg_num), paste0(" (Registry #", patient_reg_num, ")"), "")
+  
   # Check if the patient has a report of "Infantile spasms"
   has_infantile_spasms <- df_sz %>%
     filter(patient_uuid == pt, type == "Infantile spasms") %>%
     nrow() > 0
   title_suffix <- if (has_infantile_spasms) " - IF" else ""
+  
+  timeline_title <- paste(pt, patient_reg_num, " (", protein_mutation, ")", title_suffix, sep = "")
   
   # Subset seizure summary data for the current patient
   pt_data <- seizures_summary_combined %>% filter(patient_uuid == pt)
@@ -628,6 +751,31 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
       aes(x = age_months, y = type),
       color = "#C80813FF", size = pt_data_type$index + 1, alpha = 0.6
     ) +
+    # Infantile Spasms periods
+    geom_segment(
+      data = df_spasm_periods %>% filter(patient_uuid == pt),
+      aes(x = spasm_start_age, xend = spasm_end_age, y = "Infantile Spasms", yend = "Infantile Spasms"),
+      size = 2, color = "#C80813FF"
+    ) +
+    # Infantile Spasms (single reports)
+    geom_point(
+      data = df_spasm_periods %>% filter(patient_uuid == pt, is_single_report),
+      aes(x = spasm_start_age, y = "Infantile Spasms"),
+      size = 2, color = "#C80813FF", shape = 15
+    ) +
+    # EEG reports
+    geom_point(
+      data = df_eeg %>% filter(patient_uuid == pt),
+      aes(x = age_months, y = "Infantile Spasms"),
+      size = 2, color = "black", shape = 6, position = position_nudge(y = 0.18)
+    ) +
+    
+    # Hypsarrhythmia
+    geom_point(
+      data = df_hyps %>% filter(patient_uuid == pt),
+      aes(x = age_months, y = "Infantile Spasms"),
+      size = 2, color = "black", shape = 2, position = position_nudge(y = -0.18)
+    ) +
     # Adverse effects
     geom_point(
       data = pt_data_adverse,
@@ -665,20 +813,25 @@ for (pt in unique(seizures_summary_combined$patient_uuid)) {
     # ) +
     theme_linedraw() +
     labs(
-      title = paste(pt, " (", protein_mutation, ")", title_suffix, sep = ""),
+      title = timeline_title,
       x = "Age (months)",
       y = ""
     ) +
     scale_y_discrete(limits = c("Appointments", "Developmental Milestones",
                                 "Status epilepticus",
+                                "Infantile Spasms",
                                 rev(unique(pt_data_type$type)),
                                 "Adverse Effects",
                                 rev(med_order)))
   
   # Combine the plots
-  combined_plot <- (p_smooth | heatmap_on_vs_before | heatmap_on_vs_after) /
-    p_timeline +
-    plot_layout(heights = c(1, 1))
+  # combined_plot <- (p_smooth | heatmap_on_vs_before | heatmap_on_vs_after) /
+  #   p_timeline +
+  #   plot_layout(heights = c(1, 1))
+  
+  combined_heatmap <- create_combined_heatmap_modified(pt_data, limits = legend_limits)
+  combined_plot <- (p_smooth | combined_heatmap) /
+    p_timeline + plot_layout(heights = c(1, 1))
   
   print(combined_plot)
 }
