@@ -104,6 +104,7 @@ df_table_data <- df_type %>%
   select(patient_uuid,type,index,age_days)%>%
   mutate(age_in_months = age_days/30)
 
+view(df_table_data)
 #############################
 #Look at every patient and then count the number of seizure events
 #############################
@@ -112,13 +113,11 @@ seizure_counts <- df_table_data %>%
   group_by(patient_uuid)%>%
   summarise(seizure_count = n(),
             mean_index = round(mean(index),2),
-            seizure_types = n_distinct(type))
+            number_seizure_types = n_distinct(type),
+            seizure_types = paste(unique(type), collapse = ", ") )
 
 view(seizure_counts)
 
-df_table_data %>%
-  filter(patient_uuid == 'dc15a4e2-a7f1-42be-8418-d5da4f2abe40')%>%
-  summarise(mean_index = mean(index))
 
 ##############################
 #calculate the gaps
@@ -146,7 +145,7 @@ combined_seizure_data <- seizure_counts %>%
   mutate(gap = round(gap))
 
 combined_seizure_data <- combined_seizure_data %>%
-  select(patient_uuid,seizure_count,mean_index,seizure_types,gap,gap_period)
+  select(patient_uuid,seizure_count,mean_index,number_seizure_types, seizure_types,gap,gap_period)
 
 view(combined_seizure_data)
 
@@ -154,3 +153,72 @@ view(combined_seizure_data)
 ##############################
 #Medication Data
 ##############################
+
+view(seizures_summary_combined)
+
+length(unique(seizures_summary_combined$patient_uuid))
+
+medication_df <- seizures_summary_combined %>%
+  group_by(patient_uuid) %>%
+  summarise(number_med_types = n_distinct(medication),
+            med_types = paste(unique(medication), collapse = ", "))
+
+view(medication_df)
+
+pt <- unique(seizures_summary_combined$patient_uuid)
+
+combined_seizure_data <- combined_seizure_data %>%
+  filter(patient_uuid %in% pt)
+
+combined_seizure_data <- left_join(combined_seizure_data,medication_df, by='patient_uuid')
+
+view(combined_seizure_data)
+
+
+#Meds in the gap
+#look at the seizures_summary data and find the age in months
+#round it then see how it corresponds with gap start and end
+#return a list of number_meds_gap and meds_gap
+
+view(df_combined)
+
+# Assuming df_table_data contains seizures and df_medications contains medication details
+meds_during_gap <- seizure_gaps %>%
+  inner_join(seizures_summary_combined, by = "patient_uuid") %>%  # Join on patient ID
+  filter(
+    round(start_med_age/30) <= End_Age,  # Medication started before or during gap end
+    round(end_med_age/30) >= Start_Age   # Medication ended after or during gap start
+  ) %>%
+  select(patient_uuid, medication, start_med_age, end_med_age, gap_period) %>%
+  mutate(start_in_months = round(start_med_age/30),
+         end_in_months = round(end_med_age/30)) %>%
+  distinct()
+
+view(meds_during_gap)
+
+
+gap_meds_join <- meds_during_gap %>%
+  group_by(patient_uuid) %>%
+  summarise(number_med_types_gap = n_distinct(medication),
+            med_types_gap = paste(unique(medication), collapse = ", "))
+
+view(gap_meds_join)
+
+anti <- anti_join(combined_seizure_data,gap_meds_join, by='patient_uuid')
+view(anti)
+
+combined_df <- combined_seizure_data %>%
+  left_join(gap_meds_join, by = "patient_uuid")
+
+
+combined_df <- combined_df %>%
+  mutate(
+    number_med_types_gap = as.character(number_med_types_gap),  # Convert to character
+    number_med_types_gap = replace_na(number_med_types_gap, "None"),  # Replace NA with "None"
+    med_types_gap = replace_na(med_types_gap, "None"),  # Replace NA in med_types_gap
+    gap_period = gsub("-", " to ", gap_period)
+  )
+
+view(combined_df)
+
+#write.csv(combined_df, "combined_longitudinal_table.csv", row.names = FALSE)
