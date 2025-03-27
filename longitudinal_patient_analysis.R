@@ -147,7 +147,7 @@ df_table_data <- df_table_data %>%
     TRUE ~ type
   ))
 
-view(df_table_data)
+#view(df_table_data)
 
 
 
@@ -168,7 +168,7 @@ seizure_counts <- df_table_data %>%
             number_seizure_types = n_distinct(type),
             seizure_types = paste(unique(type), collapse = ", ") )
 
-view(seizure_counts)
+#view(seizure_counts)
 
 
 ##############################
@@ -233,7 +233,7 @@ medication_df <- sz_comb_sum %>%
   summarise(number_med_types = n_distinct(medication),
             med_types = paste(unique(medication), collapse = ", "))
 
-view(medication_df)
+#view(medication_df)
 
 pt <- unique(seizures_summary_combined$patient_uuid)
 
@@ -242,7 +242,7 @@ combined_seizure_data <- combined_seizure_data %>%
 
 combined_seizure_data <- left_join(combined_seizure_data,medication_df, by='patient_uuid')
 
-view(combined_seizure_data)
+#view(combined_seizure_data)
 
 # Determine current vs. weened medications
 current_weaned_df <- df_duration %>%
@@ -313,6 +313,6 @@ combined_df <- combined_df %>%
     weened_medications = replace_na(weened_medications, 0)
   )
 
-view(combined_df)
+#view(combined_df)
 
-#write.csv(combined_df, "combined_longitudinal_table.csv", row.names = FALSE)
+write.csv(combined_df, "./data/combined_longitudinal_table.csv", row.names = FALSE)

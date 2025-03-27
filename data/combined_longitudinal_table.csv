@@ -1,0 +1,71 @@
+"patient_uuid","seizure_count","mean_index","number_seizure_types","seizure_types","gap","gap_period","number_med_types","med_types","number_med_types_gap","med_types_gap","current_medications","weened_medications"
+"00bf8331-4336-4010-8d08-3bbc076ec0f5",26,0.96,4,"FC, TC, T, ABS",8,"41  to  49",6,"CLZ, LAC, LEV, OXC, PHT, ZNS","5","CLZ, LAC, OXC, PHT, ZNS",4,3
+"04b83955-018d-4b04-bae8-e77615820a58",36,2.56,4,"T, FC, MYC, TC",20,"73  to  93",10,"CLB, CLZ, CBD, ESL, LAC, LTG, LEV, OXC, PHT, VPA","4","CLZ, CBD, LAC, LTG",5,10
+"04c33d94-9c8a-4d27-85cc-8a4af03b6c54",6,2.17,3,"FC, T, TC",51,"12  to  64",4,"CLB, CBD, LAC, LEV","3","CLB, CBD, LEV",1,5
+"0ca73c00-6d87-4dda-962a-770faa0782d2",8,1.62,4,"T, TC, FC, MYC",108,"57  to  165",8,"CBZ, CLZ, CBD, LTG, LEV, OXC, PBT, ZNS","3","CBZ, LEV, PBT",2,9
+"0ccd19cb-69fa-491f-97c7-14fd3f1dcef5",13,2.15,3,"T, FC, TC",29,"39  to  68",7,"CLB, CLZ, LAC, OXC, PBT, PHT, VPA","4","CLB, CLZ, OXC, PHT",4,5
+"12958865-1073-4404-a54a-f855b6c44b85",3,2.33,1,"TC",2,"12  to  14",3,"CBD, LAC, LEV","3","CBD, LAC, LEV",2,1
+"12a26181-f80d-4993-a2af-1e3019d4ec95",22,2.41,3,"T, FC, TC",14,"33  to  47",6,"GBP, LEV, OXC, PHT, RFM, VPA","5","GBP, OXC, PHT, RFM, VPA",3,3
+"166766fd-f23b-4306-a2f8-91e5f20a4172",22,1.59,4,"FC, TC, MYC, ABS",3,"17  to  20",9,"CLB, CLZ, CBD, GBP, LAC, LEV, RFM, VBG, ZNS","3","CBD, GBP, RFM",1,11
+"1e5d723d-eba3-4b9a-b732-b6a2dae83ced",4,2,2,"FC, TC",90,"78  to  168",1,"OXC","1","OXC",1,2
+"1f065541-31bc-43ce-88c4-584c8849bc11",8,3,2,"T, TC",14,"12  to  26",6,"CBD, LAC, LEV, OXC, PBT, PHT","4","LAC, LEV, OXC, PHT",3,5
+"2e335784-6f3a-4982-a800-dd125ed7fa31",6,1.67,1,"FC",4,"21  to  25",1,"OXC","1","OXC",2,2
+"324c6ea2-b518-482e-ad72-6e5d1c365504",5,2.2,2,"TC, T",27,"6  to  33",7,"CBD, GBP, LTG, LEV, OXC, PBT, VPA","7","CBD, GBP, LTG, LEV, OXC, PBT, VPA",2,11
+"37efebcd-4599-4360-8950-bd522cccec27",3,1,3,"MYC, TC, FC",13,"6  to  19",2,"OXC, PBT","2","OXC, PBT",1,3
+"409008b9-671d-456e-96a0-8236a5ee7dbf",11,1.36,3,"T, TC, FC",45,"30  to  75",5,"LAC, LTG, OXC, PBT, PHT","4","LAC, LTG, OXC, PBT",1,5
+"422f6362-43ef-4e55-95f5-a4fb6ee50ff4",149,3.53,3,"TC, MYC, T",58,"21  to  79",8,"CLB, CLZ, CBD, LAC, OXC, PHT, TPM, VPA","5","CLB, CLZ, OXC, TPM, VPA",5,5
+"42e08160-64fd-4f1f-9d7a-f771650073d7",6,1.67,3,"FC, ABS, TC",42,"23  to  65",5,"CLB, LTG, LEV, OXC, TPM","4","CLB, LTG, LEV, OXC",4,3
+"44720703-57ab-4c29-ab8b-3e1a8200a096",4,1,2,"FC, TC",22,"8  to  30",4,"LAC, OXC, PBT, PHT","4","LAC, OXC, PBT, PHT",1,5
+"47815af9-7429-4c05-a21c-ad373b1103c7",8,1.5,4,"T, TC, ABS, FC",123,"1  to  124",8,"CLB, CLZ, FBM, OXC, PBT, PHT, PRM, RFM","1","PHT",4,18
+"47c27adc-27bd-41df-b39c-ae70495716cb",31,2.32,3,"MYC, ABS, T",16,"71  to  87",3,"CLB, VPA, ZNS","3","CLB, VPA, ZNS",1,3
+"4cdd2c4c-efa0-4ca8-90aa-b77fe60d9cc3",21,1.05,2,"FC, TC",10,"24  to  34",8,"CBZ, CLB, CLZ, LAC, LTG, LEV, OXC, PBT","4","CBZ, CLB, LAC, LTG",3,7
+"51f1227c-8312-4c5c-bb8a-fd240a7fb5ab",17,1.53,3,"FC, MYC, ABS",51,"45  to  96",8,"CLB, FBM, GBP, LAC, LTG, OXC, PBT, VBG","6","CLB, FBM, LAC, LTG, OXC, VBG",1,14
+"52928f64-eb12-44b7-a63c-7276af7a9c71",7,1,3,"T, MYC, TC",60,"74  to  134",7,"CLB, CLZ, ESL, LEV, OXC, VPA, ZNS","5","CLB, CLZ, ESL, OXC, ZNS",4,8
+"56d3dc1e-63d5-4ad6-9493-57de0fd7ef0e",5,1,1,"TC",6,"196  to  202",4,"CBD, LTG, LEV, VPA","4","CBD, LTG, LEV, VPA",1,4
+"588a77f3-6a37-4757-8941-070f69cf95b1",15,1.67,4,"ABS, MYC, T, TC",10,"38  to  48",5,"CLB, CLZ, CBD, LEV, TPM","4","CLB, CBD, LEV, TPM",3,5
+"5979a566-cb58-460e-932f-af259f152547",12,1.58,3,"T, FC, TC",21,"8  to  29",4,"CBD, LAC, OXC, PHT","4","CBD, LAC, OXC, PHT",1,6
+"5ba9555a-4f9c-45fa-945f-02c679614e18",7,1.86,2,"T, MYC",12,"8  to  20",3,"CLB, OXC, TPM","3","CLB, OXC, TPM",1,4
+"5c8bb15f-1f87-41a1-8932-ff18afdba917",3,0.67,2,"T, TC",67,"21  to  88",2,"CLZ, OXC","2","CLZ, OXC",6,1
+"63a0fc61-63b8-4c09-9f42-a2580f9f59c4",2290,3.9,5,"FC, T, TC, MYC, ABS",27,"4  to  31",13,"CLB, CLZ, ESL, FBM, LTG, LEV, OXC, PHT, RFM, STP, TPM, VPA, ZNS","None","None",4,18
+"6e5adadd-cc5c-4a50-90a1-0a8997a9e87d",20,2.2,4,"FC, MYC, TC, T",33,"65  to  98",9,"CLB, CLZ, CBD, LAC, LTG, LEV, PBT, VPA, VBG","4","CLB, CBD, LAC, VPA",2,11
+"73f5def4-d325-4abc-a24f-5d4d0b1fa72d",22,1.77,4,"FC, T, MYC, TC",7,"16  to  24",8,"CLZ, CBD, GBP, LAC, OXC, PBT, VPA, VBG","4","CLZ, CBD, PBT, VBG",1,9
+"781f9451-bf23-4a8b-9db6-2cdbf4794640",3,3.33,2,"T, TC",31,"11  to  42",2,"LAC, OXC","1","LAC",3,3
+"7c192916-2b3a-44bc-b42f-f92f6f81bd41",5,2.6,3,"TC, FC, T",70,"11  to  81",2,"OXC, PBT","2","OXC, PBT",5,1
+"849ac8d6-e9f0-48fc-b775-801f7bf03882",7,2.43,3,"TC, FC, T",19,"10  to  30",5,"CLZ, LTG, LEV, OXC, ZNS","5","CLZ, LTG, LEV, OXC, ZNS",3,3
+"84bad343-f2e0-4ec6-8f19-9d8f22c2d97e",11,0.82,2,"ABS, TC",93,"36  to  130",1,"VPA","None","None",1,0
+"8aedcfd3-8076-42b8-8037-6cf999b1c80e",18,1,4,"T, TC, MYC, ABS",36,"6  to  42",7,"CLB, CLZ, LEV, PBT, PHT, VPA, ZNS","5","CLZ, LEV, PBT, PHT, ZNS",5,6
+"8d912349-aca0-4a74-98a7-c574d56bfc7d",16,1.94,4,"MYC, T, TC, FC",15,"19  to  34",5,"CLB, CLZ, CBD, LAC, PHT","4","CLB, CLZ, LAC, PHT",4,7
+"9527087a-40c6-48e4-993c-e3f12f746ee2",1,1,1,"ABS",0,"No gap",3,"CBD, ETX, ZNS","None","None",1,5
+"9d63ed35-ec7c-4ea1-ba03-fcfdfdf0ee55",13,1.46,3,"FC, MYC, T",7,"7  to  14",6,"CLB, CLZ, LEV, OXC, PHT, VBG","6","CLB, CLZ, LEV, OXC, PHT, VBG",3,7
+"9f18be70-eaa0-46a3-9aaa-ee705216cb41",2,1,1,"TC",0,"125  to  125",2,"LTG, LEV","1","LEV",2,1
+"a0a0ed2d-1f61-4fa4-86e7-91fcde0ae084",2195,1.66,4,"T, MYC, ABS, TC",24,"18  to  42",6,"CLB, CLZ, GBP, LAC, TPM, VPA","3","CLB, CLZ, VPA",6,9
+"a0db758a-9a41-4a88-b57e-9f2e5f29bf78",42,1.57,5,"TC, FC, MYC, ABS, T",17,"45  to  62",8,"CLB, CLZ, LTG, LEV, OXC, PBT, PHT, VPA","4","CLB, CLZ, OXC, VPA",2,8
+"a6a301ea-bdf5-4111-be04-78a0fb73960a",1,0,1,"ABS",0,"No gap",1,"VPA","None","None",3,1
+"a729e5c1-bb70-4582-82a5-141ee71bf9ac",9,1.78,4,"MYC, TC, T, FC",27,"18  to  44",4,"CBZ, CBD, PBT, TPM","1","CBZ",2,2
+"a78e0fd2-2e75-464e-b60a-7f9ab86dc408",52,1.58,4,"TC, FC, MYC, ABS",14,"116  to  130",6,"CLB, CBD, GBP, LEV, OXC, PHT","3","LEV, OXC, PHT",3,4
+"aab1bbd7-596c-4c76-b047-e859434ec997",7,2.14,2,"TC, FC",25,"66  to  92",3,"FBM, LTG, OXC","3","FBM, LTG, OXC",2,7
+"aeff5c7c-86ea-4d70-a891-a34fe4477fe0",12,3.08,3,"T, TC, MYC",25,"47  to  71",8,"CLB, CLZ, CBD, GBP, LAC, OXC, RFM, TPM","5","CLB, CLZ, CBD, LAC, TPM",4,9
+"b17a5dff-ebfb-4621-97b9-a0072da41851",2,1,1,"ABS",0,"No gap",1,"LEV","1","LEV",2,1
+"b9a49da3-795b-49a5-a198-b54b69efc7fe",11,1.73,2,"TC, FC",17,"11  to  28",9,"CBZ, CLB, CLZ, GBP, LAC, LEV, OXC, PHT, VPA","7","CBZ, CLB, CLZ, LAC, OXC, PHT, VPA",6,4
+"bae51aa8-6c1f-4ea1-8005-f07558477c41",4,0.75,2,"FC, TC",8,"5  to  12",3,"LAC, LEV, PBT","3","LAC, LEV, PBT",3,2
+"bbb8471f-f12d-499d-99aa-677ea4c77dc5",15,1.27,4,"TC, T, FC, ABS",4,"12  to  16",3,"CLZ, LAC, LEV","3","CLZ, LAC, LEV",1,4
+"bf66f57a-d02d-4101-a533-ec8d6b8acebf",44,1.3,3,"TC, FC, T",44,"46  to  90",12,"CLZ, CBD, GBP, LAC, LTG, LEV, OXC, PER, PHT, RFM, TPM, ZNS","4","LTG, LEV, OXC, TPM",2,17
+"c1046a01-ecb6-4193-b54a-7fde39bae9c4",9,1.33,1,"FC",10,"4  to  14",6,"CLB, LAC, LEV, PHT, TPM, VBG","4","CLB, LAC, LEV, TPM",3,6
+"c76ad8fb-19bc-47ad-8e87-c9c9ae1fee82",8,2.12,3,"FC, MYC, T",12,"9  to  21",6,"CLZ, GBP, LEV, OXC, PHT, RFM","6","CLZ, GBP, LEV, OXC, PHT, RFM",3,8
+"c8c1c6e1-7b85-4894-8ac8-2b890157c3b1",2,1,2,"TC, FC",0,"No gap",1,"OXC","1","OXC",1,3
+"ce45fc4e-0416-4001-895c-6275a532d2e6",46,1.46,5,"TC, MYC, T, ABS, FC",12,"170  to  182",8,"CLB, CLZ, CBD, LAC, PBT, PHT, RFM, ZNS","6","CLB, CBD, LAC, PHT, RFM, ZNS",5,3
+"d04c1f7a-f357-47d5-8e41-4d535e49fa4a",5,1.4,2,"TC, FC",29,"6  to  35",3,"OXC, PBT, TPM","2","PBT, TPM",6,4
+"d085ce5d-3a27-4261-b3a9-03fdc84f9430",1,1,1,"FC",0,"No gap",1,"LTG","None","None",1,1
+"d9dcf702-a800-46c6-b20a-0df7a0f303a8",3,2.33,1,"TC",42,"11  to  53",1,"LTG","1","LTG",1,2
+"dc15a4e2-a7f1-42be-8418-d5da4f2abe40",12,3.42,1,"TC",9,"21  to  30",6,"CLZ, CBD, LAC, LEV, OXC, TPM","6","CLZ, CBD, LAC, LEV, OXC, TPM",4,3
+"e02e1f36-7df8-4cbf-9e12-872a38b8a8bf",4,0.5,1,"FC",95,"37  to  131",3,"CBZ, CLZ, LTG","2","CBZ, LTG",1,4
+"e2fee4a7-cadc-4fa1-a766-40cbe5103c71",4,1,2,"TC, FC",35,"24  to  59",2,"LEV, OXC","1","OXC",1,1
+"e320e6d6-0e44-423f-a3dc-18029444b6e8",13,1.46,3,"TC, T, FC",31,"38  to  69",4,"LAC, LTG, OXC, PBT","2","LTG, OXC",4,3
+"e390a903-b1c2-4170-bb17-b6f37e370716",4,1.25,2,"TC, FC",2,"8  to  10",2,"CLB, TPM","None","None",2,2
+"e3b2858f-6fb3-49c4-abf3-09ea7ccbb568",5,0.6,1,"FC",5,"43  to  48",4,"CBD, FBM, LAC, ZNS","4","CBD, FBM, LAC, ZNS",3,5
+"ec227c21-6fdc-46c2-95ef-4ecb6603083c",2,1,1,"ABS",58,"53  to  111",2,"LTG, VPA","2","LTG, VPA",5,1
+"edb5f39d-987a-481e-8a09-2b549a96e92e",12,1.83,4,"T, FC, TC, MYC",4,"9  to  13",5,"CLZ, LAC, LEV, OXC, PHT","5","CLZ, LAC, LEV, OXC, PHT",4,3
+"ef4aa67a-8421-4e40-92eb-44c60305fde6",5,1,2,"T, FC",17,"89  to  106",5,"CLB, CBD, LTG, RFM, ZNS","5","CLB, CBD, LTG, RFM, ZNS",2,6
+"fb4dc826-0823-4535-8283-04a6bb4968d2",16,1.06,2,"TC, FC",81,"72  to  153",8,"CLZ, CBD, FBM, LAC, LTG, LEV, OXC, PHT","7","CLZ, FBM, LAC, LTG, LEV, OXC, PHT",6,6
+"fb67ec01-0ced-4abb-a71e-07621dc999ce",4,2.25,1,"FC",1,"11  to  12",3,"CLB, CLZ, PBT","1","PBT",2,2
+"ff572f13-cb3a-4062-b80c-835da555f2cd",4,2.5,2,"FC, TC",36,"17  to  53",4,"LAC, LEV, OXC, TPM","3","LAC, LEV, OXC",2,5
