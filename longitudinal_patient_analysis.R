@@ -153,6 +153,17 @@ view(combined_seizure_data)
 ##############################
 #Medication Data
 ##############################
+ 
+appointment_data_all <- bind_rows(
+  seizures_summary_combined %>% select(patient_uuid, appointment_age_days = start_med_age),
+  seizures_summary_combined %>% select(patient_uuid, appointment_age_days = end_med_age)
+) %>%
+  distinct() %>%
+  mutate(appointment_age_months = appointment_age_days / 30)
+
+appointment_summary <- appointment_data_all %>%
+  group_by(patient_uuid) %>%
+  summarise(last_appointment = max(appointment_age_months, na.rm = TRUE), .groups = "drop")
 
 view(seizures_summary_combined)
 
@@ -173,6 +184,33 @@ combined_seizure_data <- combined_seizure_data %>%
 combined_seizure_data <- left_join(combined_seizure_data,medication_df, by='patient_uuid')
 
 view(combined_seizure_data)
+
+# Determine current vs. weened medications
+current_weaned_df <- df_duration %>%
+  mutate(
+    end_age_months = end_med_age / 30,
+    start_age_months = start_med_age / 30
+  ) %>%
+  left_join(appointment_summary, by = "patient_uuid") %>%
+  group_by(patient_uuid, medication) %>%
+  summarise(
+    is_current = any(end_age_months >= last_appointment, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  group_by(patient_uuid) %>%
+  summarise(
+    current_medications = sum(is_current),
+    weened_medications = sum(!is_current),
+    .groups = "drop"
+  )
+
+# Join current_weaned_df to combined_df
+combined_df <- combined_df %>%
+  left_join(current_weaned_df, by = "patient_uuid") %>%
+  mutate(
+    current_medications = replace_na(current_medications, 0),
+    weened_medications = replace_na(weened_medications, 0)
+  )
 
 
 #Meds in the gap
