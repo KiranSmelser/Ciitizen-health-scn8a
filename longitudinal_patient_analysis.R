@@ -204,15 +204,6 @@ current_weaned_df <- df_duration %>%
     .groups = "drop"
   )
 
-# Join current_weaned_df to combined_df
-combined_df <- combined_df %>%
-  left_join(current_weaned_df, by = "patient_uuid") %>%
-  mutate(
-    current_medications = replace_na(current_medications, 0),
-    weened_medications = replace_na(weened_medications, 0)
-  )
-
-
 #Meds in the gap
 #look at the seizures_summary data and find the age in months
 #round it then see how it corresponds with gap start and end
@@ -255,6 +246,14 @@ combined_df <- combined_df %>%
     number_med_types_gap = replace_na(number_med_types_gap, "None"),  # Replace NA with "None"
     med_types_gap = replace_na(med_types_gap, "None"),  # Replace NA in med_types_gap
     gap_period = gsub("-", " to ", gap_period)
+  )
+
+# Join current_weaned_df to combined_df
+combined_df <- combined_df %>%
+  left_join(current_weaned_df, by = "patient_uuid") %>%
+  mutate(
+    current_medications = replace_na(current_medications, 0),
+    weened_medications = replace_na(weened_medications, 0)
   )
 
 view(combined_df)
