@@ -20,6 +20,43 @@ path_absence_index <- "./data/absence_index.xlsx"
 path_tonic_index <- "./data/tonic_index.xlsx"
 path_overlap_patients <- "./data/Overlap Patients corrected.xlsx"
 
+#############################
+#abbreviations
+############################
+
+abbreviations_meds <- c("Oxcarbazepine" = "OXC",
+                        "Lacosamide" = "LAC",
+                        "Phenytoin" = "PHT", 
+                        "Valproate" = "VPA", 
+                        "Lamotrigine" = "LTG", 
+                        "Carbamazepine" = "CBZ", 
+                        "Rufinamide" = "RFM",
+                        "Eslicarbazepine" = "ESL", 
+                        "Clonazepam" = "CLZ",
+                        "Clobazam" = "CLB",
+                        "Phenobarbital" = "PBT", 
+                        "Vigabatrin" = "VBG", 
+                        "Felbamate" = "FBM",
+                        "Primidone" = "PRM", 
+                        "Stiripentol" = "STP", 
+                        "Tiagabine" = "TGB", 
+                        "Zonisamide" = "ZNS",
+                        "Gabapentin" = "GBP",
+                        "Ethosuximide" = "ETX", 
+                        "Levetiracetam" = "LEV", 
+                        "Briveracetam" = "BRV", 
+                        "ACTH",
+                        "Epidiolex/CBD" = "CBD",
+                        "Topiramate" = "TPM",
+                        "Prednisolone" = "PRD",
+                        "Perampanel" = "PER",
+                        'None' = 'None')
+
+abbreviations_seizures <- c("Tonic-clonic" = 'TC',
+                            "Focal" = 'FC',
+                            "Absence" = 'ABS',
+                            "Tonic" = 'T',
+                            'Myoclonic' = 'MYC')
 
 ##############################
 # 3. Import & Clean Seizure Data
@@ -104,10 +141,25 @@ df_table_data <- df_type %>%
   select(patient_uuid,type,index,age_days)%>%
   mutate(age_in_months = age_days/30)
 
+df_table_data <- df_table_data %>%
+  mutate(type = case_when(
+    type %in% names(abbreviations_seizures) ~ abbreviations_seizures[type],
+    TRUE ~ type
+  ))
+
 view(df_table_data)
+
+
+
+#############################################################################
+
+
+
+
 #############################
 #Look at every patient and then count the number of seizure events
 #############################
+
 
 seizure_counts <- df_table_data %>%
   group_by(patient_uuid)%>%
@@ -147,18 +199,25 @@ combined_seizure_data <- seizure_counts %>%
 combined_seizure_data <- combined_seizure_data %>%
   select(patient_uuid,seizure_count,mean_index,number_seizure_types, seizure_types,gap,gap_period)
 
-view(combined_seizure_data)
-
 
 ##############################
 #Medication Data
 ##############################
 
-view(seizures_summary_combined)
+#view(seizures_summary_combined)
 
-length(unique(seizures_summary_combined$patient_uuid))
+#length(unique(seizures_summary_combined$patient_uuid))
 
-medication_df <- seizures_summary_combined %>%
+sz_comb_sum <- seizures_summary_combined %>%
+  filter() %>%
+  mutate(medication = str_replace(medication, "\\s+\\d+$", ""),
+        medication = str_trim(medication),
+        medication = case_when(
+        medication %in% names(abbreviations_meds) ~ abbreviations_meds[medication],
+        TRUE ~ medication
+      ))
+
+medication_df <- sz_comb_sum %>%
   group_by(patient_uuid) %>%
   summarise(number_med_types = n_distinct(medication),
             med_types = paste(unique(medication), collapse = ", "))
@@ -180,11 +239,9 @@ view(combined_seizure_data)
 #round it then see how it corresponds with gap start and end
 #return a list of number_meds_gap and meds_gap
 
-view(df_combined)
-
 # Assuming df_table_data contains seizures and df_medications contains medication details
 meds_during_gap <- seizure_gaps %>%
-  inner_join(seizures_summary_combined, by = "patient_uuid") %>%  # Join on patient ID
+  inner_join(sz_comb_sum, by = "patient_uuid") %>%  # Join on patient ID
   filter(
     round(start_med_age/30) <= End_Age,  # Medication started before or during gap end
     round(end_med_age/30) >= Start_Age   # Medication ended after or during gap start
@@ -194,7 +251,7 @@ meds_during_gap <- seizure_gaps %>%
          end_in_months = round(end_med_age/30)) %>%
   distinct()
 
-view(meds_during_gap)
+#view(meds_during_gap)
 
 
 gap_meds_join <- meds_during_gap %>%
@@ -202,10 +259,10 @@ gap_meds_join <- meds_during_gap %>%
   summarise(number_med_types_gap = n_distinct(medication),
             med_types_gap = paste(unique(medication), collapse = ", "))
 
-view(gap_meds_join)
+#view(gap_meds_join)
 
-anti <- anti_join(combined_seizure_data,gap_meds_join, by='patient_uuid')
-view(anti)
+#anti <- anti_join(combined_seizure_data,gap_meds_join, by='patient_uuid')
+#view(anti)
 
 combined_df <- combined_seizure_data %>%
   left_join(gap_meds_join, by = "patient_uuid")
